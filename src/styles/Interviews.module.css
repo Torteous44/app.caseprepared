@@ -8,6 +8,10 @@
   margin: 0 auto;
 }
 
+.interviews-section a {
+  text-decoration: none;
+}
+
 .interviews-section h2 {
   font-size: 1.8rem;
   margin-bottom: 1rem;
@@ -43,6 +47,7 @@
   height: 100%;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-decoration: none;
 }
 
 .interview-card:hover {
@@ -56,6 +61,7 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  text-decoration: none;
 }
 
 .logo-container {

@@ -65,46 +65,48 @@ const Interviews: React.FC<InterviewsProps> = ({ cards = defaultCards }) => {
 
       <div className={styles["interviews-container"]}>
         {cards.map((card) => (
-          <div key={card.id} className={styles["interview-card"]}>
-            <div className={styles["card-header"]}>
-              <div className={styles["logo-container"]}>
-                <img src={card.logo} alt={`${card.company} logo`} />
+          <Link to={`/interview/${card.id}`} key={card.id}>
+            <div key={card.id} className={styles["interview-card"]}>
+              <div className={styles["card-header"]}>
+                <div className={styles["logo-container"]}>
+                  <img src={card.logo} alt={`${card.company} logo`} />
+                </div>
+                <p className={styles["card-tag"]}>{card.subtitle}</p>
               </div>
-              <p className={styles["card-tag"]}>{card.subtitle}</p>
-            </div>
 
-            <div className={styles["thumbnail-container"]}>
-              <img src={card.thumbnail} alt={card.title} />
-            </div>
+              <div className={styles["thumbnail-container"]}>
+                <img src={card.thumbnail} alt={card.title} />
+              </div>
 
-            <div className={styles["card-body"]}>
-              <h3 className={styles["card-title"]}>{card.title}</h3>
-              <p className={styles["card-description"]}>{card.description}</p>
-              <div className={styles["button-container"]}>
-                <Link
-                  to={`/interview/${card.id}`}
-                  className={styles["interview-button"]}
-                >
-                  {card.buttonText}
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 16 16"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
+              <div className={styles["card-body"]}>
+                <h3 className={styles["card-title"]}>{card.title}</h3>
+                <p className={styles["card-description"]}>{card.description}</p>
+                <div className={styles["button-container"]}>
+                  <Link
+                    to={`/interview/${card.id}`}
+                    className={styles["interview-button"]}
                   >
-                    <path
-                      d="M6 12L10 8L6 4"
-                      stroke="white"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </Link>
+                    {card.buttonText}
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M6 12L10 8L6 4"
+                        stroke="white"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
