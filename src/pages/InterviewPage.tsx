@@ -316,7 +316,7 @@ const InterviewPage: React.FC = () => {
           <h2 className={styles.aboutTitle}>Ready to Join?</h2>
 
           <div className={styles.userAvatar}>
-            <div className={styles.avatar}></div>
+            <img src="/assets/Logo.png" alt="Case Prepared Logo" className={styles.logo} />
           </div>
 
           <button
@@ -337,6 +337,26 @@ const InterviewPage: React.FC = () => {
             </a>
           </div>
         </div>
+      </div>
+
+      <div className={styles.interviewDetails}>
+        <h3>About this Case</h3>
+        
+        <h4>Client goal</h4>
+        <p>Our client is Beautify. Beautify has approached McKinsey for help with exploring new ways to approach its customers.</p>
+
+        <h4>Situation description</h4>
+        <p>Beautify is a global prestige cosmetics company that sells its products mainly inside high-end department stores such as Harrods and Shanghai No. 1. It also has a presence online with specialty retailers like Sephora. Beautify produces a number of makeup, fragrance, and skin care products sold under several different brands.</p>
+
+        <p>In department stores, beauty consultants play a critical role with consumers:</p>
+        <ul>
+          <li>approaching "passive" customers</li>
+          <li>demonstrating their knowledge of the products</li>
+          <li>actively selling the products</li>
+          <li>maintaining a loyal customer base of repeat buyers</li>
+        </ul>
+
+        <p>These consultants are hired directly by Beautify or through specialist, third-party agencies that find new recruits for a fee. Beautify is then responsible for selecting, training, and paying the consultants. Within Beautify, beauty consultants are managed independently by each brand in each country. For example, this may mean a consultant might be part of the Chanel team in a store. However, consumers are shifting more to online shopping, and too many beauty consultants are left working in empty department stores.</p>
       </div>
     </div>
   );

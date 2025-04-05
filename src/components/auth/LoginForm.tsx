@@ -33,6 +33,8 @@ const LoginForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <img src="/assets/Logo Text.png" alt="Case Prepared" className={styles.logo} />
+      <h2 className={styles.modalTitle}>Log in to continue</h2>
       {formError && <div className={styles.error}>{formError}</div>}
 
       <div className={styles.formGroup}>
@@ -45,7 +47,7 @@ const LoginForm: React.FC = () => {
           className={styles.input}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
+          placeholder="Email"
           required
         />
       </div>
@@ -60,7 +62,7 @@ const LoginForm: React.FC = () => {
           className={styles.input}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter your password"
+          placeholder="Password"
           required
         />
       </div>

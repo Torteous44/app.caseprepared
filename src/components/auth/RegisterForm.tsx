@@ -39,6 +39,8 @@ const RegisterForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <img src="/assets/Logo Text.png" alt="Case Prepared" className={styles.logo} />
+      <h2 className={styles.modalTitle}>Sign up to continue</h2>
       {formError && <div className={styles.error}>{formError}</div>}
 
       <div className={styles.formGroup}>
@@ -51,7 +53,7 @@ const RegisterForm: React.FC = () => {
           className={styles.input}
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
-          placeholder="Enter your full name"
+          placeholder="Full name"
           required
         />
       </div>
@@ -66,7 +68,7 @@ const RegisterForm: React.FC = () => {
           className={styles.input}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
+          placeholder="Email"
           required
         />
       </div>
@@ -81,7 +83,7 @@ const RegisterForm: React.FC = () => {
           className={styles.input}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Create a password (min. 6 characters)"
+          placeholder="Password"
           required
           minLength={6}
         />

@@ -17,9 +17,9 @@
 
 .modalContainer {
   background: white;
-  border-radius: var(--border-radius);
+  border-radius: 24px;
   width: 90%;
-  max-width: 500px;
+  max-width: 400px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -30,17 +30,17 @@
 
 .modalHeader {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  padding: 20px 25px;
-  border-bottom: 1px solid rgba(217, 217, 217, 0.5);
+  padding: 20px 25px 0;
 }
 
 .modalTitle {
-  margin: 0;
-  font-size: 1.4rem;
+  margin: 0 0 32px 0;
+  font-size: 1.75rem;
   font-weight: 600;
   color: #333;
+  text-align: center;
 }
 
 .closeButton {
@@ -65,7 +65,7 @@
 }
 
 .modalContent {
-  padding: 25px;
+  padding: 0 25px 25px;
   overflow-y: auto;
 }
 
@@ -76,45 +76,53 @@
   border-top: 1px solid rgba(217, 217, 217, 0.5);
 }
 
+.logo {
+  width: 180px;
+  height: auto;
+  margin: 0 auto 24px;
+  display: block;
+}
+
 /* Form styling */
 .formGroup {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
-  color: #333;
+  display: none;
 }
 
 .input {
   width: 100%;
-  padding: 12px 16px;
-  border: 1px solid #ddd;
-  border-radius: var(--border-radius);
+  padding: 16px;
+  background: #F2F2F2;
+  border: none;
+  border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition: background-color 0.3s;
 }
 
 .input:focus {
   outline: none;
-  border-color: var(--blue-primary);
-  box-shadow: 0 0 0 3px rgba(35, 81, 255, 0.2);
+  background: #E8E8E8;
+}
+
+.input::placeholder {
+  color: #666;
 }
 
 .buttonPrimary {
   background: var(--blue-primary);
   color: white;
   border: none;
-  border-radius: var(--border-radius);
-  padding: 12px 22px;
+  border-radius: 8px;
+  padding: 16px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   width: 100%;
-  margin-top: 10px;
+  margin-top: 24px;
   position: relative;
   overflow: hidden;
 }
@@ -156,8 +164,9 @@
 
 .switchLink {
   text-align: center;
-  margin-top: 15px;
+  margin-top: 16px;
   font-size: 0.9rem;
+  color: #333;
 }
 
 .switchButton {

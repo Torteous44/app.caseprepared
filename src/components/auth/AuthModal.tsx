@@ -13,9 +13,7 @@ const AuthModal: React.FC = () => {
     <Modal
       isOpen={isOpen}
       onClose={closeModal}
-      title={
-        modalType === "login" ? "Log in to your account" : "Create an account"
-      }
+      title=""
     >
       {modalType === "login" ? <LoginForm /> : <RegisterForm />}
     </Modal>

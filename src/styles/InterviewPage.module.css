@@ -2,6 +2,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 100px 20px;
+  --container-padding: 20px;
 }
 
 .breadcrumbs {
@@ -54,6 +55,7 @@
   display: grid;
   grid-template-columns: 1fr 400px;
   gap: 40px;
+  margin-bottom: 40px;
 }
 
 .cameraContainer {
@@ -129,11 +131,10 @@
   margin-bottom: 24px;
 }
 
-.avatar {
+.logo {
   width: 64px;
   height: 64px;
-  border-radius: 50%;
-  background-color: #e0e0e0;
+  object-fit: contain;
 }
 
 .startButton {
@@ -174,6 +175,54 @@
   color: #333;
   line-height: 1.6;
   margin-bottom: 16px;
+}
+
+.fullWidthSection {
+  grid-column: 1 / -1;
+  margin-top: 40px;
+  border-top: 1px solid #eaeaea;
+  padding-top: 24px;
+}
+
+.interviewDetails {
+  margin-top: 0;
+  border-top: 1px solid #eaeaea;
+  padding-top: 24px;
+  width: 100%;
+}
+
+.interviewDetails h3 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.interviewDetails h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 20px;
+  margin-bottom: 12px;
+  color: #333;
+}
+
+.interviewDetails p {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.interviewDetails ul {
+  list-style-type: disc;
+  margin-left: 20px;
+  margin-bottom: 16px;
+}
+
+.interviewDetails li {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 8px;
 }
 
 .officialLink {
