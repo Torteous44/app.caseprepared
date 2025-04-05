@@ -1,13 +1,14 @@
 import React from "react";
 import styles from "../../styles/Try.module.css";
 import { Link } from "react-router-dom";
+import LongPopupSequence from "./LongPopupSequence";
 
 const Try: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.content}>
         <div className={styles.textContainer}>
-          <p className={styles.subtitle}>Supercharge your research with AI</p>
+          <p className={styles.subtitle}>Supercharge your case practice with AI</p>
           <h2 className={styles.title}>
             Practice Smarter with Real-Time AI Coaching
           </h2>
@@ -21,10 +22,11 @@ const Try: React.FC = () => {
         </div>
         <div className={styles.imageContainer}>
           <img
-            src="/assets/VideoCall.png"
+            src="/assets/VideoCall2.png"
             alt="AI-powered real-time coaching during interview"
             className={styles.image}
           />
+          <LongPopupSequence />
         </div>
       </div>
     </div>

@@ -43,29 +43,18 @@
 }
 
 .logoText {
-  font-size: 1.8rem;
-  font-weight: 700;
-  background: linear-gradient(45deg, var(--blue-primary), var(--blue-secondary));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  cursor: pointer;
-  opacity: 1;
-  text-decoration: none;
   display: block;
+  text-decoration: none;
 }
 
-.logo:hover .logoText {
-  background: linear-gradient(45deg, var(--blue-secondary), var(--blue-primary));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: brightness(1.1);
+.logoImage {
+  height: 32px;
+  width: auto;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.scrolled .logoText {
-  font-size: 1.6rem;
+.scrolled .logoImage {
+  height: 30px;
 }
 
 .navLinks {

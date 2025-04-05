@@ -1,7 +1,7 @@
 @import "../styles.css";
 .hero-container {
   background-color: white;
-  padding: 4rem 1.5rem;
+  padding: 8rem 1.5rem 4rem 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -104,17 +104,27 @@
 
 .hero-image {
   flex: 1;
-  max-width: 580px;
+  max-width: 936px;
+  position: relative;
+}
+
+.insight-card-container {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  z-index: 10;
 }
 
 .video-call-image {
   margin-top: 100px;
-  width: 100%;
+  width: 110%;
   height: auto;
   border-radius: 8px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 936px) {
   .hero-content {
     flex-direction: column;
   }
@@ -133,7 +143,7 @@
   }
   
   .hero-image {
-    max-width: 100%;
+    max-width: 150%;
   }
   
   .hero-text h1 {

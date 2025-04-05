@@ -101,7 +101,11 @@ const InterviewsPage: React.FC = () => {
 
       <div className={styles.interviewCards}>
         {interviewCards.map((card) => (
-          <div key={card.id} className={styles.card}>
+          <div 
+            key={card.id} 
+            className={styles.card}
+            onClick={() => handleInterviewClick(card)}
+          >
             <div className={styles.cardHeader}>
               <img
                 src={card.logo}
@@ -121,7 +125,10 @@ const InterviewsPage: React.FC = () => {
 
               <div className={styles.buttonWrapper}>
                 <button
-                  onClick={() => handleInterviewClick(card)}
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent card click when clicking button
+                    handleInterviewClick(card);
+                  }}
                   disabled={loading[card.id]}
                   className={styles.mockButton}
                 >

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "../../styles/Hero.module.css";
+import InsightSequence from "./InsightSequence";
 
 interface HeroProps {
   title?: string;
@@ -17,7 +18,7 @@ const Hero: React.FC<HeroProps> = ({
         <div className={styles["hero-text"]}>
           <div className={styles["stats-pill"]}>
             <span>
-              We've helped over 10,000 students pass their case interviews
+              We've helped over 5,000 students pass their case interviews
             </span>
             <span className={styles["divider"]}></span>
             <button className={styles["read-more"]}>Read more</button>
@@ -31,10 +32,13 @@ const Hero: React.FC<HeroProps> = ({
         </div>
         <div className={styles["hero-image"]}>
           <img
-            src="/assets/heroVideoCall.png"
+            src="/assets/HeroCall.png"
             alt="AI-powered mock interview interface"
             className={styles["video-call-image"]}
           />
+          <div className={styles["insight-card-container"]}>
+            <InsightSequence />
+          </div>
         </div>
       </div>
     </div>

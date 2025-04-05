@@ -1,0 +1,16 @@
+.popupSequence {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  max-width: 500px;
+  z-index: 10;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  opacity: 1;
+}
+
+.popupSequence.animating {
+  transform: translateX(-50%) translateY(20px);
+  opacity: 0;
+} 
