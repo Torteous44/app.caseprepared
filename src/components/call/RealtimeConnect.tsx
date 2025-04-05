@@ -11,6 +11,7 @@ import styles from "../../styles/RealtimeConnect.module.css";
 import AudioVisualizer from "./AudioVisualizer";
 import { useModal } from "../../contexts/ModalContext";
 import { useAuth } from "../../contexts/AuthContext";
+import LongPopup from "../landing/LongPopup";
 
 // Types
 type ConnectionState =
@@ -48,6 +49,7 @@ const RealtimeConnect: React.FC = () => {
   const [audioLevel, setAudioLevel] = useState(0); // For the circle visualizer
   const [showTrialEndModal, setShowTrialEndModal] = useState(false);
   const [showAlmostReadyModal, setShowAlmostReadyModal] = useState(false);
+  const [showStartPrompt, setShowStartPrompt] = useState(false);
   const [notification, setNotification] = useState<{
     show: boolean;
     message: string;
@@ -715,6 +717,25 @@ const RealtimeConnect: React.FC = () => {
     navigate("/");
   };
 
+  // Show start prompt after connection is established
+  useEffect(() => {
+    if (connectionState === "connected" && callActive) {
+      // Show the prompt after a short delay
+      const timer = setTimeout(() => {
+        setShowStartPrompt(true);
+      }, 2000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [connectionState, callActive]);
+  
+  // Hide start prompt when interview starts (audio level increases)
+  useEffect(() => {
+    if (showStartPrompt && audioLevel > 0.1) {
+      setShowStartPrompt(false);
+    }
+  }, [audioLevel, showStartPrompt]);
+
   return (
     <div className={styles.container}>
       {/* Connection indicator */}
@@ -729,6 +750,22 @@ const RealtimeConnect: React.FC = () => {
           {getConnectionStatusText(connectionState)}
         </span>
       </div>
+      
+      {/* Start prompt popup */}
+      {showStartPrompt && (
+        <div className={styles.startPromptContainer}>
+          <LongPopup
+            icon={
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              </svg>
+            }
+            strokeColor="var(--blue-primary)"
+            category="Start"
+            text="Say hello to start the interview!"
+          />
+        </div>
+      )}
 
       {/* Main video and controls container */}
       <div className={styles.callContainer}>
@@ -748,10 +785,12 @@ const RealtimeConnect: React.FC = () => {
           {callActive && (
             <div className={styles.audioVisualizerContainer}>
               <div className={styles.circleContainer}>
-                <div
-                  className={styles.circleVisualizer}
+                <div 
+                  className={styles.circleVisualizer} 
                   style={getCircleSize()}
-                ></div>
+                >
+                  <div className={styles.innerCircle}></div>
+                </div>
               </div>
               <div className={styles.brandingText}>ConsultAI</div>
             </div>

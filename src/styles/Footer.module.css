@@ -1,0 +1,40 @@
+.footer {
+  width: 100%;
+  padding: 20px 0;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.footerContent {
+  font-size: 14px;
+  color: #666;
+}
+
+.companyLink {
+  color: #666;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.companyLink:hover {
+  color: #333;
+}
+
+.dot {
+  margin: 0 8px;
+  color: #666;
+}
+
+.separator {
+  margin: 0 5px;
+}
+
+.contactLink {
+  color: #666;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.contactLink:hover {
+  color: var(--blue-primary);
+} 

@@ -6,6 +6,7 @@ import Interviews from "../components/landing/interviews";
 import Analysis from "../components/landing/Analysis";
 import Try from "../components/landing/Try";
 import FAQs from "../components/landing/FAQs";
+import Footer from "../components/landing/Footer";
 
 const LandingPage: React.FC = () => {
   return (
@@ -24,6 +25,8 @@ const LandingPage: React.FC = () => {
       <Analysis />
 
       <FAQs />
+      
+      <Footer />
     </div>
   );
 };
