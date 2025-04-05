@@ -9,6 +9,8 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "../../styles/RealtimeConnect.module.css";
 import AudioVisualizer from "./AudioVisualizer";
+import { useModal } from "../../contexts/ModalContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 // Types
 type ConnectionState =
@@ -32,6 +34,8 @@ const RealtimeConnect: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const locationState = (location.state as LocationState) || {};
+  const { openModal } = useModal();
+  const { isAuthenticated } = useAuth();
 
   // State
   const [connectionState, setConnectionState] =
@@ -42,6 +46,8 @@ const RealtimeConnect: React.FC = () => {
   const [callDuration, setCallDuration] = useState(0);
   const [audioVolume, setAudioVolume] = useState(1.0);
   const [audioLevel, setAudioLevel] = useState(0); // For the circle visualizer
+  const [showTrialEndModal, setShowTrialEndModal] = useState(false);
+  const [showAlmostReadyModal, setShowAlmostReadyModal] = useState(false);
   const [notification, setNotification] = useState<{
     show: boolean;
     message: string;
@@ -211,6 +217,47 @@ const RealtimeConnect: React.FC = () => {
       return () => clearTimeout(timer);
     }
   }, [sessionId, callActive, isConnecting]);
+
+  // Check for 40 second trial end
+  useEffect(() => {
+    if (callActive && callDuration === 60) {
+      // Stop all tracks
+      if (localStreamRef.current) {
+        localStreamRef.current.getTracks().forEach((track) => {
+          track.stop();
+        });
+      }
+
+      // Close peer connection
+      if (peerConnectionRef.current) {
+        peerConnectionRef.current.close();
+        peerConnectionRef.current = null;
+      }
+
+      // Stop the timer
+      if (durationIntervalRef.current) {
+        clearInterval(durationIntervalRef.current);
+        durationIntervalRef.current = null;
+      }
+
+      // Update state
+      setCallActive(false);
+      setConnectionState("closed");
+
+      if (isAuthenticated) {
+        // For logged-in users, show the "almost ready" modal
+        setShowAlmostReadyModal(true);
+      } else {
+        // For non-logged in users, show the registration modal
+        openModal("register");
+
+        // Navigate back to interviews page after a short delay
+        setTimeout(() => {
+          navigate("/interviews");
+        }, 500);
+      }
+    }
+  }, [callDuration, callActive, navigate, openModal, isAuthenticated]);
 
   // Setup audio visualizer
   useEffect(() => {
@@ -661,6 +708,13 @@ const RealtimeConnect: React.FC = () => {
     return { transform: `scale(${scale})` };
   };
 
+  // Handle submit button click for "almost ready" modal
+  const handleSubmit = () => {
+    setShowAlmostReadyModal(false);
+    // Navigate to landing page
+    navigate("/");
+  };
+
   return (
     <div className={styles.container}>
       {/* Connection indicator */}
@@ -687,6 +741,7 @@ const RealtimeConnect: React.FC = () => {
             autoPlay
             playsInline
             muted // Mute local video to prevent feedback
+            style={{ transform: "scaleX(-1)" }} // Mirror effect
           />
 
           {/* Audio visualizer modal inside video */}
@@ -779,6 +834,22 @@ const RealtimeConnect: React.FC = () => {
           }`}
         >
           {notification.message}
+        </div>
+      )}
+
+      {/* Almost Ready Modal for logged-in users */}
+      {showAlmostReadyModal && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <h2 className={styles.modalTitle}>We're almost ready</h2>
+            <p className={styles.modalText}>
+              We'll be in contact with you soon we can help build ConsultAI with
+              your help.
+            </p>
+            <button className={styles.primaryButton} onClick={handleSubmit}>
+              Submit →
+            </button>
+          </div>
         </div>
       )}
     </div>

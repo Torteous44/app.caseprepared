@@ -11,6 +11,9 @@ import InterviewsPage from "./pages/InterviewsPage";
 import InterviewPage from "./pages/InterviewPage";
 import Navbar from "./components/Navbar";
 import RealtimeConnect from "./components/call/RealtimeConnect";
+import { AuthProvider } from "./contexts/AuthContext";
+import { ModalProvider } from "./contexts/ModalContext";
+import AuthModal from "./components/auth/AuthModal";
 
 // NavbarWrapper component to conditionally render the Navbar
 const NavbarWrapper = () => {
@@ -25,52 +28,26 @@ const NavbarWrapper = () => {
 
 const App = () => {
   return (
-    <Router>
-      <div>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <Navbar />
-                <LandingPage />
-              </>
-            }
-          />
-          <Route
-            path="/about"
-            element={
-              <>
-                <Navbar />
-                <AboutPage />
-              </>
-            }
-          />
-          <Route
-            path="/interviews"
-            element={
-              <>
-                <Navbar />
-                <InterviewsPage />
-              </>
-            }
-          />
-          <Route
-            path="/interview/:id"
-            element={
-              <>
-                <Navbar />
-                <InterviewPage />
-              </>
-            }
-          />
-          <Route
-            path="/interview/session/:sessionId"
-            element={<RealtimeConnect />}
-          />
-        </Routes>
-      </div>
-    </Router>
+    <AuthProvider>
+      <ModalProvider>
+        <Router>
+          <div>
+            <NavbarWrapper />
+            <AuthModal />
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/interviews" element={<InterviewsPage />} />
+              <Route path="/interview/:id" element={<InterviewPage />} />
+              <Route
+                path="/interview/session/:sessionId"
+                element={<RealtimeConnect />}
+              />
+            </Routes>
+          </div>
+        </Router>
+      </ModalProvider>
+    </AuthProvider>
   );
 };
 

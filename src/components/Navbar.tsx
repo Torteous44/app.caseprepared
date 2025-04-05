@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styles from "../styles/Navbar.module.css";
+import { useAuth } from "../contexts/AuthContext";
+import { useModal } from "../contexts/ModalContext";
 
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
+  const { user, logout, isAuthenticated } = useAuth();
+  const { openModal } = useModal();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -27,9 +31,9 @@ const Navbar: React.FC = () => {
       <div className={styles.container}>
         <div className={styles.logo}>
           <Link to="/" className={styles.logoText}>
-            <img 
-              src="/assets/Logo Text.png" 
-              alt="Case Prepared" 
+            <img
+              src="/assets/Logo Text.png"
+              alt="Case Prepared"
               className={styles.logoImage}
             />
           </Link>
@@ -59,8 +63,31 @@ const Navbar: React.FC = () => {
         </ul>
 
         <div className={styles.navCta}>
-          <button className={styles.loginButton}>Log in</button>
-          <button className={styles.signupButton}>Sign up</button>
+          {isAuthenticated ? (
+            <>
+              <span className={styles.userName}>
+                {user?.full_name || user?.email}
+              </span>
+              <button className={styles.loginButton} onClick={logout}>
+                Log out
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                className={styles.loginButton}
+                onClick={() => openModal("login")}
+              >
+                Log in
+              </button>
+              <button
+                className={styles.signupButton}
+                onClick={() => openModal("register")}
+              >
+                Sign up
+              </button>
+            </>
+          )}
         </div>
       </div>
     </nav>

@@ -57,7 +57,11 @@ const codeToId: { [key: string]: string } = {
 const BASE_URL = "https://demobackend-p2e1.onrender.com";
 
 const InterviewPage: React.FC = () => {
-  const { id, company, code } = useParams<{ id?: string; company?: string; code?: string }>();
+  const { id, company, code } = useParams<{
+    id?: string;
+    company?: string;
+    code?: string;
+  }>();
   const navigate = useNavigate();
   const location = useLocation();
   const locationState = location.state || {};
@@ -297,6 +301,7 @@ const InterviewPage: React.FC = () => {
                 playsInline
                 muted
                 className={styles.videoFeed}
+                style={{ transform: "scaleX(-1)" }}
               />
             )}
           </div>
