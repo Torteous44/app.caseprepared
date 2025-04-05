@@ -50,6 +50,7 @@ const RealtimeConnect: React.FC = () => {
   const [showTrialEndModal, setShowTrialEndModal] = useState(false);
   const [showAlmostReadyModal, setShowAlmostReadyModal] = useState(false);
   const [showStartPrompt, setShowStartPrompt] = useState(false);
+  const [interviewTitle, setInterviewTitle] = useState<string>("Case Interview");
   const [notification, setNotification] = useState<{
     show: boolean;
     message: string;
@@ -736,6 +737,33 @@ const RealtimeConnect: React.FC = () => {
     }
   }, [audioLevel, showStartPrompt]);
 
+  // Fetch interview details based on sessionId
+  useEffect(() => {
+    const fetchInterviewDetails = async () => {
+      if (!sessionId) return;
+      
+      try {
+        // First check if title is in location state
+        if (locationState.title) {
+          setInterviewTitle(locationState.title);
+          return;
+        }
+        
+        // If not in location state, try to fetch from API
+        const response = await api.get(`/interviews/session/${sessionId}`);
+        if (response.data && response.data.interview) {
+          const { company, title } = response.data.interview;
+          setInterviewTitle(`${company} - ${title}`);
+        }
+      } catch (error) {
+        console.error("Error fetching interview details:", error);
+        // Keep default title if fetch fails
+      }
+    };
+    
+    fetchInterviewDetails();
+  }, [sessionId, locationState.title, api]);
+  
   return (
     <div className={styles.container}>
       {/* Connection indicator */}
@@ -798,7 +826,7 @@ const RealtimeConnect: React.FC = () => {
 
           {/* Call title info inside video */}
           <div className={styles.callInfo}>
-            <span className={styles.callTitle}>McKinsey - Case Interview</span>
+            <span className={styles.callTitle}>{interviewTitle}</span>
           </div>
         </div>
 
