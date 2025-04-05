@@ -1,0 +1,259 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: var(--font-family, 'Inter', sans-serif);
+  color: #333;
+}
+
+.header {
+  background: linear-gradient(to bottom, #f0f4ff, #f7f9ff);
+  padding: 130px 0 100px;
+  text-align: center;
+  border-bottom: 1px solid rgba(234, 234, 234, 0.5);
+  position: relative;
+  overflow: hidden;
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+  cursor: default;
+}
+
+.spotlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    circle at var(--mouse-x) var(--mouse-y),
+    rgba(35, 81, 255, 0.04) 0%,
+    rgba(35, 81, 255, 0.01) 35%,
+    rgba(35, 81, 255, 0) 70%
+  );
+  pointer-events: none;
+  z-index: 1;
+  will-change: background;
+  opacity: 0;
+  animation: fadeIn 0.8s forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: -150px;
+  left: -150px;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(35, 81, 255, 0.008) 0%,
+    rgba(35, 81, 255, 0) 70%
+  );
+  transform: translate(calc((var(--mouse-x) - 50%) * 0.07), calc((var(--mouse-y) - 50%) * 0.07));
+  will-change: transform;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.8;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(35,81,255,0.2), rgba(255,255,255,0));
+  z-index: 2;
+}
+
+.title {
+  font-size: 3.2rem;
+  font-weight: 700;
+  color: #222;
+  margin: 0;
+  letter-spacing: -0.03em;
+  position: relative;
+  display: inline-block;
+  z-index: 2;
+}
+
+
+
+.content {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 80px 20px 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.section {
+  margin-bottom: 20px;
+  opacity: 0.95;
+  transition: opacity 0.3s ease;
+}
+
+.section:hover {
+  opacity: 1;
+}
+
+.section h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #1a1a1a;
+  letter-spacing: -0.02em;
+  display: inline-block;
+  position: relative;
+}
+
+.section h2::after {
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 2px;
+  background-color: rgba(35, 81, 255, 0.7);
+  bottom: -8px;
+  left: 0;
+  border-radius: 2px;
+}
+
+.section p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #444;
+  margin-bottom: 24px;
+}
+
+.ctaSection {
+  background: linear-gradient(145deg, #f7f9ff, #f0f4ff);
+  padding: 50px 40px;
+  border-radius: 16px;
+  text-align: center;
+  margin-top: 30px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(230, 236, 255, 0.7);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ctaSection:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.06);
+}
+
+.ctaSection h2 {
+  font-size: 1.7rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+  color: #1a1a1a;
+  letter-spacing: -0.02em;
+}
+
+.button {
+  background-color: #2351FF;
+  color: white;
+  border: none;
+  padding: 16px 36px;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-block;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(35, 81, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transition: left 0.7s ease;
+}
+
+.button:hover {
+  background-color: #1a41e0;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(35, 81, 255, 0.25);
+}
+
+.button:hover::before {
+  left: 100%;
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 100px 0 70px;
+  }
+  
+  .title {
+    font-size: 2.6rem;
+  }
+  
+  .content {
+    padding: 60px 20px 80px;
+    gap: 40px;
+  }
+  
+  .section h2 {
+    font-size: 1.6rem;
+  }
+  
+  .section p {
+    font-size: 1rem;
+  }
+  
+  .ctaSection {
+    padding: 40px 30px;
+  }
+  
+  .ctaSection h2 {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 90px 20px 60px;
+  }
+  
+  .title {
+    font-size: 2.2rem;
+  }
+  
+  .title::after {
+    width: 40px;
+  }
+  
+  .content {
+    padding: 50px 20px 70px;
+  }
+  
+  .ctaSection {
+    padding: 35px 25px;
+  }
+  
+  .button {
+    width: 100%;
+    padding: 14px 20px;
+  }
+} 

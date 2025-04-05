@@ -1,0 +1,89 @@
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.card {
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  border: 1px solid #d9d9d9;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 12px;
+  margin-top: 2px;
+}
+
+.icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.blueIcon {
+  color: #2351FF;
+}
+
+.orangeIcon {
+  color: #FF9100;
+}
+
+.pinkIcon {
+  color: #E91E63;
+}
+
+.cardHeader h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.highlight {
+  font-weight: 700;
+}
+
+.card:nth-child(1) .highlight {
+  color: #2351FF;
+}
+
+.card:nth-child(2) .highlight {
+  color: #FF9100;
+}
+
+.card:nth-child(3) .highlight {
+  color: #E91E63;
+}
+
+.cardText {
+  color: #444;
+  line-height: 1.6;
+  font-size: 1rem;
+  margin: 0;
+} 

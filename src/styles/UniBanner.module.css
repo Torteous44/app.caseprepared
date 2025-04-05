@@ -1,0 +1,86 @@
+.uni-banner {
+  position: relative;
+  width: 100%;
+  background-color: white;
+  overflow: hidden;
+  margin: 30px 0;
+  margin-bottom: 80px;
+  margin-top: 100px;
+}
+
+.uni-banner h3 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #848484;
+}
+
+.scroll-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.universities-container {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+  padding: 0;
+  animation: scroll 40s linear infinite;
+  width: max-content;
+}
+
+.university-item {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.university-item:hover {
+  opacity: 1;
+}
+
+.university-item img {
+  height: 100%;
+  object-fit: contain;
+  transition: filter 0.3s ease;
+}
+
+
+.gradient-overlay-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 20px;
+  background: linear-gradient(to right, white, rgba(255, 255, 255, 0));
+  z-index: 2;
+  pointer-events: none;
+}
+
+.gradient-overlay-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 20px;
+  background: linear-gradient(to left, white, rgba(255, 255, 255, 0));
+  z-index: 2;
+  pointer-events: none;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-50% - 40px));
+  }
+}

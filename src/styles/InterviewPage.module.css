@@ -1,0 +1,193 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 20px;
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.breadcrumbs a {
+  color: #0066cc;
+  text-decoration: none;
+}
+
+.breadcrumbs a:hover {
+  text-decoration: underline;
+}
+
+.separator {
+  color: #666;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.tags {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.duration {
+  background-color: #f5f5f5;
+  border-radius: 16px;
+  padding: 4px 12px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.official {
+  font-size: 14px;
+  color: #555;
+}
+
+.interviewLayout {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 40px;
+}
+
+.cameraContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.camera {
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.videoFeed {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cameraError {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px;
+  text-align: center;
+}
+
+.cameraError p {
+  color: #555;
+  max-width: 280px;
+}
+
+.retryButton {
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.cameraInstructions {
+  font-size: 14px;
+  color: #555;
+}
+
+.interviewInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.aboutTitle {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.userAvatar {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+}
+
+.startButton {
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 24px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 40px;
+  transition: background-color 0.2s;
+}
+
+.startButton:hover:not(:disabled) {
+  background-color: #0055aa;
+}
+
+.startButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.aboutSection {
+  border-top: 1px solid #eaeaea;
+  padding-top: 24px;
+}
+
+.aboutSection h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.aboutSection p {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.officialLink {
+  color: #0066cc;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.officialLink:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+  .interviewLayout {
+    grid-template-columns: 1fr;
+  }
+} 

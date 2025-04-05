@@ -1,0 +1,15 @@
+.landing-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.landing-content {
+  padding: 20px;
+}
+
+.about-section {
+  text-align: center;
+  padding: 60px 20px;
+  max-width: 800px;
+  margin: 0 auto;
+} 

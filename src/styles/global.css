@@ -1,0 +1,44 @@
+/* Global Styles */
+
+:root {
+  /* Colors */
+  --blue-primary: #2351FF;
+  --border-color: #d9d9d9;
+  --text-color: #333333;
+  --background-light: #f8f8f8;
+}
+
+/* Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Figtree', sans-serif;
+  letter-spacing: -0.01em; /* -1% spacing for normal text */
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Figtree', sans-serif;
+  letter-spacing: -0.03em; /* -3% spacing for titles */
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  font-family: 'Figtree', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+} 

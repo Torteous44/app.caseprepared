@@ -1,0 +1,314 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  background-color: #1e1e1e;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.header {
+  display: none; /* Hide the header as it's not in the mockup */
+}
+
+.callContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1200px;
+  height: 100%;
+  max-height: 85vh;
+  gap: 20px;
+}
+
+.videoContainer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  background-color: #2a2a2a;
+}
+
+.localVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.audioVisualizerContainer {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 200px;
+  height: 120px;
+  border-radius: 12px;
+  background-color: rgba(74, 74, 74, 0.95);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  padding: 10px;
+}
+
+.circleContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.circleVisualizer {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: white;
+  transform: scale(0.5);
+  transition: transform 0.1s ease-out;
+}
+
+.brandingText {
+  color: white;
+  font-size: 14px;
+  margin-top: 10px;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.callInfo {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.callTitle {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.bottomControls {
+  display: flex;
+  gap: 20px;
+  background-color: rgba(42, 42, 42, 0.7);
+  padding: 10px 20px;
+  border-radius: 36px;
+  margin-top: 20px;
+}
+
+.controlButton {
+  background-color: transparent;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.controlButton svg {
+  width: 24px;
+  height: 24px;
+}
+
+.controlButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.controlButton.muted {
+  background-color: #ef4444;
+}
+
+.endCall {
+  background-color: #ef4444;
+}
+
+.endCall:hover {
+  background-color: #dc2626;
+}
+
+.volumeControl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 4px 12px;
+  border-radius: 24px;
+}
+
+.volumeControl input[type="range"] {
+  width: 80px;
+  -webkit-appearance: none;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
+  outline: none;
+}
+
+.volumeControl input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.volumeControl input[type="range"]::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+}
+
+.connectionIndicator {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 8px 12px;
+  border-radius: 24px;
+  z-index: 10;
+}
+
+.statusDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #4ade80;
+}
+
+.statusText {
+  font-size: 14px;
+  color: white;
+}
+
+.notification {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  z-index: 100;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.waitingAudio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.connecting {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  border-left-color: white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.notification-info {
+  background-color: rgba(59, 130, 246, 0.9);
+}
+
+.notification-success {
+  background-color: rgba(34, 197, 94, 0.9);
+}
+
+.notification-warning {
+  background-color: rgba(249, 115, 22, 0.9);
+}
+
+.notification-error {
+  background-color: rgba(239, 68, 68, 0.9);
+}
+
+@media (max-width: 768px) {
+  .callContainer {
+    max-width: 100%;
+    max-height: 80vh;
+  }
+  
+  .bottomControls {
+    width: 90%;
+    justify-content: space-around;
+    padding: 10px;
+  }
+  
+  .controlButton {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .audioVisualizerContainer {
+    bottom: 20px;
+    right: 20px;
+    width: 160px;
+    height: 100px;
+  }
+  
+  .circleVisualizer {
+    width: 45px;
+    height: 45px;
+  }
+} 
