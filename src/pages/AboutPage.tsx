@@ -72,7 +72,7 @@ const AboutPage = () => {
     <div className={styles.container}>
       <div className={styles.header} ref={headerRef}>
         <div className={styles.spotlight}></div>
-        <h1 className={styles.title}>About Case Prepared</h1>
+        <h1 className={styles.title}>About Us</h1>
       </div>
 
       <div className={styles.content}>
