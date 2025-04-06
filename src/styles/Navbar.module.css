@@ -73,7 +73,8 @@
 }
 
 .scrolled .logoImage {
-  height: 30px;
+  margin-top: 5px;
+  height: 32px;
 }
 
 .navLinks {
@@ -212,12 +213,7 @@
   .loginButton {
     display: none;
   }
+
   
-  .logo {
-    flex: 1;
-  }
-  
-  .userName {
-    display: none;
-  }
+
 } 

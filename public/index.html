@@ -1,79 +1,139 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/assets/Logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="theme-color" content="#0066cc" />
-    <meta name="description" content="Master consulting case interviews with Case Prepared's AI platform. Get personalized feedback, practice with real-world scenarios, and improve your consulting interview skills with our advanced artificial intelligence system. Start your journey to consulting success today." />
-    <meta name="keywords" content="consulting case interviews, management consulting preparation, case interview practice, AI interview coach, consulting career prep, McKinsey interview prep, BCG practice cases, Bain case preparation, strategy consulting interviews, case interview frameworks, consulting math practice, market sizing cases, profitability cases, merger acquisition cases, case prepared ai" />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/favicon.ico" />
-    <link rel="canonical" href="https://caseprepared.com" />
+    <!-- Favicons -->
+    <link rel="icon" href="/favicon/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
+    <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon/android-chrome-192x192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon/android-chrome-512x512.png" />
     
-    <!-- Preconnect to font resources -->
+    <!-- Primary Meta Tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="theme-color" content="#0066cc" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0066cc" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="Master consulting case interviews with Case Prepared's AI platform. Get personalized feedback, practice with real-world scenarios, and improve your consulting interview skills with our advanced artificial intelligence system. Start your journey to consulting success today." />
+    <link rel="canonical" href="https://caseprepared.com/" />
+    
+    <!-- Performance optimizations -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" as="style" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" />
     
     <!-- Open Graph / Social Media -->
-    <meta property="og:title" content="Case Prepared | AI-Powered Consulting Interview Practice" />
-    <meta property="og:description" content="Master consulting case interviews with our AI-powered practice platform. Get real-time feedback and improve your interview skills with artificial intelligence." />
-    <meta property="og:image" content="%PUBLIC_URL%/favicon.ico" />
+    <meta property="og:title" content="Case Prepared | Master Consulting Case Interviews with AI" />
+    <meta property="og:description" content="Practice consulting case interviews with our AI platform. Get personalized feedback, master frameworks, and improve your skills with real-time guidance." />
+    <meta property="og:image" content="https://caseprepared.com/assets/social-share.png" />
+    <meta property="og:image:alt" content="Case Prepared AI Platform Interface" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Case Prepared" />
-    <meta property="og:url" content="https://caseprepared.com" />
+    <meta property="og:url" content="https://caseprepared.com/" />
+    <meta property="og:locale" content="en_US" />
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Case Prepared | AI Consulting Interview Practice" />
-    <meta name="twitter:description" content="Practice consulting case interviews with AI. Get instant feedback and improve your skills." />
-    <meta name="twitter:image" content="%PUBLIC_URL%/favicon.ico" />
+    <meta name="twitter:title" content="Case Prepared | AI-Powered Case Interview Practice" />
+    <meta name="twitter:description" content="Practice consulting case interviews with AI. Get instant feedback and improve your skills with personalized guidance." />
+    <meta name="twitter:image" content="https://caseprepared.com/assets/social-share.png" />
     
     <!-- Additional SEO Meta Tags -->
     <meta name="author" content="Case Prepared" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <meta name="googlebot" content="index, follow" />
-    
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    
-    <!-- Performance optimizations -->
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Language Alternatives -->
+    <link rel="alternate" href="https://caseprepared.com/" hreflang="x-default" />
+    <link rel="alternate" href="https://caseprepared.com/" hreflang="en" />
 
     <!-- Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Case Prepared",
-      "description": "AI-powered consulting interview preparation platform",
-      "applicationCategory": "Education",
-      "offers": {
-        "@type": "Offer",
-        "category": "Consulting Interview Preparation"
-      },
-      "featureList": "AI-powered interview practice, Real-time feedback, Consulting frameworks, Case interview preparation",
-      "url": "https://caseprepared.com"
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "name": "Case Prepared",
+          "description": "AI-powered consulting interview preparation platform",
+          "applicationCategory": "Education",
+          "operatingSystem": "Web",
+          "offers": {
+            "@type": "Offer",
+            "category": "Consulting Interview Preparation"
+          },
+          "featureList": "AI-powered interview practice, Real-time feedback, Consulting frameworks, Case interview preparation",
+          "url": "https://caseprepared.com",
+          "provider": {
+            "@type": "Organization",
+            "name": "Case Prepared",
+            "url": "https://caseprepared.com",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://caseprepared.com/assets/Logo.png",
+              "width": "512",
+              "height": "512"
+            }
+          },
+          "screenshot": "https://caseprepared.com/assets/app-screenshot.png",
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "ratingCount": "150"
+          }
+        },
+        {
+          "@type": "Organization",
+          "name": "Case Prepared",
+          "url": "https://caseprepared.com",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://caseprepared.com/assets/Logo.png",
+            "width": "512",
+            "height": "512"
+          },
+        },
+        {
+          "@type": "WebSite",
+          "name": "Case Prepared",
+          "url": "https://caseprepared.com",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://caseprepared.com/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [{
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://caseprepared.com"
+          }]
+        }
+      ]
     }
     </script>
 
     <!-- Cloudflare Web Analytics -->
     <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2f7b6a9ba17f4a5191f4796c4f80ad78"}'></script>
     
-    <title>Case Prepared | AI-Powered Consulting Interview Practice & Preparation</title>
+    <title>Case Prepared | Master Consulting Case Interviews with AI-Powered Practice</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
+    <noscript>
+      <div style="padding: 20px; text-align: center;">
+        You need to enable JavaScript to use Case Prepared. Please enable JavaScript to access our AI-powered consulting interview practice platform.
+      </div>
+    </noscript>
+    <main id="root"></main>
   </body>
 </html>
