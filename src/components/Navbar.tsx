@@ -32,7 +32,7 @@ const Navbar: React.FC = () => {
         <div className={styles.logo}>
           <Link to="/" className={styles.logoText}>
             <img
-              src="/assets/Logo Text.avif"
+              src="/assets/Logo Text.svg"
               alt="Case Prepared"
               className={styles.logoImage}
             />
