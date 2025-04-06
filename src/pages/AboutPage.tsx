@@ -72,7 +72,7 @@ const AboutPage = () => {
     <div className={styles.container}>
       <div className={styles.header} ref={headerRef}>
         <div className={styles.spotlight}></div>
-        <h1 className={styles.title}>About Interview AI</h1>
+        <h1 className={styles.title}>About Case Prepared</h1>
       </div>
 
       <div className={styles.content}>
@@ -131,7 +131,7 @@ const AboutPage = () => {
         </div>
 
         <div className={styles.ctaSection}>
-          <h2>Ready to experience the future of interview preparation?</h2>
+          <h2>Ready to land your dream job?</h2>
           <Link to="/" className={styles.button}>
             Try an Interview
           </Link>

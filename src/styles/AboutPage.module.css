@@ -1,3 +1,5 @@
+@import '../styles.css';
+
 .container {
   display: flex;
   flex-direction: column;
@@ -18,24 +20,7 @@
   cursor: default;
 }
 
-.spotlight {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(
-    circle at var(--mouse-x) var(--mouse-y),
-    rgba(35, 81, 255, 0.04) 0%,
-    rgba(35, 81, 255, 0.01) 35%,
-    rgba(35, 81, 255, 0) 70%
-  );
-  pointer-events: none;
-  z-index: 1;
-  will-change: background;
-  opacity: 0;
-  animation: fadeIn 0.8s forwards;
-}
+
 
 @keyframes fadeIn {
   from { opacity: 0; }
@@ -74,8 +59,8 @@
 }
 
 .title {
-  font-size: 3.2rem;
-  font-weight: 700;
+  font-size: 3rem;
+  font-weight: 600;
   color: #222;
   margin: 0;
   letter-spacing: -0.03em;
@@ -158,7 +143,7 @@
 }
 
 .button {
-  background-color: #2351FF;
+  background-color: var(--blue-primary);
   color: white;
   border: none;
   padding: 16px 36px;
@@ -191,7 +176,7 @@
 }
 
 .button:hover {
-  background-color: #1a41e0;
+  background-color: var(--blue-secondary);
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(35, 81, 255, 0.25);
 }

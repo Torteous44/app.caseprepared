@@ -17,7 +17,7 @@
 
 .modalContainer {
   background: white;
-  border-radius: 24px;
+  border-radius:12px;
   width: 90%;
   max-width: 400px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
@@ -26,6 +26,7 @@
   max-height: 90vh;
   display: flex;
   flex-direction: column;
+  border: 2.5px solid var(--blue-primary);
 }
 
 .modalHeader {

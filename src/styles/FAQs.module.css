@@ -1,8 +1,10 @@
+@import '../styles.css';
+
 .container {
   width: 100%;
   max-width: 1000px;
   margin: 140px auto;
-  padding: 0 20px;
+  padding: 0 80px;
 }
 
 .title {
@@ -27,7 +29,7 @@
 }
 
 .faqItem:hover {
-  border-color: #2351FF;
+  border-color: var(--blue-primary);
 }
 
 .question {
@@ -51,7 +53,7 @@
   align-items: center;
   justify-content: center;
   transition: transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
-  color: #2351FF;
+  color: var(--blue-primary);
 }
 
 .expanded .arrow {

@@ -21,7 +21,9 @@ const Hero: React.FC<HeroProps> = ({
               We've helped over 5,000 students pass their case interviews
             </span>
             <span className={styles["divider"]}></span>
-            <button className={styles["read-more"]}>Read more</button>
+            <Link to="/about" className={styles["read-more"]}>
+              Read more
+            </Link>
           </div>
 
           <h1>{title}</h1>
