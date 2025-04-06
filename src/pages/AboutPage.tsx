@@ -79,7 +79,7 @@ const AboutPage = () => {
         <div className={styles.section}>
           <h2>Our Mission</h2>
           <p>
-            Interview AI is dedicated to revolutionizing the way professionals
+            Case Prepared is dedicated to revolutionizing the way professionals
             prepare for interviews. Our platform combines artificial
             intelligence with proven interview techniques to provide
             personalized, interactive practice experiences that boost confidence
@@ -106,7 +106,7 @@ const AboutPage = () => {
         <div className={styles.section}>
           <h2>Real-Time Coaching</h2>
           <p>
-            What sets Interview AI apart is our real-time coaching feature. As
+            What sets Case Prepared apart is our real-time coaching feature. As
             you practice, our AI provides immediate guidance on your delivery,
             content, and overall presentation. This instant feedback loop
             accelerates your learning curve and helps you refine your responses
@@ -122,7 +122,7 @@ const AboutPage = () => {
         <div className={styles.section}>
           <h2>Developed by Experts</h2>
           <p>
-            Interview AI was developed by a team of hiring managers, career
+            Case Prepared was developed by a team of hiring managers, career
             coaches, and AI specialists who understand what makes a successful
             interview. Our algorithms are trained on thousands of real
             interviews and continuously updated to reflect the latest hiring
