@@ -33,7 +33,11 @@ const LoginForm: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <img src="/assets/Logo Text.png" alt="Case Prepared" className={styles.logo} />
+      <img
+        src="/assets/Logo Text.png"
+        alt="Case Prepared"
+        className={styles.logo}
+      />
       <h2 className={styles.modalTitle}>Log in to continue</h2>
       {formError && <div className={styles.error}>{formError}</div>}
 

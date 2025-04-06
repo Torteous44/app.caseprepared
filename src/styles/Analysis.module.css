@@ -1,3 +1,5 @@
+@import '../styles.css';
+
 .container {
   width: 100%;
   max-width: 1200px;
@@ -46,7 +48,7 @@
 }
 
 .blueIcon {
-  color: #2351FF;
+  color: var(--blue-primary);
 }
 
 .orangeIcon {
@@ -70,7 +72,7 @@
 }
 
 .card:nth-child(1) .highlight {
-  color: #2351FF;
+  color: var(--blue-primary);
 }
 
 .card:nth-child(2) .highlight {

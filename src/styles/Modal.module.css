@@ -78,10 +78,11 @@
 }
 
 .logo {
-  width: 180px;
+  width: 160px;
   height: auto;
-  margin: 0 auto 24px;
   display: block;
+  margin: 0 auto 24px;
+  margin-top: 10px;
 }
 
 /* Form styling */
@@ -101,6 +102,7 @@
   border-radius: 8px;
   font-size: 1rem;
   transition: background-color 0.3s;
+  border: 1px solid var(--border-color);
 }
 
 .input:focus {
