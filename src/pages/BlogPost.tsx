@@ -49,7 +49,23 @@ const BlogPost: React.FC = () => {
   return (
     <div className={styles.blogPostContainer}>
       <Link to="/blogs" className={styles.backButton}>
-        ← Back to Blogs
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className={styles.backArrow}
+        >
+          <path
+            d="M15.8333 10H4.16666M4.16666 10L9.16666 15M4.16666 10L9.16666 5"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+        Back to Blogs
       </Link>
 
       <header className={styles.blogHeader}>

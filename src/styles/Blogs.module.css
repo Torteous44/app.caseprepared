@@ -1,36 +1,39 @@
 .blogsContainer {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 120px 40px;
+  max-width: 1080px;
+  margin: 20px auto;
+  padding: 100px 24px;
 }
 
 .blogsHeader {
-  margin-bottom: 40px;
+  margin-bottom: 64px;
 }
 
 .blogsHeader h1 {
-  font-size: 2.5rem;
+  font-size: 3.5rem;
   font-weight: 800;
   margin: 0;
   color: var(--text-color);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
 }
 
 .filterInfo {
-  margin: 20px 0 0;
-  color: #666;
+  margin: 32px 0 0;
+  color: #595959;
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 16px;
+  font-size: 0.9375rem;
 }
 
 .clearFilter {
-  color: var(--blue-primary);
+  color: var(--text-color);
   text-decoration: none;
-  font-size: 0.9rem;
-  padding: 4px 8px;
+  font-size: 0.875rem;
+  padding: 6px 12px;
   background: rgba(0, 0, 0, 0.03);
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 }
 
 .clearFilter:hover {
@@ -40,30 +43,32 @@
 .tagCloud {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 40px;
+  gap: 12px;
+  margin-bottom: 64px;
   align-items: center;
 }
 
 .tagLink {
   text-decoration: none;
-  color: #666;
+  color: #595959;
   background: rgba(0, 0, 0, 0.03);
-  padding: 6px 12px;
-  border-radius: var(--border-radius);
-  font-size: 0.9rem;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9375rem;
   transition: all 0.2s ease;
+  font-weight: 450;
 }
 
 .moreTagsButton {
   background: none;
   border: none;
-  color: var(--blue-primary);
-  font-size: 0.9rem;
-  padding: 6px 12px;
+  color: var(--text-color);
+  font-size: 0.9375rem;
+  padding: 8px 16px;
   cursor: pointer;
   transition: all 0.2s ease;
-  border-radius: var(--border-radius);
+  border-radius: 8px;
+  font-weight: 450;
 }
 
 .moreTagsButton:hover {
@@ -71,13 +76,13 @@
 }
 
 .moreTag {
-  background-color: rgba(0, 0, 0, 0.06);
-  color: #666;
+  background-color: rgba(0, 0, 0, 0.02);
+  color: #8c8c8c;
   cursor: default;
 }
 
 .moreTag:hover {
-  background-color: rgba(0, 0, 0, 0.06);
+  background-color: rgba(0, 0, 0, 0.02);
 }
 
 .tagLink:hover {
@@ -86,20 +91,18 @@
 }
 
 .tagLinkActive {
-  background: var(--blue-primary);
+  background: var(--text-color);
   color: white;
 }
 
 .tagLinkActive:hover {
-  background: var(--blue-primary);
-  color: white;
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
 .blogsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 40px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 64px 48px;
 }
 
 .blogCard {
@@ -109,93 +112,130 @@
 }
 
 .blogCard article {
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  overflow: hidden;
+  background: none;
   transition: all 0.3s ease;
-  border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .blogCard:hover article {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
 }
 
 .blogImage {
   width: 100%;
-  height: 220px;
+  aspect-ratio: 16/9;
   object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 24px;
 }
 
 .blogContent {
-  padding: 24px;
+  padding: 0;
 }
 
 .blogTitle {
-  font-size: 1.35rem;
-  font-weight: 600;
-  margin: 0 0 12px 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 16px 0;
   color: var(--text-color);
-  line-height: 1.4;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
 }
 
 .blogExcerpt {
   color: #595959;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   line-height: 1.6;
-  font-size: 0.95rem;
+  font-size: 1rem;
 }
 
 .blogMeta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   color: #8c8c8c;
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .blogTags {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   flex-wrap: wrap;
-  margin-top: 16px;
+  margin-top: 0;
 }
 
 .tag {
-  background-color: rgba(0, 0, 0, 0.03);
-  padding: 5px 10px;
-  border-radius: 6px;
-  font-size: 0.75rem;
-  color: #595959;
-  font-weight: 500;
-  letter-spacing: 0.02em;
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: 0.875rem;
+  color: #8c8c8c;
+  font-weight: 450;
+  letter-spacing: 0;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: color 0.2s ease;
+  text-decoration: none;
 }
 
 .tag:hover {
-  background-color: rgba(0, 0, 0, 0.06);
+  color: var(--text-color);
+}
+
+@media (max-width: 1024px) {
+  .blogsContainer {
+    padding: 80px 24px;
+  }
+
+  .blogsHeader h1 {
+    font-size: 3rem;
+  }
+
+  .blogsGrid {
+    gap: 48px 40px;
+  }
 }
 
 @media (max-width: 768px) {
   .blogsContainer {
-    padding: 80px 20px;
+    padding: 64px 20px;
+  }
+
+  .blogsHeader {
+    margin-bottom: 48px;
   }
 
   .blogsHeader h1 {
-    font-size: 2rem;
+    font-size: 2.5rem;
+  }
+
+  .filterInfo {
+    margin-top: 24px;
   }
 
   .tagCloud {
-    margin-bottom: 30px;
+    margin-bottom: 48px;
+    gap: 10px;
   }
 
   .blogsGrid {
     grid-template-columns: 1fr;
-    gap: 30px;
+    gap: 48px;
+  }
+
+  .blogTitle {
+    font-size: 1.375rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .blogsHeader h1 {
+    font-size: 2rem;
+  }
+
+  .tagLink, .moreTagsButton {
+    padding: 6px 12px;
+    font-size: 0.875rem;
   }
 } 
