@@ -13,14 +13,14 @@ interface UniBannerProps {
 
 // Define university logos
 const defaultLogos: UniLogo[] = [
-  { id: 1, src: "/assets/uniBanner/image.png", alt: "University Logo 1" },
-  { id: 2, src: "/assets/uniBanner/image 4.png", alt: "University Logo 2" },
-  { id: 3, src: "/assets/uniBanner/image 5.png", alt: "University Logo 3" },
-  { id: 4, src: "/assets/uniBanner/image 6.png", alt: "University Logo 4" },
-  { id: 5, src: "/assets/uniBanner/image 7.png", alt: "University Logo 5" },
-  { id: 6, src: "/assets/uniBanner/image 10.png", alt: "University Logo 6" },
-  { id: 7, src: "/assets/uniBanner/image 11.png", alt: "University Logo 7" },
-  { id: 8, src: "/assets/uniBanner/image 12.png", alt: "University Logo 8" },
+  { id: 1, src: "/assets/uniBanner/Penn.avif", alt: "University Logo 1" },
+  { id: 2, src: "/assets/uniBanner/Harvard.avif", alt: "University Logo 2" },
+  { id: 3, src: "/assets/uniBanner/Stanford.avif", alt: "University Logo 3" },
+  { id: 4, src: "/assets/uniBanner/Dartmouth.avif", alt: "University Logo 4" },
+  { id: 5, src: "/assets/uniBanner/Oxford.avif", alt: "University Logo 5" },
+  { id: 6, src: "/assets/uniBanner/Bocconi.avif", alt: "University Logo 6" },
+  { id: 7, src: "/assets/uniBanner/Wharton.avif", alt: "University Logo 7" },
+  { id: 8, src: "/assets/uniBanner/IE.avif", alt: "University Logo 8" },
 ];
 
 const UniBanner: React.FC<UniBannerProps> = ({ logos = defaultLogos }) => {

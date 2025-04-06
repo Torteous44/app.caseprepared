@@ -34,7 +34,7 @@ const Hero: React.FC<HeroProps> = ({
         </div>
         <div className={styles["hero-image"]}>
           <img
-            src="/assets/HeroCall.png"
+            src="/assets/HeroCall.avif"
             alt="AI-powered mock interview interface"
             className={styles["video-call-image"]}
           />

@@ -50,7 +50,8 @@ const RealtimeConnect: React.FC = () => {
   const [showTrialEndModal, setShowTrialEndModal] = useState(false);
   const [showAlmostReadyModal, setShowAlmostReadyModal] = useState(false);
   const [showStartPrompt, setShowStartPrompt] = useState(false);
-  const [interviewTitle, setInterviewTitle] = useState<string>("Case Interview");
+  const [interviewTitle, setInterviewTitle] =
+    useState<string>("Case Interview");
   const [notification, setNotification] = useState<{
     show: boolean;
     message: string;
@@ -725,11 +726,11 @@ const RealtimeConnect: React.FC = () => {
       const timer = setTimeout(() => {
         setShowStartPrompt(true);
       }, 2000);
-      
+
       return () => clearTimeout(timer);
     }
   }, [connectionState, callActive]);
-  
+
   // Hide start prompt when interview starts (audio level increases)
   useEffect(() => {
     if (showStartPrompt && audioLevel > 0.1) {
@@ -741,14 +742,14 @@ const RealtimeConnect: React.FC = () => {
   useEffect(() => {
     const fetchInterviewDetails = async () => {
       if (!sessionId) return;
-      
+
       try {
         // First check if title is in location state
         if (locationState.title) {
           setInterviewTitle(locationState.title);
           return;
         }
-        
+
         // If not in location state, try to fetch from API
         const response = await api.get(`/interviews/session/${sessionId}`);
         if (response.data && response.data.interview) {
@@ -760,10 +761,10 @@ const RealtimeConnect: React.FC = () => {
         // Keep default title if fetch fails
       }
     };
-    
+
     fetchInterviewDetails();
   }, [sessionId, locationState.title, api]);
-  
+
   return (
     <div className={styles.container}>
       {/* Connection indicator */}
@@ -778,13 +779,23 @@ const RealtimeConnect: React.FC = () => {
           {getConnectionStatusText(connectionState)}
         </span>
       </div>
-      
+
       {/* Start prompt popup */}
       {showStartPrompt && (
         <div className={styles.startPromptContainer}>
           <LongPopup
             icon={
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
               </svg>
             }
@@ -813,8 +824,8 @@ const RealtimeConnect: React.FC = () => {
           {callActive && (
             <div className={styles.audioVisualizerContainer}>
               <div className={styles.circleContainer}>
-                <div 
-                  className={styles.circleVisualizer} 
+                <div
+                  className={styles.circleVisualizer}
                   style={getCircleSize()}
                 >
                   <div className={styles.innerCircle}></div>
@@ -838,24 +849,31 @@ const RealtimeConnect: React.FC = () => {
             disabled={isConnecting}
           >
             {isMuted ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                width="24"
-                height="24"
-                fill="currentColor"
-              >
-                <path d="M5.889 16H2a1 1 0 01-1-1V9a1 1 0 011-1h3.889l5.294-4.332a.5.5 0 01.817.387v15.89a.5.5 0 01-.817.387L5.89 16zm14.525-4l3.536 3.536-1.414 1.414L19 13.414l-3.536 3.536-1.414-1.414L17.586 12 14.05 8.464l1.414-1.414L19 10.586l3.536-3.536 1.414 1.414L20.414 12z" />
-              </svg>
+              <>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                >
+                  <path d="M5.889 16H2a1 1 0 01-1-1V9a1 1 0 011-1h3.889l5.294-4.332a.5.5 0 01.817.387v15.89a.5.5 0 01-.817.387L5.89 16zm14.525-4l3.536 3.536-1.414 1.414L19 13.414l-3.536 3.536-1.414-1.414L17.586 12 14.05 8.464l1.414-1.414L19 10.586l3.536-3.536 1.414 1.414L20.414 12z" />
+                </svg>
+              </>
             ) : (
               <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
+                fill="currentColor"
                 width="24"
                 height="24"
-                fill="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <path d="M13 7.22L9.603 10H6v4h3.603L13 16.78V7.22zM8.889 16H5a1 1 0 01-1-1V9a1 1 0 011-1h3.889l5.294-4.332a.5.5 0 01.817.387v15.89a.5.5 0 01-.817.387L8.89 16zm13.974.591l-1.422-1.422A3.993 3.993 0 0019 12c0-1.43-.75-2.685-1.89-3.395l1.422-1.422A5.991 5.991 0 0121 12c0 1.842-.83 3.49-2.137 4.591z" />
+                <path
+                  fillRule="evenodd"
+                  d="M11.553 3.064A.75.75 0 0112 3.75v16.5a.75.75 0 01-1.255.555L5.46 16H2.75A1.75 1.75 0 011 14.25v-4.5C1 8.784 1.784 8 2.75 8h2.71l5.285-4.805a.75.75 0 01.808-.13zM10.5 5.445l-4.245 3.86a.75.75 0 01-.505.195h-3a.25.25 0 00-.25.25v4.5c0 .138.112.25.25.25h3a.75.75 0 01.505.195l4.245 3.86V5.445z"
+                />
+                <path d="M18.718 4.222a.75.75 0 011.06 0c4.296 4.296 4.296 11.26 0 15.556a.75.75 0 01-1.06-1.06 9.5 9.5 0 000-13.436.75.75 0 010-1.06z" />
+                <path d="M16.243 7.757a.75.75 0 10-1.061 1.061 4.5 4.5 0 010 6.364.75.75 0 001.06 1.06 6 6 0 000-8.485z" />
               </svg>
             )}
           </button>

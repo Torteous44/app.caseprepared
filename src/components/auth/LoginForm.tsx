@@ -34,7 +34,7 @@ const LoginForm: React.FC = () => {
   return (
     <form onSubmit={handleSubmit}>
       <img
-        src="/assets/Logo Text.png"
+        src="/assets/Logo Text.avif"
         alt="Case Prepared"
         className={styles.logo}
       />

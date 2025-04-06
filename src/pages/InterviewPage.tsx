@@ -80,53 +80,63 @@ const caseContent: CaseContentMap = {
     sections: [
       {
         heading: "Client goal",
-        content: "Our client is Beautify. Beautify has approached McKinsey for help with exploring new ways to approach its customers."
+        content:
+          "Our client is Beautify. Beautify has approached McKinsey for help with exploring new ways to approach its customers.",
       },
       {
         heading: "Situation description",
-        content: "Beautify is a global prestige cosmetics company that sells its products mainly inside high-end department stores such as Harrods and Shanghai No. 1. It also has a presence online with specialty retailers like Sephora. Beautify produces a number of makeup, fragrance, and skin care products sold under several different brands.",
-        subContent: "In department stores, beauty consultants play a critical role with consumers:",
+        content:
+          "Beautify is a global prestige cosmetics company that sells its products mainly inside high-end department stores such as Harrods and Shanghai No. 1. It also has a presence online with specialty retailers like Sephora. Beautify produces a number of makeup, fragrance, and skin care products sold under several different brands.",
+        subContent:
+          "In department stores, beauty consultants play a critical role with consumers:",
         listItems: [
-          "approaching \"passive\" customers",
+          'approaching "passive" customers',
           "demonstrating their knowledge of the products",
           "actively selling the products",
-          "maintaining a loyal customer base of repeat buyers"
+          "maintaining a loyal customer base of repeat buyers",
         ],
-        additionalContent: "These consultants are hired directly by Beautify or through specialist, third-party agencies that find new recruits for a fee. Beautify is then responsible for selecting, training, and paying the consultants. Within Beautify, beauty consultants are managed independently by each brand in each country. For example, this may mean a consultant might be part of the Chanel team in a store. However, consumers are shifting more to online shopping, and too many beauty consultants are left working in empty department stores."
-      }
-    ]
+        additionalContent:
+          "These consultants are hired directly by Beautify or through specialist, third-party agencies that find new recruits for a fee. Beautify is then responsible for selecting, training, and paying the consultants. Within Beautify, beauty consultants are managed independently by each brand in each country. For example, this may mean a consultant might be part of the Chanel team in a store. However, consumers are shifting more to online shopping, and too many beauty consultants are left working in empty department stores.",
+      },
+    ],
   },
   bcg: {
     title: "About this Case",
     sections: [
       {
         heading: "Introduction",
-        content: "Our client is a global consumer goods company. The company's products include a wide variety of personal care products (e.g., hair care, skin care, cosmetics). The client's CEO feels strongly that her company needs to develop a plan to reduce its environmental impact and do its part in the fight against climate change, and has engaged BCG to help her create a business case for setting a science-based target to reduce the company's impact and determine what initiatives to undertake to achieve that target."
+        content:
+          "Our client is a global consumer goods company. The company's products include a wide variety of personal care products (e.g., hair care, skin care, cosmetics). The client's CEO feels strongly that her company needs to develop a plan to reduce its environmental impact and do its part in the fight against climate change, and has engaged BCG to help her create a business case for setting a science-based target to reduce the company's impact and determine what initiatives to undertake to achieve that target.",
       },
       {
         heading: "Context",
-        content: "Science-based targets provide a clearly-defined pathway for companies to reduce greenhouse gas emissions, helping prevent the worst impacts of climate change and future-proof business growth.",
-        additionalContent: "Targets are considered science based if they are in line with what the latest climate science deems necessary to meet the goals of the Paris Agreement – limiting global warming to well-below 2°C above pre-industrial levels and pursuing efforts to limit warming to 1.5°C."
-      }
-    ]
+        content:
+          "Science-based targets provide a clearly-defined pathway for companies to reduce greenhouse gas emissions, helping prevent the worst impacts of climate change and future-proof business growth.",
+        additionalContent:
+          "Targets are considered science based if they are in line with what the latest climate science deems necessary to meet the goals of the Paris Agreement – limiting global warming to well-below 2°C above pre-industrial levels and pursuing efforts to limit warming to 1.5°C.",
+      },
+    ],
   },
   bain: {
     title: "About this Case",
     sections: [
       {
         heading: "Introduction",
-        content: "You're having lunch with an old friend from university, and she's looking for some business advice. She is thinking of opening a coffee shop in Cambridge, England, a large university city an hour and a half away from London."
+        content:
+          "You're having lunch with an old friend from university, and she's looking for some business advice. She is thinking of opening a coffee shop in Cambridge, England, a large university city an hour and a half away from London.",
       },
       {
         heading: "The Challenge",
-        content: "She sees potential in this business but wants your help in determining whether opening a coffee shop is a good idea. Cambridge is a vibrant city with a large student population, but it also has a competitive coffee shop market with both local and national chains."
+        content:
+          "She sees potential in this business but wants your help in determining whether opening a coffee shop is a good idea. Cambridge is a vibrant city with a large student population, but it also has a competitive coffee shop market with both local and national chains.",
       },
       {
         heading: "What to Consider",
-        content: "As you help your friend evaluate this opportunity, consider factors such as market demand, competition, location options, startup costs, operational requirements, and potential revenue streams. Your analysis should help determine if this venture is viable and what strategy would give it the best chance of success."
-      }
-    ]
-  }
+        content:
+          "As you help your friend evaluate this opportunity, consider factors such as market demand, competition, location options, startup costs, operational requirements, and potential revenue streams. Your analysis should help determine if this venture is viable and what strategy would give it the best chance of success.",
+      },
+    ],
+  },
 };
 
 const InterviewPage: React.FC = () => {
@@ -389,7 +399,11 @@ const InterviewPage: React.FC = () => {
           <h2 className={styles.aboutTitle}>Ready to Join?</h2>
 
           <div className={styles.userAvatar}>
-            <img src="/assets/Logo.png" alt="Case Prepared Logo" className={styles.logo} />
+            <img
+              src="/assets/Logo.avif"
+              alt="Case Prepared Logo"
+              className={styles.logo}
+            />
           </div>
 
           <button
@@ -413,9 +427,15 @@ const InterviewPage: React.FC = () => {
       </div>
 
       <div className={styles.interviewDetails}>
-        <h3>{caseContent[interview.company.toLowerCase() as keyof typeof caseContent]?.title || "About this Case"}</h3>
-        
-        {caseContent[interview.company.toLowerCase() as keyof typeof caseContent]?.sections.map((section, index) => (
+        <h3>
+          {caseContent[
+            interview.company.toLowerCase() as keyof typeof caseContent
+          ]?.title || "About this Case"}
+        </h3>
+
+        {caseContent[
+          interview.company.toLowerCase() as keyof typeof caseContent
+        ]?.sections.map((section, index) => (
           <div key={index}>
             <h4>{section.heading}</h4>
             <p>{section.content}</p>
