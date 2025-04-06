@@ -6,6 +6,7 @@
   margin: 30px 0;
   margin-bottom: 80px;
   margin-top: 100px;
+  padding: 0 20px;
 }
 
 .uni-banner h3 {
@@ -14,6 +15,8 @@
   font-size: 1.2rem;
   font-weight: 600;
   color: #848484;
+  padding: 0 20px;
+  line-height: 1.4;
 }
 
 .scroll-container {
@@ -53,7 +56,6 @@
   transition: filter 0.3s ease;
 }
 
-
 .gradient-overlay-left {
   position: absolute;
   top: 0;
@@ -82,5 +84,60 @@
   }
   100% {
     transform: translateX(calc(-50% - 40px));
+  }
+}
+
+@media (max-width: 768px) {
+  .uni-banner {
+    margin: 60px 0;
+    margin-bottom: 60px;
+    margin-top: 60px;
+  }
+
+  .uni-banner h3 {
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+  }
+
+  .scroll-container {
+    height: 60px;
+  }
+
+  .universities-container {
+    gap: 60px;
+  }
+
+  .university-item {
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .uni-banner {
+    margin: 40px 0;
+    margin-bottom: 40px;
+    margin-top: 40px;
+  }
+
+  .uni-banner h3 {
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+
+  .scroll-container {
+    height: 50px;
+  }
+
+  .universities-container {
+    gap: 40px;
+  }
+
+  .university-item {
+    height: 35px;
+  }
+
+  .gradient-overlay-left,
+  .gradient-overlay-right {
+    width: 30px;
   }
 }

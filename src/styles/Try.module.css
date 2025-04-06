@@ -4,6 +4,7 @@
   width: 100%;
   padding: 80px 20px;
   margin: 40px 0;
+  background-color: white;
 }
 
 .content {
@@ -31,13 +32,13 @@
 }
 
 .title {
-    font-size: 3.5rem;
-    font-weight: 600;
-    line-height: 1.1;
-    color: black;
-    margin-top: 0.5rem;
-    letter-spacing: -0.08em;
-    margin-bottom: 0.5rem;
+  font-size: 3.5rem;
+  font-weight: 600;
+  line-height: 1.1;
+  color: black;
+  margin-top: 0.5rem;
+  letter-spacing: -0.08em;
+  margin-bottom: 0.5rem;
 }
 
 .description {
@@ -56,14 +57,14 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 24px;
-  display: inline-block;
+  transition: all 0.3s ease;
   text-decoration: none;
+  display: inline-block;
 }
 
 .button:hover {
   background-color: var(--blue-secondary);
+  transform: translateY(-2px);
 }
 
 .imageContainer {
@@ -80,6 +81,24 @@
   border-radius: 12px;
 }
 
+@media (max-width: 1024px) {
+  .container {
+    padding: 60px 20px;
+  }
+
+  .title {
+    font-size: 3rem;
+  }
+
+  .description {
+    font-size: 1.1rem;
+  }
+
+  .image {
+    max-width: 100%;
+  }
+}
+
 @media (max-width: 900px) {
   .content {
     flex-direction: column;
@@ -89,6 +108,7 @@
   .textContainer {
     padding-right: 0;
     align-items: center;
+    max-width: 600px;
   }
 
   .title {
@@ -102,5 +122,46 @@
 
   .imageContainer {
     margin-top: 40px;
+    width: 100%;
+  }
+
+  .button {
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 40px 16px;
+    margin: 20px 0;
+  }
+
+  .content {
+    gap: 30px;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .title {
+    font-size: 2rem;
+    letter-spacing: -0.05em;
+  }
+
+  .description {
+    font-size: 1rem;
+    margin: 0 0 24px 0;
+  }
+
+  .button {
+    padding: 12px 24px;
+    font-size: 0.95rem;
+  }
+
+  .imageContainer {
+    margin-top: 30px;
   }
 } 

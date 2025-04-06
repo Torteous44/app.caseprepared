@@ -5,6 +5,30 @@ import remarkGfm from "remark-gfm";
 import { blogPosts } from "../data/blogData";
 import styles from "../styles/BlogPost.module.css";
 
+// Helper function to get related posts
+const getRelatedPosts = (
+  currentPost: (typeof blogPosts)[0],
+  maxPosts: number = 3
+) => {
+  return blogPosts
+    .filter(
+      (post) =>
+        post.id !== currentPost.id && // Exclude current post
+        post.tags.some((tag) => currentPost.tags.includes(tag)) // Must share at least one tag
+    )
+    .sort((a, b) => {
+      // Count matching tags to prioritize posts with more tag overlap
+      const aMatchingTags = a.tags.filter((tag) =>
+        currentPost.tags.includes(tag)
+      ).length;
+      const bMatchingTags = b.tags.filter((tag) =>
+        currentPost.tags.includes(tag)
+      ).length;
+      return bMatchingTags - aMatchingTags;
+    })
+    .slice(0, maxPosts);
+};
+
 const BlogPost: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -19,6 +43,8 @@ const BlogPost: React.FC = () => {
   if (!post) {
     return null;
   }
+
+  const relatedPosts = getRelatedPosts(post);
 
   return (
     <div className={styles.blogPostContainer}>
@@ -80,15 +106,44 @@ const BlogPost: React.FC = () => {
 
       <div className={styles.blogTags}>
         {post.tags.map((tag) => (
-          <span key={tag} className={styles.tag}>
+          <Link
+            key={tag}
+            to={`/blogs?tag=${encodeURIComponent(tag)}`}
+            className={styles.tag}
+          >
             {tag}
-          </span>
+          </Link>
         ))}
       </div>
 
-      <div className={styles.authorSection}>
-        <p>{post.author}</p>
-      </div>
+      {relatedPosts.length > 0 && (
+        <div className={styles.relatedPosts}>
+          <h2 className={styles.relatedPostsTitle}>Related Articles</h2>
+          <div className={styles.relatedPostsGrid}>
+            {relatedPosts.map((relatedPost) => (
+              <Link
+                key={relatedPost.id}
+                to={`/blog/${relatedPost.id}`}
+                className={styles.relatedPostCard}
+              >
+                <img
+                  src={relatedPost.imageUrl}
+                  alt={relatedPost.title}
+                  className={styles.relatedPostImage}
+                />
+                <div className={styles.relatedPostContent}>
+                  <h3 className={styles.relatedPostTitle}>
+                    {relatedPost.title}
+                  </h3>
+                  <p className={styles.relatedPostExcerpt}>
+                    {relatedPost.excerpt}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

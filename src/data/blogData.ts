@@ -20,7 +20,7 @@ export interface BlogPost {
   Before diving into specific case interview strategies, take time to understand the consulting industry. Research major firms, their service lines, and their clients. Each consulting firm has unique expectations and cultural nuances, which can guide how you structure and present your case solutions.
   
   **2. Master Core Frameworks**  
-  Familiarity with common business frameworks—like MECE (Mutually Exclusive, Collectively Exhaustive), Porter’s Five Forces, and the 4Ps of Marketing—can help you dissect complex problems systematically. While you shouldn’t rely on memorizing frameworks verbatim, having a mental library of approaches ensures you can pivot quickly when your case interviewer shifts focus or adds new data.
+  Familiarity with common business frameworks—like MECE (Mutually Exclusive, Collectively Exhaustive), Porter's Five Forces, and the 4Ps of Marketing—can help you dissect complex problems systematically. While you shouldn't rely on memorizing frameworks verbatim, having a mental library of approaches ensures you can pivot quickly when your case interviewer shifts focus or adds new data.
   
   **3. Practice Quantitative Analysis**  
   Case interviews often require mental math, market sizing, and interpreting data charts. Practice calculating percentages, break-even points, and compound annual growth rates (CAGR) without a calculator. This not only boosts your confidence but also demonstrates to interviewers that you can handle data under time constraints.
@@ -32,13 +32,13 @@ export interface BlogPost {
   Consultants must communicate complex ideas in a succinct, clear manner. During your case interview, maintain structured conversation, summarize your key points, and check in with the interviewer to confirm mutual understanding. Polished communication elevates your recommendations and strengthens your personal brand.
   
   **6. Seek Feedback and Iterate**  
-  Improvement comes from consistent practice combined with actionable feedback. Whether it’s from a professional coach, peers, or online platforms like Case Prepared, incorporate critiques into your process and track your growth over time.
+  Improvement comes from consistent practice combined with actionable feedback. Whether it's from a professional coach, peers, or online platforms like Case Prepared, incorporate critiques into your process and track your growth over time.
   
-  By balancing theory, deliberate practice, and confident delivery, you’ll be well-positioned to tackle any case interview scenario. Armed with the right strategies and mindset, you can transform a daunting process into a rewarding opportunity to showcase your consulting aptitude.`,
+  By balancing theory, deliberate practice, and confident delivery, you'll be well-positioned to tackle any case interview scenario. Armed with the right strategies and mindset, you can transform a daunting process into a rewarding opportunity to showcase your consulting aptitude.`,
       author: "Case Prepared Team",
       date: "2025-04-06",
       imageUrl: "/assets/blogs/consult.jpg",
-      tags: ["Consulting", "Case Interviews", "MECE", "Preparation"]
+      tags: ["Case Interview Preparation", "Consulting Frameworks", "Interview Strategy", "Problem Solving", "Business Analysis", "Career Development", "Management Consulting"]
     },
     {
       id: 2,
@@ -68,7 +68,7 @@ export interface BlogPost {
       author: "Ryan Münker",
       date: "2025-04-06",
       imageUrl: "/assets/blogs/case.jpg",
-      tags: ["pitfalls", "case interviews", "frameworks", "consulting"]
+      tags: ["Case Interview Mistakes", "Interview Tips", "Consulting Career", "MECE Framework", "Problem Solving", "Interview Preparation", "Management Consulting"]
     },
     {
       id: 3,
@@ -83,33 +83,33 @@ export interface BlogPost {
   For instance, if you're analyzing cost drivers, categorize them by function (e.g., manufacturing, marketing, distribution) or by cost type (fixed vs. variable) without overlapping.
   
   **2. Applying MECE in Interviews**  
-  - **Clarify the Problem Scope:** Ask targeted questions to define what’s in or out of scope. This helps you set up your categories more effectively.  
-  - **Create Logical Buckets:** Group similar elements together (e.g., customer segments by age or usage patterns) in a way that’s easy to communicate.  
+  - **Clarify the Problem Scope:** Ask targeted questions to define what's in or out of scope. This helps you set up your categories more effectively.  
+  - **Create Logical Buckets:** Group similar elements together (e.g., customer segments by age or usage patterns) in a way that's easy to communicate.  
   - **Validate Completeness:** Periodically check if you've omitted any key piece of data. Refining your categories mid-interview is acceptable, as it shows adaptability.
   
   **3. Practice with Diverse Cases**  
-  MECE can be applied across different case types—profitability, market entry, product launch, or mergers and acquisitions. Varying your practice ensures you’re comfortable applying MECE principles in multiple scenarios.
+  MECE can be applied across different case types—profitability, market entry, product launch, or mergers and acquisitions. Varying your practice ensures you're comfortable applying MECE principles in multiple scenarios.
   
   **4. Communicate Your Structure**  
   Articulate your categories out loud as you set up your framework. This transparency helps the interviewer follow your thought process and highlights your structured approach.
   
-  By mastering the MECE principle, you’ll enhance both the clarity and depth of your case interview performances. It’s a skill that consultants leverage daily, making it indispensable for aspiring candidates who want to stand out from the crowd.`,
+  By mastering the MECE principle, you'll enhance both the clarity and depth of your case interview performances. It's a skill that consultants leverage daily, making it indispensable for aspiring candidates who want to stand out from the crowd.`,
       author: "Boris Gans",
       date: "2025-04-06",
       imageUrl: "/assets/blogs/mece.jpg",
-      tags: ["MECE", "Consulting", "Case Interviews"]
+      tags: ["MECE Framework", "Structured Thinking", "Problem Solving Methods", "Consulting Skills", "Interview Strategy", "Case Interview Preparation"]
     },
     {
       id: 4,
       title: "Advanced Case Interview Frameworks Beyond MECE",
       excerpt: "Explore lesser-known but powerful frameworks to tackle complex business problems during consulting interviews.",
-      content: `While MECE is a critical principle, you’ll often need additional frameworks and analytical tools to dissect complex business questions thoroughly. Below are some advanced frameworks that can help you excel in challenging case interviews:
+      content: `While MECE is a critical principle, you'll often need additional frameworks and analytical tools to dissect complex business questions thoroughly. Below are some advanced frameworks that can help you excel in challenging case interviews:
   
   **1. Value Chain Analysis**  
-  This framework breaks down an organization’s activities—both primary (e.g., operations, marketing) and support (e.g., procurement, technology). Identifying inefficiencies or opportunities within each function can provide actionable insights for cost reduction or differentiation.
+  This framework breaks down an organization's activities—both primary (e.g., operations, marketing) and support (e.g., procurement, technology). Identifying inefficiencies or opportunities within each function can provide actionable insights for cost reduction or differentiation.
   
   **2. Porter's Five Forces**  
-  Designed to assess industry competitiveness, Porter’s Five Forces helps you analyze threats from new entrants, substitute products, buyer bargaining power, supplier bargaining power, and competitive rivalry. It’s particularly useful for market entry or competitive strategy cases.
+  Designed to assess industry competitiveness, Porter's Five Forces helps you analyze threats from new entrants, substitute products, buyer bargaining power, supplier bargaining power, and competitive rivalry. It's particularly useful for market entry or competitive strategy cases.
   
   **3. The Four Ps of Marketing**  
   When dealing with product-related challenges, focusing on Product, Price, Place, and Promotion can clarify how a company should position its offerings. This ensures comprehensive coverage of both tangible and intangible aspects of a product launch or marketing push.
@@ -120,17 +120,17 @@ export interface BlogPost {
   **5. Three Horizons of Growth**  
   If a case interview revolves around long-term strategy, the Three Horizons model helps segment growth initiatives into immediate (Horizon 1), mid-term (Horizon 2), and long-term (Horizon 3) opportunities. It shows you can prioritize strategic moves over time.
   
-  Each framework provides a different lens through which to examine business problems. By mixing and matching approaches, you’ll demonstrate the analytical versatility that top consulting firms seek. Remember to communicate your thought process clearly—your interviewer wants to see not just what you conclude but how you arrive there.`,
+  Each framework provides a different lens through which to examine business problems. By mixing and matching approaches, you'll demonstrate the analytical versatility that top consulting firms seek. Remember to communicate your thought process clearly—your interviewer wants to see not just what you conclude but how you arrive there.`,
       author: "Mohapi Ralethe",
       date: "2025-04-06",
       imageUrl: "/assets/blogs/interview.jpg",
-      tags: ["Frameworks", "Consulting", "Case Interviews", "Strategy"]
+      tags: ["Advanced Frameworks", "Business Strategy", "Porter's Five Forces", "Value Chain Analysis", "Strategic Planning", "Case Interview Preparation", "Management Consulting", "Consulting Frameworks"]
     },
     {
       id: 5,
       title: "Navigating Behavioral Questions in Consulting Interviews",
       excerpt: "Learn how to structure your responses and showcase your interpersonal skills when facing behavioral questions.",
-      content: `Consulting interviews aren’t limited to solving business cases; they also evaluate your soft skills, leadership potential, and cultural fit. Behavioral questions often reveal how you handle team dynamics, conflicts, and high-stakes situations.
+      content: `Consulting interviews aren't limited to solving business cases; they also evaluate your soft skills, leadership potential, and cultural fit. Behavioral questions often reveal how you handle team dynamics, conflicts, and high-stakes situations.
   
   **1. Expect Common Themes**  
   Behavioral questions typically revolve around teamwork, leadership, conflict resolution, failure, and success stories. For each theme, prepare one or two real-life examples that highlight key strengths like communication, adaptability, or resilience.
@@ -147,16 +147,16 @@ export interface BlogPost {
   Consultants thrive on continuous improvement. After presenting your story, summarize what you learned and how it shaped you. This demonstrates self-awareness and a growth mindset—attributes vital for success in client-facing roles.
   
   **4. Align with Firm Values**  
-  Research your target consulting firm’s values and culture. If collaboration is a major focus, choose examples that showcase teamwork. If innovation is prized, highlight situations where you proposed creative solutions under pressure.
+  Research your target consulting firm's values and culture. If collaboration is a major focus, choose examples that showcase teamwork. If innovation is prized, highlight situations where you proposed creative solutions under pressure.
   
   **5. Practice, But Stay Authentic**  
   While preparation is crucial, avoid memorizing scripted answers. Interviewers value genuine responses and can detect overly polished narratives. Instead, internalize the STAR framework and key talking points so you can adapt them naturally.
   
-  By combining solid case-solving abilities with compelling behavioral stories, you’ll position yourself as a well-rounded candidate ready to navigate the high demands of consulting life.`,
+  By combining solid case-solving abilities with compelling behavioral stories, you'll position yourself as a well-rounded candidate ready to navigate the high demands of consulting life.`,
       author: "Case Prepared Team",
       date: "2025-04-06",
       imageUrl: "/assets/blogs/behaviour.jpg",
-      tags: ["Behavioral", "Consulting", "Interviews", "Soft Skills"]
+      tags: ["Behavioral Interviews", "Soft Skills", "STAR Method", "Leadership Skills", "Communication Skills", "Interview Preparation", "Consulting Career"]
     },
     {
       id: 6,
@@ -184,11 +184,11 @@ export interface BlogPost {
   - **Key Skills:** Familiarity with operational KPIs, root-cause analysis, and process redesign.  
   - **Common Mistakes:** Over-simplifying operational issues or failing to factor in change management efforts.
   
-  Tailoring your method to the specific case type allows you to demonstrate both depth and versatility. By preparing for these specialized scenarios, you’ll showcase your ability to tackle diverse, real-world challenges that consulting firms handle every day.`,
+  Tailoring your method to the specific case type allows you to demonstrate both depth and versatility. By preparing for these specialized scenarios, you'll showcase your ability to tackle diverse, real-world challenges that consulting firms handle every day.`,
       author: "Diego Gutierrez",
       date: "2025-04-06",
       imageUrl: "/assets/blogs/special.jpg",
-      tags: ["Market Sizing", "M&A", "Growth Strategy", "Operations"]
+      tags: ["Market Sizing", "M&A Analysis", "Growth Strategy", "Operations Management", "Business Valuation", "Case Interview Types", "Strategic Planning"]
     },
     {
       id: 7,
@@ -203,7 +203,7 @@ export interface BlogPost {
   Our advanced Natural Language Processing engine analyzes your speech patterns, filler words, pacing, and clarity. This unbiased, data-driven feedback highlights exactly where to focus for improved communication, giving you a crucial edge in live consulting interviews.
   
   **3. Expert Coaching and Community**  
-  Beyond automated feedback, our experienced consulting coaches offer one-on-one guidance. They’ll help you refine frameworks, practice mental math, and develop a more polished presentation style. You can also collaborate with peers for group practice sessions, sharing tips and insights.
+  Beyond automated feedback, our experienced consulting coaches offer one-on-one guidance. They'll help you refine frameworks, practice mental math, and develop a more polished presentation style. You can also collaborate with peers for group practice sessions, sharing tips and insights.
   
   **4. Comprehensive Resource Library**  
   From in-depth blog posts and video tutorials to interactive quizzes on business frameworks, we provide the knowledge base you need to hone both technical and behavioral competencies. Whether you're new to case interviews or aiming to refine your approach, there's always something fresh to learn.
@@ -215,7 +215,7 @@ export interface BlogPost {
       author: "Case Prepared Team",
       date: "2025-04-06",
       imageUrl: "/assets/blogs/caseprep.png",
-      tags: ["Consulting", "Case Interviews", "NLP", "Mock Interviews"]
+      tags: ["Interview Platform", "Mock Interviews", "Interview Preparation", "Career Development", "Consulting Skills", "NLP Technology", "Professional Development"]
     }
   ];
   

@@ -115,11 +115,17 @@
 }
 
 .tag {
-  background-color: var(--background-light);
+  background-color: rgba(0, 0, 0, 0.03);
   padding: 6px 12px;
   border-radius: var(--border-radius);
   font-size: 0.9rem;
   color: var(--blue-primary);
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.tag:hover {
+  background-color: rgba(0, 0, 0, 0.06);
 }
 
 .authorSection {
@@ -148,6 +154,68 @@
   text-decoration: underline;
 }
 
+.relatedPosts {
+  margin-top: 80px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border-color);
+}
+
+.relatedPostsTitle {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: var(--text-color);
+}
+
+.relatedPostsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.relatedPostCard {
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.relatedPostCard:hover {
+  transform: translateY(-4px);
+}
+
+.relatedPostImage {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+  margin-bottom: 15px;
+}
+
+.relatedPostContent {
+  flex: 1;
+}
+
+.relatedPostTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+  color: var(--text-color);
+  line-height: 1.4;
+}
+
+.relatedPostExcerpt {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 @media (max-width: 768px) {
   .blogTitle {
     font-size: 2rem;
@@ -172,5 +240,14 @@
 
   .mdHeading3 {
     font-size: 1.3rem;
+  }
+
+  .relatedPostsGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .relatedPostImage {
+    height: 200px;
   }
 } 
