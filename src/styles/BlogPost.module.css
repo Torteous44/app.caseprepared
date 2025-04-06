@@ -1,0 +1,176 @@
+.blogPostContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 120px 20px;
+}
+
+.blogHeader {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.blogTitle {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: var(--text-color);
+  letter-spacing: -0.03em;
+}
+
+.blogMeta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  color: #666;
+  font-size: 1rem;
+}
+
+.blogImage {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+  margin-bottom: 40px;
+}
+
+.blogContent {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: var(--text-color);
+}
+
+/* Markdown Styles */
+.mdHeading1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin: 2rem 0 1.5rem;
+  color: var(--text-color);
+}
+
+.mdHeading2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 2rem 0 1.2rem;
+  color: var(--text-color);
+}
+
+.mdHeading3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 1.8rem 0 1rem;
+  color: var(--text-color);
+}
+
+.mdParagraph {
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+}
+
+.mdList {
+  margin: 1rem 0 1.5rem 2rem;
+}
+
+.mdList li {
+  margin-bottom: 0.5rem;
+}
+
+.mdInlineCode {
+  background-color: var(--background-light);
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.mdCodeBlock {
+  display: block;
+  background-color: var(--background-light);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  margin: 1.5rem 0;
+  font-family: monospace;
+  font-size: 0.9em;
+  white-space: pre-wrap;
+  overflow-x: auto;
+}
+
+.mdBlockquote {
+  border-left: 4px solid var(--blue-primary);
+  margin: 1.5rem 0;
+  padding: 0.5rem 0 0.5rem 1.5rem;
+  font-style: italic;
+  color: #666;
+}
+
+.mdBlockquote p {
+  margin: 0;
+}
+
+.blogTags {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 40px 0;
+}
+
+.tag {
+  background-color: var(--background-light);
+  padding: 6px 12px;
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+  color: var(--blue-primary);
+}
+
+.authorSection {
+  margin-top: 60px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border-color);
+}
+
+.authorHeader {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--blue-primary);
+  text-decoration: none;
+  font-weight: 500;
+  margin-bottom: 30px;
+}
+
+.backButton:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .blogTitle {
+    font-size: 2rem;
+  }
+
+  .blogImage {
+    height: 300px;
+  }
+
+  .blogMeta {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mdHeading1 {
+    font-size: 1.8rem;
+  }
+
+  .mdHeading2 {
+    font-size: 1.5rem;
+  }
+
+  .mdHeading3 {
+    font-size: 1.3rem;
+  }
+} 

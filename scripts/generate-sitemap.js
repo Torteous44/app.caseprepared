@@ -10,6 +10,13 @@ const urls = [
   { url: '/contact', changefreq: 'monthly', priority: 0.7 },
   { url: '/pricing', changefreq: 'weekly', priority: 0.8 },
   { url: '/interviews', changefreq: 'weekly', priority: 0.9 },
+  { url: '/blogs', changefreq: 'weekly', priority: 0.9 },
+  { url: '/blogs/1', changefreq: 'weekly', priority: 0.9 },
+  { url: '/blogs/2', changefreq: 'weekly', priority: 0.9 },
+  { url: '/blogs/3', changefreq: 'weekly', priority: 0.9 },
+  { url: '/blogs/4', changefreq: 'weekly', priority: 0.9 },
+  { url: '/blogs/5', changefreq: 'weekly', priority: 0.9 },
+  
 
 ];
 

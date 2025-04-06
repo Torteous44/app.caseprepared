@@ -14,7 +14,8 @@ import RealtimeConnect from "./components/call/RealtimeConnect";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ModalProvider } from "./contexts/ModalContext";
 import AuthModal from "./components/auth/AuthModal";
-
+import Blogs from "./pages/Blogs";
+import BlogPost from "./pages/BlogPost";
 // NavbarWrapper component to conditionally render the Navbar
 const NavbarWrapper = () => {
   const location = useLocation();
@@ -43,6 +44,8 @@ const App = () => {
                 path="/interview/session/:sessionId"
                 element={<RealtimeConnect />}
               />
+              <Route path="/blogs" element={<Blogs />} />
+              <Route path="/blog/:id" element={<BlogPost />} />
             </Routes>
           </div>
         </Router>
