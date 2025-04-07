@@ -29,7 +29,7 @@ const UniBanner: React.FC<UniBannerProps> = ({ logos = defaultLogos }) => {
 
   return (
     <div className={styles["uni-banner"]}>
-      <h3>Trusted by over 5,000 students at top universities</h3>
+      <h3>Trusted by students at top universities</h3>
       <div className={styles["scroll-container"]}>
         {/* Left gradient overlay */}
         <div className={styles["gradient-overlay-left"]}></div>

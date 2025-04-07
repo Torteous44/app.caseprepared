@@ -16,6 +16,7 @@ import { ModalProvider } from "./contexts/ModalContext";
 import AuthModal from "./components/auth/AuthModal";
 import Blogs from "./pages/Blogs";
 import BlogPost from "./pages/BlogPost";
+import Playground from "./pages/Playground";
 // NavbarWrapper component to conditionally render the Navbar
 const NavbarWrapper = () => {
   const location = useLocation();
@@ -46,6 +47,7 @@ const App = () => {
               />
               <Route path="/blogs" element={<Blogs />} />
               <Route path="/blog/:id" element={<BlogPost />} />
+              <Route path="/playground" element={<Playground />} />
             </Routes>
           </div>
         </Router>

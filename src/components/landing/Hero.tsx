@@ -18,7 +18,7 @@ const Hero: React.FC<HeroProps> = ({
         <div className={styles["hero-text"]}>
           <div className={styles["stats-pill"]}>
             <span>
-              We've helped over 5,000 students pass their case interviews
+              We've helped students get into top MBB firms
             </span>
             <span className={styles["divider"]}></span>
             <Link to="/about" className={styles["read-more"]}>

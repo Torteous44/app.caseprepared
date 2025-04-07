@@ -1,0 +1,56 @@
+.container {
+  max-width: 1200px;
+  margin: 160px auto;
+  padding: 0 20px;
+}
+
+.section {
+  margin-bottom: 40px;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 32px;
+  color: #333;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin-bottom: 24px;
+  color: #444;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    margin: 24px auto;
+    padding: 0 16px;
+  }
+
+  .section {
+    margin-bottom: 32px;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    margin-bottom: 20px;
+  }
+
+  .cardGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+} 
