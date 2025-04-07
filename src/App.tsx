@@ -17,6 +17,7 @@ import AuthModal from "./components/auth/AuthModal";
 import Blogs from "./pages/Blogs";
 import BlogPost from "./pages/BlogPost";
 import Playground from "./pages/Playground";
+import { Analytics } from "@vercel/analytics/react";
 // NavbarWrapper component to conditionally render the Navbar
 const NavbarWrapper = () => {
   const location = useLocation();
@@ -34,6 +35,7 @@ const App = () => {
       <ModalProvider>
         <Router>
           <div>
+            <Analytics />
             <NavbarWrapper />
             <AuthModal />
             <Routes>
