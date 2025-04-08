@@ -16,7 +16,6 @@ import { ModalProvider } from "./contexts/ModalContext";
 import AuthModal from "./components/auth/AuthModal";
 import Blogs from "./pages/Blogs";
 import BlogPost from "./pages/BlogPost";
-import Playground from "./pages/Playground";
 import { Analytics } from "@vercel/analytics/react";
 import Pricing from "./pages/Pricing";
 
@@ -52,7 +51,6 @@ const App = () => {
               <Route path="/blogs" element={<Blogs />} />
               <Route path="/blog/:id" element={<BlogPost />} />
               <Route path="/pricing" element={<Pricing />} />
-              <Route path="/playground" element={<Playground />} />
             </Routes>
           </div>
         </Router>

@@ -21,36 +21,36 @@ const interviewCards: InterviewCard[] = [
   {
     id: 1,
     company: "McKinsey",
-    logo: "/assets/interviewCards/Mckinsey.png",
+    logo: "/assets/interviewCards/logos/McKinsey.svg",
     title: "Beautify - McKinsey Case",
     subtitle: "Official Interview",
     description:
       "Evaluating whether a global beauty products company should be training in-store beauty consultants in the effective use of virtual channels to connect with customers.",
-    thumbnail: "/assets/interviewCards/image@2x.png",
+    thumbnail: "/assets/interviewCards/image@2x.webp",
     buttonText: "Mock Interview",
     code: "6276",
   },
   {
     id: 2,
     company: "BCG",
-    logo: "/assets/interviewCards/BCG.png",
+    logo: "/assets/interviewCards/logos/BCG.svg",
     title: "Climate Case - BCG Case",
     subtitle: "Official Interview",
     description:
       "The CEO of a global company wants to reduce their environmental impact. Build the business case for setting a climate target and determine what initiatives to undertake to achieve it.",
-    thumbnail: "/assets/interviewCards/image@2x-1.png",
+    thumbnail: "/assets/interviewCards/image@2x-1.webp",
     buttonText: "Mock Interview",
     code: "A72B",
   },
   {
     id: 3,
     company: "Bain",
-    logo: "/assets/interviewCards/BAIN.png",
+    logo: "/assets/interviewCards/logos/Bain.svg",
     title: "Coffee Shop Co. - Bain Case",
     subtitle: "Official Interview",
     description:
       "A specialty coffee company wants to accelerate growth. Identify key market opportunities, evaluate profitability levers, and recommend a strategy to expand their footprint.",
-    thumbnail: "/assets/interviewCards/image@2x-2.png",
+    thumbnail: "/assets/interviewCards/image@2x-2.webp",
     buttonText: "Mock Interview",
     code: "3DE0",
   },
@@ -101,8 +101,8 @@ const InterviewsPage: React.FC = () => {
 
       <div className={styles.interviewCards}>
         {interviewCards.map((card) => (
-          <div 
-            key={card.id} 
+          <div
+            key={card.id}
             className={styles.card}
             onClick={() => handleInterviewClick(card)}
           >

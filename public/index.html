@@ -2,6 +2,26 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8" />
+    <!-- Performance optimizations -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://static.cloudflareinsights.com" crossorigin />
+    
+    <!-- DNS Prefetch -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="dns-prefetch" href="https://static.cloudflareinsights.com" />
+    
+    <!-- Critical resources -->
+    <link rel="preload" href="/static/js/main.chunk.js" as="script" />
+    <link rel="preload" href="/static/css/main.chunk.css" as="style" />
+    <link rel="modulepreload" href="/static/js/runtime-main.js" />
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" as="style" />
+    <link rel="preload" href="/assets/HeroCall.avif" as="image" fetchpriority="high" />
+    
+    <!-- Non-blocking font load -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" media="print" onload="this.media='all'" />
+    
     <!-- Favicons -->
     <link rel="icon" href="/favicon/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
@@ -16,13 +36,6 @@
     <meta name="theme-color" content="#0066cc" media="(prefers-color-scheme: dark)" />
     <meta name="description" content="Master consulting case interviews with Case Prepared's AI platform. Get personalized feedback, practice with real-world scenarios, and improve your consulting interview skills with our advanced artificial intelligence system. Start your journey to consulting success today." />
     <link rel="canonical" href="https://caseprepared.com/" />
-    
-    <!-- Performance optimizations -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" as="style" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" />
-    <link rel="preload" href="/assets/HeroCall.avif" as="image" />
     
     <!-- Open Graph / Social Media -->
     <meta property="og:title" content="Case Prepared | Master Consulting Case Interviews with AI" />
@@ -124,7 +137,7 @@
     }
     </script>
 
-    <!-- Cloudflare Web Analytics -->
+    <!-- Deferred Analytics -->
     <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2f7b6a9ba17f4a5191f4796c4f80ad78"}'></script>
     
     <title>Case Prepared | Master Consulting Case Interviews with AI-Powered Practice</title>

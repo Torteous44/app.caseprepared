@@ -1,3 +1,5 @@
+@import "../styles.css";
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -49,6 +51,7 @@
 .official {
   font-size: 14px;
   color: #555;
+  margin-top: 5px;
 }
 
 .interviewLayout {
@@ -138,10 +141,10 @@
 }
 
 .startButton {
-  background-color: #0066cc;
+  background-color: var(--blue-primary);
   color: white;
   border: none;
-  border-radius: 24px;
+  border-radius: var(--border-radius);
   padding: 12px 24px;
   font-size: 16px;
   font-weight: 600;
@@ -151,7 +154,8 @@
 }
 
 .startButton:hover:not(:disabled) {
-  background-color: #0055aa;
+  background-color: var(--blue-secondary);
+  cursor: pointer;
 }
 
 .startButton:disabled {

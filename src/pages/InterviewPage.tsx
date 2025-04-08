@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import styles from "../styles/InterviewPage.module.css";
-import axios from "axios";
 
 interface InterviewData {
   id: number | string;
@@ -140,11 +139,7 @@ const caseContent: CaseContentMap = {
 };
 
 const InterviewPage: React.FC = () => {
-  const { id, company, code } = useParams<{
-    id?: string;
-    company?: string;
-    code?: string;
-  }>();
+  const { id, company } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const locationState = location.state || {};
@@ -159,8 +154,8 @@ const InterviewPage: React.FC = () => {
     }
 
     // If we have a code param, use hardcoded data
-    if (code) {
-      const mappedId = codeToId[code];
+    if (company) {
+      const mappedId = codeToId[company];
       return mappedId ? interviewsData[mappedId] : null;
     }
 

@@ -8,7 +8,6 @@ import React, {
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "../../styles/RealtimeConnect.module.css";
-import AudioVisualizer from "./AudioVisualizer";
 import { useModal } from "../../contexts/ModalContext";
 import { useAuth } from "../../contexts/AuthContext";
 import LongPopup from "../landing/LongPopup";
@@ -45,9 +44,7 @@ const RealtimeConnect: React.FC = () => {
   const [isConnecting, setIsConnecting] = useState(false);
   const [callActive, setCallActive] = useState(false);
   const [callDuration, setCallDuration] = useState(0);
-  const [audioVolume, setAudioVolume] = useState(1.0);
   const [audioLevel, setAudioLevel] = useState(0); // For the circle visualizer
-  const [showTrialEndModal, setShowTrialEndModal] = useState(false);
   const [showAlmostReadyModal, setShowAlmostReadyModal] = useState(false);
   const [showStartPrompt, setShowStartPrompt] = useState(false);
   const [interviewTitle, setInterviewTitle] =
