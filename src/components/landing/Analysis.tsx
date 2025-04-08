@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/Analysis.module.css";
+import styles from "../../styles/landing page/Analysis.module.css";
 
 const Analysis: React.FC = () => {
   return (

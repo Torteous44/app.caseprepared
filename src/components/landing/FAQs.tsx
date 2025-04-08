@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "../../styles/FAQs.module.css";
+import styles from "../../styles/landing page/FAQs.module.css";
 
 interface FAQItem {
   question: string;

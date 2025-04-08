@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import styles from "../../styles/Hero.module.css";
+import styles from "../../styles/landing page/Hero.module.css";
 import InsightSequence from "./InsightSequence";
 
 interface HeroProps {
@@ -17,9 +17,7 @@ const Hero: React.FC<HeroProps> = ({
       <div className={styles["hero-content"]}>
         <div className={styles["hero-text"]}>
           <div className={styles["stats-pill"]}>
-            <span>
-              We've helped students get into top MBB firms
-            </span>
+            <span>We've helped students get into top MBB firms</span>
             <span className={styles["divider"]}></span>
             <Link to="/about" className={styles["read-more"]}>
               Read more

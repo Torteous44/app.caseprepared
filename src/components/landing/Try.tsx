@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/Try.module.css";
+import styles from "../../styles/landing page/Try.module.css";
 import { Link } from "react-router-dom";
 import LongPopupSequence from "./LongPopupSequence";
 

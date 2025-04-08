@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../../styles/UniBanner.module.css";
+import styles from "../../styles/landing page/UniBanner.module.css";
 
 interface UniLogo {
   id: number;

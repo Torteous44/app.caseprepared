@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import styles from "../../styles/Interviews.module.css";
+import styles from "../../styles/landing page/Interviews.module.css";
 
 interface InterviewCard {
   id: number;

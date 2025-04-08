@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import InsightCard from "./InsightCard";
-import styles from "../../styles/InsightSequence.module.css";
+import styles from "../../styles/landing page/InsightSequence.module.css";
 
 interface Insight {
   id: number;

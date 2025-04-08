@@ -1,5 +1,5 @@
-import React from 'react';
-import styles from '../../styles/InsightCard.module.css';
+import React from "react";
+import styles from "../../styles/landing page/InsightCard.module.css";
 
 interface InsightCardProps {
   message: string;
@@ -7,10 +7,10 @@ interface InsightCardProps {
   strokeColor?: string;
 }
 
-const InsightCard: React.FC<InsightCardProps> = ({ 
-  message, 
-  icon, 
-  strokeColor = '#0066FF' 
+const InsightCard: React.FC<InsightCardProps> = ({
+  message,
+  icon,
+  strokeColor = "#0066FF",
 }) => {
   // Default star icon as SVG
   const defaultIcon = (
@@ -26,18 +26,20 @@ const InsightCard: React.FC<InsightCardProps> = ({
   );
 
   // Split the message into heading and body parts
-  const [firstLine, ...bodyParts] = message.split('. ');
-  const [label, headingText] = firstLine.split(': ');
-  const bodyText = bodyParts.join('. ').trim();
-  
+  const [firstLine, ...bodyParts] = message.split(". ");
+  const [label, headingText] = firstLine.split(": ");
+  const bodyText = bodyParts.join(". ").trim();
+
   return (
     <div className={styles.insightContainer}>
-      <div 
+      <div
         className={styles.insightBubble}
-        style={{ 
-          borderColor: strokeColor,
-          '--stroke-color': strokeColor
-        } as React.CSSProperties}
+        style={
+          {
+            borderColor: strokeColor,
+            "--stroke-color": strokeColor,
+          } as React.CSSProperties
+        }
       >
         <div className={styles.insightHeader}>
           <span className={styles.iconWrapper} style={{ color: strokeColor }}>
@@ -48,9 +50,7 @@ const InsightCard: React.FC<InsightCardProps> = ({
               <span style={{ color: strokeColor }}>{label}: </span>
               <span>{headingText}</span>
             </div>
-            <div className={styles.insightBody}>
-              {bodyText}
-            </div>
+            <div className={styles.insightBody}>{bodyText}</div>
           </div>
         </div>
       </div>
@@ -58,4 +58,4 @@ const InsightCard: React.FC<InsightCardProps> = ({
   );
 };
 
-export default InsightCard; 
+export default InsightCard;

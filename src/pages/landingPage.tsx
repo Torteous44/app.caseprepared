@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../styles/LandingPage.module.css";
+import styles from "../styles/landing page/LandingPage.module.css";
 import Hero from "../components/landing/Hero";
 import UniBanner from "../components/landing/uniBanner";
 import Interviews from "../components/landing/interviews";
