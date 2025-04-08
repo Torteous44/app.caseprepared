@@ -6,6 +6,12 @@
     padding: 140px 40px;
 }
 
+@media (max-width: 768px) {
+    .container {
+        padding: 80px 20px;
+    }
+}
+
 .title {
   font-size: 36px;
   margin-bottom: 3rem;
@@ -13,6 +19,12 @@
   text-align: center;
 }
 
+@media (max-width: 768px) {
+    .title {
+        font-size: 28px;
+        margin-bottom: 2rem;
+    }
+}
 
 .mockInterviewButton {
   background-color: #E9C46A;
@@ -32,20 +44,52 @@
 }
 
 .pricingGrid {
-  display: flex;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  margin-top: 2rem;
-  gap: 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 2rem;
+    gap: 2rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 768px) {
+    .pricingGrid {
+        flex-direction: column;
+        align-items: center;
+    }
 }
 
 .pricingCard {
-  background-color: var(--blue-primary);
-  color: white;
-  padding: 2rem;
-  border-radius: 1rem;
-  text-align: left;
-  max-width: 600px;
-  min-width: 400px;
+    background-color: var(--blue-primary);
+    color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: left;
+}
+
+/* First pricing card (smaller one) */
+.pricingCard:first-child {
+    flex: 0 1 450px;
+    max-width: 450px;
+}
+
+/* Second pricing card (larger one) */
+.pricingCard:last-child {
+    flex: 0 1 600px;
+    max-width: 600px;
+}
+
+@media (max-width: 768px) {
+    .pricingCard,
+    .pricingCard:first-child,
+    .pricingCard:last-child {
+        flex: 1 1 100%;
+        max-width: 100%;
+        width: 100%;
+        margin: 0;
+    }
 }
 
 .pricingCard h2 {
@@ -59,6 +103,12 @@
   font-weight: bold;
   color: #E9C46A;
   margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .price {
+        font-size: 2rem;
+    }
 }
 
 .period {
@@ -106,6 +156,13 @@
   font-family: inherit;
 }
 
+@media (max-width: 768px) {
+    .memberButton {
+        padding: 0.875rem 1.5rem;
+        font-size: 0.95rem;
+    }
+}
+
 .memberButton:hover {
   background-color: #F4D03F;
 }
@@ -117,6 +174,20 @@
   padding: 3rem;
   border-radius: 1rem;
   text-align: left;
+}
+
+@media (max-width: 768px) {
+    .infoBox {
+        padding: 2rem;
+    }
+    
+    .infoTitle {
+        font-size: 1.5rem;
+    }
+    
+    .infoText {
+        font-size: 1rem;
+    }
 }
 
 .infoBox::after {
