@@ -37,7 +37,7 @@ export interface BlogPost {
   By balancing theory, deliberate practice, and confident delivery, you'll be well-positioned to tackle any case interview scenario. Armed with the right strategies and mindset, you can transform a daunting process into a rewarding opportunity to showcase your consulting aptitude.`,
       author: "Case Prepared Team",
       date: "2025-04-06",
-      imageUrl: "/assets/blogs/consult.jpg",
+      imageUrl: "/assets/blogs/consult.webp",
       tags: ["Case Interview Preparation", "Consulting Frameworks", "Interview Strategy", "Problem Solving", "Business Analysis", "Career Development", "Management Consulting"]
     },
     {
@@ -67,7 +67,7 @@ export interface BlogPost {
   By anticipating these pitfalls, you can refine your problem-solving method and deliver structured, data-driven conclusions—all while projecting confidence and poise.`,
       author: "Ryan Münker",
       date: "2025-04-06",
-      imageUrl: "/assets/blogs/case.jpg",
+      imageUrl: "/assets/blogs/case.webp",
       tags: ["Case Interview Mistakes", "Interview Tips", "Consulting Career", "MECE Framework", "Problem Solving", "Interview Preparation", "Management Consulting"]
     },
     {
@@ -96,7 +96,7 @@ export interface BlogPost {
   By mastering the MECE principle, you'll enhance both the clarity and depth of your case interview performances. It's a skill that consultants leverage daily, making it indispensable for aspiring candidates who want to stand out from the crowd.`,
       author: "Boris Gans",
       date: "2025-04-06",
-      imageUrl: "/assets/blogs/mece.jpg",
+      imageUrl: "/assets/blogs/mece.webp",
       tags: ["MECE Framework", "Structured Thinking", "Problem Solving Methods", "Consulting Skills", "Interview Strategy", "Case Interview Preparation"]
     },
     {
@@ -123,7 +123,7 @@ export interface BlogPost {
   Each framework provides a different lens through which to examine business problems. By mixing and matching approaches, you'll demonstrate the analytical versatility that top consulting firms seek. Remember to communicate your thought process clearly—your interviewer wants to see not just what you conclude but how you arrive there.`,
       author: "Mohapi Ralethe",
       date: "2025-04-06",
-      imageUrl: "/assets/blogs/interview.jpg",
+      imageUrl: "/assets/blogs/interview.webp",
       tags: ["Advanced Frameworks", "Business Strategy", "Porter's Five Forces", "Value Chain Analysis", "Strategic Planning", "Case Interview Preparation", "Management Consulting", "Consulting Frameworks"]
     },
     {
@@ -155,7 +155,7 @@ export interface BlogPost {
   By combining solid case-solving abilities with compelling behavioral stories, you'll position yourself as a well-rounded candidate ready to navigate the high demands of consulting life.`,
       author: "Case Prepared Team",
       date: "2025-04-06",
-      imageUrl: "/assets/blogs/behaviour.jpg",
+      imageUrl: "/assets/blogs/behaviour.webp",
       tags: ["Behavioral Interviews", "Soft Skills", "STAR Method", "Leadership Skills", "Communication Skills", "Interview Preparation", "Consulting Career"]
     },
     {
@@ -187,7 +187,7 @@ export interface BlogPost {
   Tailoring your method to the specific case type allows you to demonstrate both depth and versatility. By preparing for these specialized scenarios, you'll showcase your ability to tackle diverse, real-world challenges that consulting firms handle every day.`,
       author: "Diego Gutierrez",
       date: "2025-04-06",
-      imageUrl: "/assets/blogs/special.jpg",
+      imageUrl: "/assets/blogs/special.webp",
       tags: ["Market Sizing", "M&A Analysis", "Growth Strategy", "Operations Management", "Business Valuation", "Case Interview Types", "Strategic Planning"]
     },
     {
