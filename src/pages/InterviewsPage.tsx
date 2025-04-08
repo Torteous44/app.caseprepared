@@ -21,7 +21,7 @@ const interviewCards: InterviewCard[] = [
   {
     id: 1,
     company: "McKinsey",
-    logo: "/assets/interviewCards/logos/McKinsey.svg",
+    logo: "/assets/interviewCards/logos/Mckinsey.svg",
     title: "Beautify - McKinsey Case",
     subtitle: "Official Interview",
     description:
@@ -45,7 +45,7 @@ const interviewCards: InterviewCard[] = [
   {
     id: 3,
     company: "Bain",
-    logo: "/assets/interviewCards/logos/Bain.svg",
+    logo: "/assets/interviewCards/Logos/Bain.svg",
     title: "Coffee Shop Co. - Bain Case",
     subtitle: "Official Interview",
     description:
