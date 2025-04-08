@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "../../styles/landing page/Hero.module.css";
 import InsightSequence from "./InsightSequence";
 
@@ -12,6 +12,12 @@ const Hero: React.FC<HeroProps> = ({
   title = "Crack the case with AI mock interviews",
   subtitle = "Practice makes perfect. Successful consulting candidates often have over 30 mock interviews before the real one.",
 }) => {
+  const navigate = useNavigate();
+
+  const handleTryInterview = () => {
+    navigate("/interview/1"); // Navigate directly to McKinsey interview
+  };
+
   return (
     <div className={styles["hero-container"]}>
       <div className={styles["hero-content"]}>
@@ -26,9 +32,12 @@ const Hero: React.FC<HeroProps> = ({
 
           <h1>{title}</h1>
           <p>{subtitle}</p>
-          <Link to="/interviews" className={styles["button-primary"]}>
+          <button
+            onClick={handleTryInterview}
+            className={styles["button-primary"]}
+          >
             Try an Interview
-          </Link>
+          </button>
         </div>
         <div className={styles["hero-image"]}>
           <img

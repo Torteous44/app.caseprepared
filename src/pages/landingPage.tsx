@@ -4,6 +4,7 @@ import Hero from "../components/landing/Hero";
 import UniBanner from "../components/landing/uniBanner";
 import Interviews from "../components/landing/interviews";
 import Analysis from "../components/landing/Analysis";
+import Join from "../components/landing/Join";
 import Try from "../components/landing/Try";
 import FAQs from "../components/landing/FAQs";
 import Footer from "../components/landing/Footer";
@@ -75,6 +76,8 @@ const LandingPage: React.FC = () => {
       <Try />
 
       <Analysis />
+
+      <Join />
 
       <FAQs />
 

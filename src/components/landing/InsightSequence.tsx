@@ -75,91 +75,70 @@ const insights: Insight[] = [
   },
 ];
 
-const ANIMATION_DURATION = 500;
-const DISPLAY_DURATION = 3000;
-const CYCLE_DURATION = 4000;
+const ANIMATION_DURATION = 500; // Duration of fade animation
+const DISPLAY_DURATION = 3000; // How long to show each insight
 const INITIAL_DELAY = 1000;
 
 const InsightSequence: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [isAnimatingOut, setIsAnimatingOut] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const mountedRef = useRef(true);
 
-  const clearTimers = useCallback(() => {
+  const clearTimer = useCallback(() => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = null;
     }
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
   }, []);
 
-  const safeSetState = useCallback((setter: Function) => {
-    if (mountedRef.current) {
-      setter();
-    }
-  }, []);
-
-  const cycleInsights = useCallback(() => {
+  const cycleInsight = useCallback(() => {
     if (!mountedRef.current) return;
 
-    safeSetState(() => setIsAnimating(true));
+    // Start fade out animation
+    setIsAnimatingOut(true);
 
+    // After animation completes, change content and fade in
     timeoutRef.current = setTimeout(() => {
-      safeSetState(() => setIsAnimating(false));
-
-      timeoutRef.current = setTimeout(() => {
-        safeSetState(() => setIsAnimating(true));
-
-        timeoutRef.current = setTimeout(() => {
-          safeSetState(() => {
-            setCurrentIndex((prevIndex) => (prevIndex + 1) % insights.length);
-            setIsAnimating(false);
-          });
-        }, ANIMATION_DURATION);
-      }, DISPLAY_DURATION);
+      if (mountedRef.current) {
+        setCurrentIndex((prevIndex) => (prevIndex + 1) % insights.length);
+        setIsAnimatingOut(false);
+      }
     }, ANIMATION_DURATION);
-  }, [safeSetState]);
+
+    // Schedule next cycle
+    timeoutRef.current = setTimeout(() => {
+      if (mountedRef.current) {
+        cycleInsight();
+      }
+    }, DISPLAY_DURATION + ANIMATION_DURATION);
+  }, []);
 
   useEffect(() => {
     mountedRef.current = true;
 
+    // Initial delay before starting the sequence
     timeoutRef.current = setTimeout(() => {
-      safeSetState(() => {
+      if (mountedRef.current) {
         setIsVisible(true);
-        setIsInitialized(true);
-      });
+        cycleInsight();
+      }
     }, INITIAL_DELAY);
 
     return () => {
       mountedRef.current = false;
-      clearTimers();
+      clearTimer();
     };
-  }, [clearTimers, safeSetState]);
-
-  useEffect(() => {
-    if (!isVisible || !isInitialized) return;
-
-    cycleInsights();
-    intervalRef.current = setInterval(cycleInsights, CYCLE_DURATION);
-
-    return () => clearTimers();
-  }, [isVisible, isInitialized, cycleInsights, clearTimers]);
+  }, [cycleInsight, clearTimer]);
 
   // Handle component visibility changes (e.g., tab switching)
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
-        clearTimers();
-      } else if (isInitialized) {
-        cycleInsights();
-        intervalRef.current = setInterval(cycleInsights, CYCLE_DURATION);
+        clearTimer();
+      } else if (isVisible) {
+        cycleInsight();
       }
     };
 
@@ -167,7 +146,7 @@ const InsightSequence: React.FC = () => {
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [isInitialized, cycleInsights, clearTimers]);
+  }, [isVisible, cycleInsight, clearTimer]);
 
   if (!isVisible || !insights.length) return null;
 
@@ -176,7 +155,7 @@ const InsightSequence: React.FC = () => {
   return (
     <div
       className={`${styles.insightSequence} ${
-        isAnimating ? styles.animating : ""
+        isAnimatingOut ? styles.animating : ""
       }`}
       role="status"
       aria-live="polite"
