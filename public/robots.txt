@@ -1,5 +1,4 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
-Crawl-delay: 1
 Sitemap: https://caseprepared.com/sitemap.xml
