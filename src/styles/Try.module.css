@@ -64,7 +64,6 @@
 
 .button:hover {
   background-color: var(--blue-secondary);
-  transform: translateY(-2px);
 }
 
 .imageContainer {
