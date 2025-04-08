@@ -1,0 +1,85 @@
+import React from "react";
+import { Link } from "react-router-dom";
+import styles from "../styles/Pricing.module.css";
+import { useModal } from "../contexts/ModalContext";
+
+const CheckIcon = () => (
+  <svg
+    width="12"
+    height="12"
+    viewBox="0 0 12 12"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M2.25 6.375L5.25 9.375L9.75 2.625"
+      stroke="#E9C46A"
+      stroke-width="1.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
+
+const Pricing: React.FC = () => {
+  const { openModal } = useModal();
+
+  return (
+    <div className={styles.container}>
+      <h1 className={styles.title}>
+        Start landing offers today, through AI case interview practice
+      </h1>
+
+      <div className={styles.pricingGrid}>
+        <div className={styles.pricingCard}>
+          <h2>CasePrepared</h2>
+          <div className={styles.price}>$40.00*</div>
+          <div className={styles.period}>per month</div>
+          <div className={styles.trialText}>*Free for the first 7 days</div>
+
+          <ul className={styles.featuresList}>
+            <li className={styles.featureItem}>
+              <CheckIcon />
+              100+ mock interviews
+            </li>
+            <li className={styles.featureItem}>
+              <CheckIcon />
+              Real time interview insights
+            </li>
+            <li className={styles.featureItem}>
+              <CheckIcon />
+              AI powered performance reviews
+            </li>
+            <li className={styles.featureItem}>
+              <CheckIcon />
+              Direct access to professionals
+            </li>
+          </ul>
+
+          <button
+            onClick={() => openModal("register")}
+            className={styles.memberButton}
+          >
+            Become a member
+          </button>
+        </div>
+
+        <div className={styles.infoBox}>
+          <h2 className={styles.infoTitle}>
+            Join students from all over the world, and land your dream role
+            today.
+          </h2>
+          <p className={styles.infoText}>
+            All it takes is practice. Successful candidates often do 30+ mock
+            interviews before the real one.
+          </p>
+          <Link to="/interviews" className={styles.mockInterviewButton}>
+            Start a Mock Interview
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Pricing;
