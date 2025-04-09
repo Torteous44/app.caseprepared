@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -21,6 +21,17 @@ import BlogPost from "./pages/BlogPost";
 import { Analytics } from "@vercel/analytics/react";
 import Pricing from "./pages/Pricing";
 
+// ScrollToTop component to handle scrolling to top on route changes
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
+
 // NavbarWrapper component to conditionally render the Navbar
 const NavbarWrapper = () => {
   const location = useLocation();
@@ -39,6 +50,7 @@ const App = () => {
         <Router>
           <div>
             <Analytics />
+            <ScrollToTop />
             <NavbarWrapper />
             <AuthModal />
             <Routes>

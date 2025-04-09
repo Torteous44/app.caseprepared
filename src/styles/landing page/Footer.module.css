@@ -59,10 +59,6 @@
   transition: all 0.2s ease;
 }
 
-.emailIconMinimal:hover {
-  transform: scale(1.1);
-}
-
 .emailIconMinimal:hover path {
   fill: var(--blue-primary);
 }
