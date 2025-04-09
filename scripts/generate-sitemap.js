@@ -59,6 +59,8 @@ const staticPages = [
   { url: '/contact', changefreq: 'monthly', priority: 0.7 },
   { url: '/interviews', changefreq: 'weekly', priority: 0.8 },
   { url: '/resources', changefreq: 'weekly', priority: 0.8 },
+  { url: '/privacy', changefreq: 'weekly', priority: 0.8 },
+  { url: '/terms', changefreq: 'weekly', priority: 0.8 },
 ];
 
 async function generateSitemap() {

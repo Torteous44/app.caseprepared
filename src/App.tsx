@@ -9,6 +9,8 @@ import LandingPage from "./pages/landingPage";
 import AboutPage from "./pages/AboutPage";
 import InterviewsPage from "./pages/InterviewsPage";
 import InterviewPage from "./pages/InterviewPage";
+import TermsPage from "./pages/TermsPage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import Navbar from "./components/Navbar";
 import RealtimeConnect from "./components/call/RealtimeConnect";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -51,6 +53,8 @@ const App = () => {
               <Route path="/blogs" element={<Blogs />} />
               <Route path="/blog/:id" element={<BlogPost />} />
               <Route path="/pricing" element={<Pricing />} />
+              <Route path="/terms" element={<TermsPage />} />
+              <Route path="/privacy" element={<PrivacyPolicyPage />} />
             </Routes>
           </div>
         </Router>

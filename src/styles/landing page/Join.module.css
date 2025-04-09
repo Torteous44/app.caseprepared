@@ -1,90 +1,89 @@
 @import "../../styles.css";
 
 .join-section {
-    padding: 4rem 2rem;
-    text-align: center;
-    background-color: #ffffff;
-    max-width: 1400px;
+    padding: 4rem 1.25rem;
     margin: 0 auto;
 }
 
 .join-container {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(400px, 500px) 1fr;
     gap: 4rem;
-    margin-bottom: 2rem;
+    align-items: center;
 }
 
 .join-title {
     font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #2D3748;
+    text-align: left;
+    line-height: 1.2;
 }
 
 .join-subtitle {
     font-size: 1.1rem;
-    color: #666;
-    margin-bottom: 3rem;
-}
-
-.membership-side {
-    flex: 0 1 400px;
+    color: #4A5568;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    text-align: left;
 }
 
 .membership-card {
     width: 100%;
-    padding: 2rem;
-    background-color: var(--blue-primary);
+    padding: 2.5rem;
+    background-color: white;
+    border: 1px solid #d9d9d9;
     border-radius: 12px;
-    color: white;
+    color: #2D3748;
     text-align: left;
 }
 
 .card-header {
-    margin-bottom: 0.5rem;
+    margin-bottom: 2rem;
 }
 
 .membership-label {
     display: block;
     margin-bottom: 1rem;
     font-size: 1rem;
-    color: #fff;
+    color: var(--blue-primary);
+    font-weight: 500;
 }
 
 .price {
     font-size: 2.5rem;
     font-weight: bold;
-    color: #E8C72D;
-    margin-right: 0.5rem;
+    color: #2D3748;
 }
 
 .per-month {
-    font-size: 0.9rem;
-    color: #7592FF;
-    opacity: 0.8;
+    font-size: 1rem;
+    color: #4A5568;
+    margin-left: 0.5rem;
 }
 
 .trial-text {
-    font-size: 1rem;
-    color: #ffffff;
-    opacity: 0.8;
-    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    color: #4A5568;
+    margin-top: 0.5rem;
 }
 
 .feature-list {
     list-style: none;
     padding: 0;
     margin: 2rem 0;
+    display: grid;
+    gap: 1rem;
 }
 
 .feature-item {
     display: flex;
     align-items: center;
     gap: 12px;
-    margin-bottom: 1rem;
-    font-size: 0.95rem;
-    line-height: 1.4;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #4A5568;
 }
 
 .feature-item svg {
@@ -94,18 +93,19 @@
 .cta-button {
     width: 100%;
     padding: 1rem;
-    background-color: #E8C72D;
+    background-color: var(--blue-primary);
     border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    color: #003087;
+    border-radius: 8px;
+    font-weight: 500;
+    color: white;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.2s ease;
     font-size: 1rem;
 }
 
 .cta-button:hover {
-    background-color: #ffed4a;
+    opacity: 0.9;
+    transform: translateY(-1px);
 }
 
 .universities-side {
@@ -128,100 +128,29 @@
     padding: 2rem;
 }
 
-.university-logos {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-.logo-container {
-    position: absolute;
-    width: 65px;
-    height: 65px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.3s ease;
-    z-index: 1;
-    transform: translateZ(0);
-    transform-style: preserve-3d;
-    perspective: 1000px;
-}
-
-.logo-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-/* Logo positioning classes with size variations */
-.logo-1 { 
-    top: 15%; 
-    left: 20%; 
-    width: 75px;
-    height: 75px;
-}
-.logo-2 { 
-    top: 15%; 
-    right: 20%;
-    width: 60px;
-    height: 60px;
-}
-.logo-3 { 
-    top: 45%; 
-    left: 5%;
-    width: 70px;
-    height: 70px;
-}
-.logo-4 { 
-    top: 55%; 
-    right: 2.5%;
-    width: 55px;
-    height: 55px;
-}
-.logo-5 { 
-    bottom: 15%; 
-    left: 20%;
-    width: 80px;
-    height: 80px;
-}
-.logo-6 { 
-    top: 5%; 
-    left: 45%;
-    width: 65px;
-    height: 65px;
-}
-.logo-7 { 
-    bottom: 15%; 
-    right: 20%;
-    width: 75px;
-    height: 75px;
-}
-.logo-8 { 
-    top: 30%; 
-    right: 5%;
-    width: 60px;
-    height: 60px;
-}
-.logo-9 { 
-    bottom: 5%; 
-    left: 45%;
-    width: 70px;
-    height: 70px;
-}
 
 /* Responsive Design */
 @media (max-width: 1024px) {
     .join-container {
-        flex-direction: column;
-        align-items: center;
+        grid-template-columns: 1fr;
         gap: 3rem;
     }
 
+    .content-side {
+        order: -1;
+    }
+
+    .join-title {
+        text-align: center;
+        font-size: 2rem;
+    }
+
+    .join-subtitle {
+        text-align: center;
+        margin-bottom: 0;
+    }
+
     .membership-side {
-        flex: 0 1 auto;
         width: 100%;
         max-width: 400px;
     }
@@ -249,20 +178,23 @@
         margin-bottom: 2rem;
     }
 
-    /* Reset all logo sizes in mobile to be consistent */
-    .logo-1, .logo-2, .logo-3, .logo-4, .logo-5, 
-    .logo-6, .logo-7, .logo-8, .logo-9 {
-        width: 50px;
-        height: 50px;
+
+    .benefits-content {
+        max-width: 600px;
+        margin: 0 auto;
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 640px) {
     .join-section {
         padding: 3rem 1rem;
     }
 
-    .join-title {
+    .membership-card {
+        padding: 1.5rem;
+    }
+
+    .price {
         font-size: 2rem;
     }
 
@@ -276,4 +208,81 @@
         width: 40px;
         height: 40px;
     }
+
+    .stats-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .testimonial {
+        padding-left: 1rem;
+    }
+
+    .testimonial-text {
+        font-size: 1rem;
+    }
+}
+
+.benefits-side {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.benefits-content {
+    width: 100%;
+}
+
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 2.25rem;
+    font-weight: bold;
+    color: var(--blue-primary);
+    margin-bottom: 0.5rem;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #4A5568;
+}
+
+.testimonial {
+    text-align: left;
+    border-left: 3px solid var(--blue-primary);
+    padding-left: 1.5rem;
+    margin-left: 3.5rem;
+}
+
+.testimonial-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    color: #2D3748;
+}
+
+.testimonial-author {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.author-name {
+    font-weight: 600;
+    color: var(--blue-primary);
+}
+
+.author-title {
+    font-size: 0.9rem;
+    color: #4A5568;
 } 

@@ -1,13 +1,114 @@
 .footer {
   width: 100%;
-  padding: 20px 0;
+  padding: 40px 0 20px;
   text-align: center;
-  margin-top: 40px;
+  margin: 40px auto 0;
+  border-top: 1px solid #eaeaea;
+}
+
+.mainContent {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px 40px;
+  text-align: left;
+}
+
+.logoSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 300px;
+}
+
+.logo {
+  width: 200px;
+  height: auto;
+}
+
+.logoSmall {
+  width: 180px;
+  height: auto;
+}
+
+.tagline {
+  margin: 15px 0;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.emailLink {
+  margin-top: 10px;
+}
+
+.emailIcon {
+  font-size: 18px;
+  color: #666;
+  transition: color 0.2s ease;
+}
+
+.emailIcon:hover {
+  color: var(--blue-primary);
+}
+
+.emailIconMinimal {
+  width: 20px;
+  height: 20px;
+  transition: all 0.2s ease;
+}
+
+.emailIconMinimal:hover {
+  transform: scale(1.1);
+}
+
+.emailIconMinimal:hover path {
+  fill: var(--blue-primary);
+}
+
+.linksContainer {
+  display: flex;
+  gap: 80px;
+}
+
+.linkColumn h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.linkColumn ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.linkColumn li {
+  margin-bottom: 12px;
+}
+
+.linkColumn a {
+  text-decoration: none;
+  color: #666;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.linkColumn a:hover {
+  color: var(--blue-primary);
 }
 
 .footerContent {
   font-size: 14px;
   color: #666;
+  padding-top: 20px;
+  text-align: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .companyLink {
@@ -37,4 +138,27 @@
 
 .contactLink:hover {
   color: var(--blue-primary);
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    flex-direction: column;
+  }
+  
+  .logoSection {
+    margin-bottom: 40px;
+    max-width: 100%;
+    align-items: center;
+  }
+  
+  .linksContainer {
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
+  }
+  
+  .linkColumn {
+    width: 100%;
+    text-align: center;
+  }
 } 
