@@ -26,9 +26,12 @@ const Pricing: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>
-        Start landing offers today, through AI case interview practice
-      </h1>
+      <div className={styles.header}>
+        <h1 className={styles.title}>
+          Start landing offers today, through AI case interview practice
+        </h1>
+        <p>Choose the plan that best fits your preparation needs.</p>
+      </div>
 
       <div className={styles.pricingGrid}>
         <div className={styles.pricingCard}>
