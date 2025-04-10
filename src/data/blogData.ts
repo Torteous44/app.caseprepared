@@ -36,7 +36,7 @@ export interface BlogPost {
   
   By balancing theory, deliberate practice, and confident delivery, you'll be well-positioned to tackle any case interview scenario. Armed with the right strategies and mindset, you can transform a daunting process into a rewarding opportunity to showcase your consulting aptitude.`,
       author: "Case Prepared Team",
-      date: "2025-04-06",
+      date: "2025-04-01",
       imageUrl: "/assets/blogs/consult.webp",
       tags: ["Case Interview Preparation", "Consulting Frameworks", "Interview Strategy", "Problem Solving", "Business Analysis", "Career Development", "Management Consulting"]
     },
@@ -105,7 +105,7 @@ Express your thought process out loud as you build your MECE-based framework. Th
 
 By rigorously applying and communicating the MECE principle, you set a strong foundation for any case interview analysis. Whether you're dissecting cost components, mapping out strategic priorities, or exploring new market opportunities, a MECE-aligned framework will help you remain focused, concise, and comprehensive. Master this skill, and you'll be well-positioned to stand out in competitive consulting interviews.`,
       author: "Boris Gans",
-      date: "2025-04-06",
+      date: "2025-04-03",
       imageUrl: "/assets/blogs/mece.webp",
       tags: [
         "MECE Framework",
@@ -148,7 +148,7 @@ While these frameworks are traditionally taught in isolation, top-performing can
 
 By blending frameworks thoughtfully—and adapting them to the context of the case—you'll demonstrate the analytical versatility that top consulting firms seek. Always remember to communicate your reasoning clearly and logically, ensuring that your interviewer can follow each step of your problem-solving process. Ultimately, showcasing both a mastery of these frameworks and the strategic judgment to apply them effectively will set you apart.`,
       author: "Mohapi Ralethe",
-      date: "2025-04-06",
+      date: "2025-02-15",
       imageUrl: "/assets/blogs/interview.webp",
       tags: [
         "Advanced Frameworks",
@@ -190,7 +190,7 @@ By blending frameworks thoughtfully—and adapting them to the context of the ca
   
   By combining solid case-solving abilities with compelling behavioral stories, you'll position yourself as a well-rounded candidate ready to navigate the high demands of consulting life.`,
       author: "Case Prepared Team",
-      date: "2025-04-06",
+      date: "2025-04-12",
       imageUrl: "/assets/blogs/behaviour.webp",
       tags: ["Behavioral Interviews", "Soft Skills", "STAR Method", "Leadership Skills", "Communication Skills", "Interview Preparation", "Consulting Career"]
     },
@@ -222,7 +222,7 @@ By blending frameworks thoughtfully—and adapting them to the context of the ca
   
   Tailoring your method to the specific case type allows you to demonstrate both depth and versatility. By preparing for these specialized scenarios, you'll showcase your ability to tackle diverse, real-world challenges that consulting firms handle every day.`,
       author: "Diego Gutierrez",
-      date: "2025-04-06",
+      date: "2025-04-22",
       imageUrl: "/assets/blogs/special.webp",
       tags: ["Market Sizing", "M&A Analysis", "Growth Strategy", "Operations Management", "Business Valuation", "Case Interview Types", "Strategic Planning"]
     },
