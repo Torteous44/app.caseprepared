@@ -1,7 +1,7 @@
 @import "../../styles.css";
 .hero-container {
   background-color: white;
-  padding: 8rem 1.5rem 4rem 1.5rem;
+  padding: 6rem 1.5rem 4rem 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -64,7 +64,7 @@
   line-height: 1.1;
   color: black;
   margin-top: 0.5rem;
-  letter-spacing: -0.08em;
+  letter-spacing: -0.065em;
 }
 
 .hero-text p {

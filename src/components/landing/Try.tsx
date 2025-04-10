@@ -18,7 +18,7 @@ const Try: React.FC = () => {
             Practice like it's the real thing and get coaching as you go, not
             just after it ends.
           </p>
-          <Link to="/about" className={styles.button}>
+          <Link to="/resources" className={styles.button}>
             Learn More
           </Link>
         </div>

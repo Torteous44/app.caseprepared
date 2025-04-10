@@ -143,6 +143,10 @@
 
 /* Responsive adjustments */
 @media (max-width: 1024px) {
+  .measurements-section {
+    padding: 40px 60px;
+  }
+  
   .measurements-grid {
     gap: 20px;
   }
@@ -153,14 +157,14 @@
 }
 
 @media (max-width: 768px) {
+  .measurements-section {
+    padding: 60px 30px;
+  }
+  
   .measurements-grid {
     grid-template-columns: 1fr;
     max-width: 600px;
     margin: 0 auto;
-  }
-  
-  .measurements-section {
-    padding: 60px 0;
   }
   
   .measurements-subtitle {
@@ -169,15 +173,28 @@
 }
 
 @media (max-width: 480px) {
+  .measurements-section {
+    padding: 40px 20px;
+  }
+  
   .measurements-title {
     font-size: 28px;
   }
   
   .measurements-subtitle {
-    font-size: 16px;
+    font-size: 15px;
   }
   
   .measurement-card {
-    padding: 20px;
+    padding: 16px;
+  }
+  
+  .measurement-card li {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  
+  .measurement-card p {
+    font-size: 14px;
   }
 } 

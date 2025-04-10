@@ -12,7 +12,7 @@ const CheckIcon = () => (
   >
     <path
       d="M2.25 6.375L5.25 9.375L9.75 2.625"
-      stroke="#E9C46A"
+      stroke="#174EA6"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"

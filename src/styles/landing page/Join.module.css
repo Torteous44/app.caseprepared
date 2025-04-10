@@ -33,40 +33,44 @@
     width: 100%;
     padding: 2.5rem;
     background-color: white;
-    border: 1px solid #d9d9d9;
+    border: 1px solid var(--border-color);
     border-radius: 12px;
     color: #2D3748;
     text-align: left;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
 .card-header {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 .membership-label {
     display: block;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     font-size: 1rem;
     color: var(--blue-primary);
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: 0.02em;
 }
 
 .price {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #2D3748;
+    font-size: 3rem;
+    font-weight: 700;
+    color: #1A202C;
+    line-height: 1.1;
 }
 
 .per-month {
     font-size: 1rem;
-    color: #4A5568;
-    margin-left: 0.5rem;
+    color: #718096;
+    margin-left: 0.25rem;
+    font-weight: 500;
 }
 
 .trial-text {
-    font-size: 0.9rem;
-    color: #4A5568;
-    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    color: #718096;
+    margin-top: 0.75rem;
 }
 
 .feature-list {
@@ -74,12 +78,12 @@
     padding: 0;
     margin: 2rem 0;
     display: grid;
-    gap: 1rem;
+    gap: 1.25rem;
 }
 
 .feature-item {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 12px;
     font-size: 1rem;
     line-height: 1.5;
@@ -88,46 +92,34 @@
 
 .feature-item svg {
     flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    margin-top: 0.25rem;
+    color: var(--blue-primary);
 }
 
 .cta-button {
     width: 100%;
     padding: 1rem;
+    margin-top: 0.5rem;
     background-color: var(--blue-primary);
     border: none;
     border-radius: 8px;
-    font-weight: 500;
+    font-weight: 600;
     color: white;
     cursor: pointer;
     transition: all 0.2s ease;
     font-size: 1rem;
+    letter-spacing: 0.01em;
 }
 
 .cta-button:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
+    background-color: var(--blue-secondary);
 }
 
-.universities-side {
-    flex: 1;
-    position: relative;
-    min-height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.content-side {
+    display: block;
 }
-
-.university-title {
-    font-size: 1.75rem;
-    font-weight: bold;
-    max-width: 500px;
-    text-align: center;
-    position: relative;
-    z-index: 2;
-    margin: 0;
-    padding: 2rem;
-}
-
 
 /* Responsive Design */
 @media (max-width: 1024px) {
@@ -149,40 +141,6 @@
         text-align: center;
         margin-bottom: 0;
     }
-
-    .membership-side {
-        width: 100%;
-        max-width: 400px;
-    }
-
-    .universities-side {
-        min-height: 180px;
-    }
-
-    .university-logos {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 1.5rem;
-        position: static;
-        padding: 2rem 0;
-    }
-
-    .logo-container {
-        position: static;
-        width: 50px;
-        height: 50px;
-    }
-
-    .university-title {
-        margin-bottom: 2rem;
-    }
-
-
-    .benefits-content {
-        max-width: 600px;
-        margin: 0 auto;
-    }
 }
 
 @media (max-width: 640px) {
@@ -191,98 +149,10 @@
     }
 
     .membership-card {
-        padding: 1.5rem;
+        padding: 1.75rem;
     }
 
     .price {
         font-size: 2rem;
     }
-
-    .university-title {
-        font-size: 1.5rem;
-    }
-
-    .logo-container,
-    .logo-1, .logo-2, .logo-3, .logo-4, .logo-5, 
-    .logo-6, .logo-7, .logo-8, .logo-9 {
-        width: 40px;
-        height: 40px;
-    }
-
-    .stats-container {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-
-    .testimonial {
-        padding-left: 1rem;
-    }
-
-    .testimonial-text {
-        font-size: 1rem;
-    }
 }
-
-.benefits-side {
-    flex: 1;
-    display: flex;
-    align-items: center;
-}
-
-.benefits-content {
-    width: 100%;
-}
-
-.stats-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    margin-bottom: 4rem;
-}
-
-.stat-item {
-    text-align: center;
-}
-
-.stat-number {
-    font-size: 2.25rem;
-    font-weight: bold;
-    color: var(--blue-primary);
-    margin-bottom: 0.5rem;
-    line-height: 1;
-}
-
-.stat-label {
-    font-size: 0.9rem;
-    color: #4A5568;
-}
-
-.testimonial {
-    text-align: left;
-    border-left: 3px solid var(--blue-primary);
-    padding-left: 1.5rem;
-    margin-left: 3.5rem;
-}
-
-.testimonial-text {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 1rem;
-    color: #2D3748;
-}
-
-.testimonial-author {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.author-name {
-    font-weight: 600;
-    color: var(--blue-primary);
-}
-
-.author-title {
-    font-size: 0.9rem;
-    color: #4A5568;
-} 
