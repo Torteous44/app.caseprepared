@@ -1,6 +1,6 @@
-import React from "react";
-import styles from "../styles/ResourcesHero.module.css";
-import "../styles.css"; // Import global styles for CSS variables
+import React, { useState, useEffect } from "react";
+import styles from "../../styles/resources page/ResourcesHero.module.css";
+import "../../styles.css"; // Import global styles for CSS variables
 import { Link } from "react-router-dom";
 
 // Use the correct paths to the SVG logos
@@ -20,6 +20,31 @@ const getCompanyName = (path: string): string => {
 };
 
 const ResourcesHero: React.FC = () => {
+  const [loadedLogos, setLoadedLogos] = useState<{ [key: string]: boolean }>(
+    {}
+  );
+
+  // Preload all SVG images
+  useEffect(() => {
+    allLogos.forEach((logoPath) => {
+      const img = new Image();
+      img.onload = () => {
+        setLoadedLogos((prev) => ({
+          ...prev,
+          [logoPath]: true,
+        }));
+      };
+      img.onerror = (e) => {
+        console.error(`Failed to load logo: ${logoPath}`, e);
+        setLoadedLogos((prev) => ({
+          ...prev,
+          [logoPath]: false,
+        }));
+      };
+      img.src = logoPath;
+    });
+  }, []);
+
   return (
     <section className={styles.hero}>
       <div className={styles.content}>
@@ -53,6 +78,12 @@ const ResourcesHero: React.FC = () => {
                 src={logo}
                 alt={`${getCompanyName(logo)} Logo`}
                 className={styles.logo}
+                loading="lazy"
+                onError={(e) => {
+                  // Fallback handling if image fails to load
+                  (e.target as HTMLImageElement).style.display = "none";
+                  console.error(`Error loading logo: ${logo}`);
+                }}
               />
             ))}
           </div>

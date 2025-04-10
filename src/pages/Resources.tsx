@@ -3,9 +3,9 @@ import React from "react";
 import "../styles.css";
 
 // Placeholder imports for components - these will need to be created
-import ResourcesHero from "../components/ResourcesHero"; // Assuming path
-import ResourcesMeasurements from "../components/ResourcesMeasurements";
-import ResourcesBlog from "../components/ResourcesBlog";
+import ResourcesHero from "../components/resources page/ResourcesHero"; // Assuming path
+import ResourcesMeasurements from "../components/resources page/ResourcesMeasurements";
+import ResourcesBlog from "../components/resources page/ResourcesBlog";
 import Footer from "../components/common/Footer";
 // import Blog from '../components/Blog';
 

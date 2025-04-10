@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { blogPosts } from "../data/blogData";
-import styles from "../styles/Blogs.module.css";
+import styles from "../styles/blog/Blogs.module.css";
 
 const Blogs: React.FC = () => {
   const [searchParams] = useSearchParams();

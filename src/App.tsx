@@ -11,7 +11,7 @@ import InterviewsPage from "./pages/InterviewsPage";
 import InterviewPage from "./pages/InterviewPage";
 import TermsPage from "./pages/TermsPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/common/Navbar";
 import RealtimeConnect from "./components/call/RealtimeConnect";
 import { AuthProvider } from "./contexts/AuthContext";
 import { ModalProvider } from "./contexts/ModalContext";

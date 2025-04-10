@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { blogPosts } from "../data/blogData";
-import styles from "../styles/BlogPost.module.css";
+import styles from "../styles/blog/BlogPost.module.css";
 
 // Helper function to get related posts
 const getRelatedPosts = (

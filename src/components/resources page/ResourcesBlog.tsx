@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { blogPosts } from "../data/blogData";
-import "../styles/ResourcesBlog.css";
+import { blogPosts } from "../../data/blogData";
+import "../../styles/resources page/ResourcesBlog.css";
 
 const ResourcesBlog: React.FC = () => {
   // Only show the first 3 blog posts

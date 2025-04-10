@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import styles from "../styles/Navbar.module.css";
-import { useAuth } from "../contexts/AuthContext";
-import { useModal } from "../contexts/ModalContext";
+import styles from "../../styles/common/Navbar.module.css";
+import { useAuth } from "../../contexts/AuthContext";
+import { useModal } from "../../contexts/ModalContext";
 
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);

@@ -1,6 +1,6 @@
 import React from "react";
-import "../styles/ResourcesMeasurements.css";
-import "../styles.css";
+import "../../styles/resources page/ResourcesMeasurements.css";
+import "../../styles.css";
 
 const ResourcesMeasurements: React.FC = () => {
   return (
