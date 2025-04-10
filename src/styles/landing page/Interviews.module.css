@@ -63,6 +63,8 @@
   justify-content: space-between;
   align-items: center;
   text-decoration: none;
+  box-sizing: border-box;
+  
 }
 
 .logo-container {
@@ -70,12 +72,14 @@
   height: 30px;
   display: flex;
   align-items: center;
+  box-sizing: border-box;
 }
 
 .logo-container img {
   max-height: 100%;
   max-width: 100%;
   object-fit: contain;
+  box-sizing: border-box;
 }
 
 .card-tag {
@@ -90,6 +94,7 @@
   height: 180px;
   overflow: hidden;
   padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .thumbnail-container img {
@@ -97,6 +102,7 @@
   height: 100%;
   border-radius: 8px;
   object-fit: cover;
+  box-sizing: border-box;
 }
 
 .card-body {
@@ -109,7 +115,7 @@
 .card-title {
   font-size: 1.2rem;
   font-weight: 600;
-  margin: 0 0 12px 0;
+  margin: 10px 0 2px 0;
   text-align: left;
   color: #000;
 }
