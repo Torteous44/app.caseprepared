@@ -1,9 +1,20 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import "./styles/global.css";
+// Dynamically import non-critical CSS
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+
+// Dynamically load non-critical CSS
+const loadCss = () => {
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = "/styles/global.css";
+  document.head.appendChild(link);
+};
+
+// Load CSS after main content is rendered
+window.addEventListener("load", loadCss);
 
 // Create root with type assertion
 const root = ReactDOM.createRoot(

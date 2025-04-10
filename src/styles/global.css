@@ -8,9 +8,7 @@
   --background-light: #f8f8f8;
 }
 
-/* Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
-
+/* Fonts - using preloaded version from HTML */
 
 body {
   font-family: 'Figtree', sans-serif;
@@ -20,7 +18,6 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
-
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Figtree', sans-serif;

@@ -8,7 +8,7 @@
 .join-container {
     display: grid;
     grid-template-columns: minmax(400px, 500px) 1fr;
-    gap: 4rem;
+    gap: 8rem;
     align-items: center;
 }
 
