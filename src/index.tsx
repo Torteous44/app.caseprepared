@@ -16,26 +16,21 @@ const loadCss = () => {
 // Load CSS after main content is rendered
 window.addEventListener("load", loadCss);
 
-// Support both hydration from react-snap and normal rendering
+// Create root with type assertion
 const rootElement = document.getElementById("root") as HTMLElement;
+const root = ReactDOM.createRoot(rootElement);
 
-if (rootElement.hasChildNodes()) {
-  // If the root element has children, it means the app was pre-rendered by react-snap
-  // Use hydrateRoot instead of createRoot to avoid the double-rendering
-  ReactDOM.hydrateRoot(rootElement, <App />);
-} else {
-  // Normal rendering path when not pre-rendered
-  const root = ReactDOM.createRoot(rootElement);
-  root.render(
-    process.env.NODE_ENV === "development" ? (
-      <React.StrictMode>
-        <App />
-      </React.StrictMode>
-    ) : (
+// Conditionally render with StrictMode in development
+const app =
+  process.env.NODE_ENV === "development" ? (
+    <React.StrictMode>
       <App />
-    )
+    </React.StrictMode>
+  ) : (
+    <App />
   );
-}
+
+root.render(app);
 
 // Monitor core web vitals
 reportWebVitals((metric) => {
