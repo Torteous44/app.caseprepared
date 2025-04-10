@@ -21,6 +21,7 @@ import BlogPost from "./pages/BlogPost";
 import { Analytics } from "@vercel/analytics/react";
 import Pricing from "./pages/Pricing";
 import Resources from "./pages/Resources";
+import NotFoundPage from "./pages/NotFoundPage";
 // ScrollToTop component to handle scrolling to top on route changes
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -68,6 +69,7 @@ const App = () => {
               <Route path="/terms" element={<TermsPage />} />
               <Route path="/privacy" element={<PrivacyPolicyPage />} />
               <Route path="/resources" element={<Resources />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </div>
         </Router>

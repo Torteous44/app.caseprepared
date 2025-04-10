@@ -1,0 +1,90 @@
+.container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  background-color: #fafafa;
+}
+
+.content {
+  max-width: 400px;
+  width: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.errorCode {
+  font-size: 5rem;
+  font-weight: 300;
+  margin: 0;
+  color: var(--blue-primary);
+  line-height: 1;
+  font-family: 'Inter', sans-serif;     
+}
+
+.title {
+  font-size: 2.5rem;
+  margin: 1rem 0 2rem;
+  color: #333;
+  font-family: 'Inter', sans-serif;
+}
+
+.description {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.primaryButton {
+  background: transparent;
+  color: #333;
+  font-weight: 500;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.primaryButton:hover {
+  background: #f0f0f0;
+}
+
+.secondaryButton {
+  color: #0066cc;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.2s ease;
+}
+
+.secondaryButton:hover {
+  color: #3c83dc;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .errorCode {
+    font-size: 4rem;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+} 
