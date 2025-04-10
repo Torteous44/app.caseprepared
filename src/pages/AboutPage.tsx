@@ -1,78 +1,84 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import styles from "../styles/AboutPage.module.css";
 
 const AboutPage = () => {
-  const headerRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  useEffect(() => {
-    const header = headerRef.current;
-    if (!header) return;
-
-    // Track mouse position with RAF for smoother performance
-    let rafId: number | null = null;
-    let currentX = 50;
-    let currentY = 50;
-    let targetX = 50;
-    let targetY = 50;
-
-    const updateSpotlight = () => {
-      // Smooth interpolation for more natural movement
-      currentX = currentX + (targetX - currentX) * 0.1;
-      currentY = currentY + (targetY - currentY) * 0.1;
-
-      // Apply the updated position
-      header.style.setProperty("--mouse-x", `${currentX}%`);
-      header.style.setProperty("--mouse-y", `${currentY}%`);
-
-      rafId = requestAnimationFrame(updateSpotlight);
-    };
-
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = header.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      // Calculate position percentages relative to the header
-      targetX = (x / rect.width) * 100;
-      targetY = (y / rect.height) * 100;
-
-      // Start animation loop if not already running
-      if (rafId === null) {
-        rafId = requestAnimationFrame(updateSpotlight);
-      }
-    };
-
-    const handleMouseLeave = () => {
-      // Slowly return to center when mouse leaves
-      targetX = 50;
-      targetY = 50;
-    };
-
-    header.addEventListener("mousemove", handleMouseMove);
-    header.addEventListener("mouseleave", handleMouseLeave);
-
-    // Start with centered position
-    rafId = requestAnimationFrame(updateSpotlight);
-
-    return () => {
-      header.removeEventListener("mousemove", handleMouseMove);
-      header.removeEventListener("mouseleave", handleMouseLeave);
-      if (rafId !== null) {
-        cancelAnimationFrame(rafId);
-      }
-    };
-  }, []);
+  // JSON-LD structured data for better SEO
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Case Prepared",
+    url: "https://caseprepared.com",
+    logo: "https://caseprepared.com/assets/Logo.png",
+    description:
+      "Case Prepared helps professionals master their interviews through personalized AI-powered practice.",
+    sameAs: [
+      "https://twitter.com/caseprepared",
+      "https://linkedin.com/company/caseprepared",
+    ],
+  };
 
   return (
     <div className={styles.container}>
-      <div className={styles.header} ref={headerRef}>
-        <div className={styles.spotlight}></div>
+      <Helmet>
+        <title>About Case Prepared | AI-Powered Interview Training</title>
+        <meta
+          name="description"
+          content="Learn about Case Prepared's mission to revolutionize interview preparation through AI-powered coaching and personalized feedback."
+        />
+        <meta
+          name="keywords"
+          content="interview preparation, AI coaching, interview practice, career development"
+        />
+        <link rel="canonical" href="https://caseprepared.com/about" />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://caseprepared.com/about" />
+        <meta
+          property="og:title"
+          content="About Case Prepared | AI-Powered Interview Training"
+        />
+        <meta
+          property="og:description"
+          content="Learn about Case Prepared's mission to revolutionize interview preparation through AI-powered coaching and personalized feedback."
+        />
+        <meta
+          property="og:image"
+          content="https://caseprepared.com/assets/about-preview.png"
+        />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://caseprepared.com/about" />
+        <meta
+          property="twitter:title"
+          content="About Case Prepared | AI-Powered Interview Training"
+        />
+        <meta
+          property="twitter:description"
+          content="Learn about Case Prepared's mission to revolutionize interview preparation through AI-powered coaching and personalized feedback."
+        />
+        <meta
+          property="twitter:image"
+          content="https://caseprepared.com/assets/about-preview.png"
+        />
+
+        {/* JSON-LD structured data */}
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Helmet>
+
+      <div className={styles.header}>
         <h1 className={styles.title}>About Us</h1>
+        <p className={styles.subtitle}>
+          We're on a mission to help professionals master their interviews
+          through personalized AI-powered practice.
+        </p>
       </div>
 
       <div className={styles.content}>
