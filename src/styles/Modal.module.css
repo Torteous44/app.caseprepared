@@ -103,6 +103,7 @@
   font-size: 1rem;
   transition: background-color 0.3s;
   border: 1px solid var(--border-color);
+  box-sizing: border-box;
 }
 
 .input:focus {
