@@ -7,7 +7,7 @@ import Analysis from "../components/landing/Analysis";
 import Join from "../components/landing/Join";
 import Try from "../components/landing/Try";
 import FAQs from "../components/landing/FAQs";
-import Footer from "../components/landing/Footer";
+import Footer from "../components/common/Footer";
 
 const LandingPage: React.FC = () => {
   const jsonLd = {

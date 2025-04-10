@@ -46,7 +46,7 @@ const Navbar: React.FC = () => {
             </Link>
           </li>
           <li className={styles.navItem}>
-            <Link to="/" className={styles.navLink}>
+            <Link to="/resources" className={styles.navLink}>
               Resources
             </Link>
           </li>

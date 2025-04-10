@@ -1,0 +1,133 @@
+.resources-blog-section {
+  padding: 80px 175px;
+  background-color: white;
+}
+
+.resources-blog-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.resources-blog-header {
+  text-align: left;
+  margin-bottom: 40px;
+}
+
+.resources-blog-title {
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--text-color);
+}
+
+.resources-blog-subtitle {
+  font-size: 18px;
+  color: #555;
+  margin: 0;
+}
+
+.resources-blog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.resources-blog-card {
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease;
+}
+
+.resources-blog-card:hover {
+  transform: translateY(-4px);
+}
+
+.resources-blog-image {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+  background-color: #f0f0f0;
+  margin-bottom: 16px;
+}
+
+.resources-blog-content {
+  padding: 0;
+}
+
+.resources-blog-post-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0 0 10px 0;
+  line-height: 1.4;
+}
+
+.resources-blog-excerpt {
+  font-size: 15px;
+  color: #555;
+  margin: 0;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.resources-blog-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.resources-blog-button {
+  background-color: var(--blue-primary);
+  color: white;
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  display: inline-block;
+}
+
+.resources-blog-button:hover {
+  background-color: var(--blue-secondary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .resources-blog-grid {
+    gap: 24px;
+  }
+  
+  .resources-blog-title {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .resources-blog-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .resources-blog-section {
+    padding: 60px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .resources-blog-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .resources-blog-title {
+    font-size: 28px;
+  }
+  
+  .resources-blog-subtitle {
+    font-size: 16px;
+  }
+} 
