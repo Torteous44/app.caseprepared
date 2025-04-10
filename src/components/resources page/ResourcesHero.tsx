@@ -55,8 +55,8 @@ const ResourcesHero: React.FC = () => {
           </h1>
           <p className={styles.description}>
             Access our curated collection of frameworks, case examples, and
-            industry insights designed to help you excel in consulting case
-            interviews at top firms.
+            AI-powered practice interviews designed to help you excel in
+            consulting case interviews at top firms.
           </p>
           <div className={styles.ctaContainer}>
             <Link to="/interviews">
