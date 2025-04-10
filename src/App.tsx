@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -22,6 +22,33 @@ import { Analytics } from "@vercel/analytics/react";
 import Pricing from "./pages/Pricing";
 import Resources from "./pages/Resources";
 import NotFoundPage from "./pages/NotFoundPage";
+
+// Extend Window interface to include React DevTools hook
+declare global {
+  interface Window {
+    __REACT_DEVTOOLS_GLOBAL_HOOK__?: {
+      renderers: Map<any, any>;
+      [key: string]: any;
+    };
+  }
+}
+
+// Disable React DevTools in production for better security and performance
+const disableReactDevTools = () => {
+  if (typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined") {
+    for (const prop in window.__REACT_DEVTOOLS_GLOBAL_HOOK__) {
+      if (prop === "renderers") {
+        window.__REACT_DEVTOOLS_GLOBAL_HOOK__[prop] = new Map();
+      } else {
+        window.__REACT_DEVTOOLS_GLOBAL_HOOK__[prop] =
+          typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__[prop] === "function"
+            ? () => {}
+            : null;
+      }
+    }
+  }
+};
+
 // ScrollToTop component to handle scrolling to top on route changes
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -45,6 +72,13 @@ const NavbarWrapper = () => {
 };
 
 const App = () => {
+  // Disable React DevTools in production
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production") {
+      disableReactDevTools();
+    }
+  }, []);
+
   return (
     <AuthProvider>
       <ModalProvider>

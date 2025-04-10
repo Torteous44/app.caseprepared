@@ -23,11 +23,13 @@
     "react-scripts": "5.0.1",
     "remark-gfm": "^4.0.1",
     "typescript": "^4.9.5",
+    "use-react-router-breadcrumbs": "^4.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build && npm run generate-sitemap",
+    "postbuild": "react-snap",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "generate-sitemap": "node scripts/generate-sitemap.js"
@@ -51,6 +53,23 @@
     ]
   },
   "devDependencies": {
+    "react-snap": "^1.23.0",
     "sitemap": "^8.0.0"
+  },
+  "reactSnap": {
+    "include": ["/", "/about", "/pricing", "/terms", "/privacy"],
+    "skipThirdPartyRequests": true,
+    "puppeteerArgs": ["--no-sandbox", "--disable-setuid-sandbox"],
+    "puppeteerIgnoreHTTPSErrors": true,
+    "puppeteerLaunchOptions": {
+      "timeout": 60000
+    },
+    "maxConcurrentRoutes": 4,
+    "minifyHtml": {
+      "collapseWhitespace": true,
+      "removeComments": true
+    },
+    "source": "build",
+    "destination": "build"
   }
 }
