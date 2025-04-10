@@ -51,7 +51,7 @@ const ResourcesHero: React.FC = () => {
         <div className={styles.leftColumn}>
           <h1 className={styles.title}>
             Consulting interview{" "}
-            <span className={styles.highlight}>resources that work</span>
+            <span className={styles.highlight}>preparation that works</span>
           </h1>
           <p className={styles.description}>
             Access our curated collection of frameworks, case examples, and
