@@ -99,6 +99,26 @@
       padding: 12px;
       margin-bottom: 20px;
     }
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 8px;
+    }
+    .badge-success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .badge-warning {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    .badge-danger {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
   </style>
 </head>
 <body>
@@ -106,8 +126,8 @@
     <h1>Google OAuth Debugging Tool</h1>
     
     <div class="info-box">
-      <strong>Important:</strong> The CasePrepared API requires a POST request with the token in the request body,
-      not a GET request with query parameters.
+      <strong>Important:</strong> The CasePrepared API's actual implementation requires the token as a query parameter,
+      despite the documentation stating it should be in the request body.
     </div>
     
     <div class="panel">
@@ -144,29 +164,42 @@
       <div class="radio-group">
         <label>Request Method:</label>
         <label class="radio-label">
-          <input type="radio" name="requestMethod" value="POST" checked> POST (Required)
+          <input type="radio" name="requestMethod" value="POST" checked> POST
+          <span class="badge badge-success">Works</span>
         </label>
         <label class="radio-label">
-          <input type="radio" name="requestMethod" value="GET"> GET (Not Supported)
+          <input type="radio" name="requestMethod" value="GET"> GET
+          <span class="badge badge-danger">Fails</span>
         </label>
       </div>
       
       <div class="radio-group">
         <label>Token Transmission:</label>
         <label class="radio-label">
-          <input type="radio" name="tokenMethod" value="body" checked> Request Body (Required)
+          <input type="radio" name="tokenMethod" value="query" checked> Query Parameter
+          <span class="badge badge-success">Works</span>
         </label>
         <label class="radio-label">
-          <input type="radio" name="tokenMethod" value="query"> Query Parameter (Not Supported)
+          <input type="radio" name="tokenMethod" value="body"> Request Body
+          <span class="badge badge-danger">Fails</span>
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="tokenMethod" value="hybrid"> Hybrid (POST with Query)
+          <span class="badge badge-success">Recommended</span>
         </label>
       </div>
       
-      <div id="bodyFormatContainer">
+      <div id="queryParamContainer">
+        <label for="queryParamName">Query Parameter Name:</label>
+        <input type="text" id="queryParamName" value="token">
+      </div>
+      
+      <div id="bodyFormatContainer" style="display: none;">
         <label for="payloadFormat">Payload Format (for Body):</label>
         <select id="payloadFormat">
-          <option value="token">Required Format: { "token": "..." }</option>
-          <option value="id_token">Alternative: { "id_token": "..." }</option>
-          <option value="credential">Alternative: { "credential": "..." }</option>
+          <option value="token">Format: { "token": "..." }</option>
+          <option value="id_token">Format: { "id_token": "..." }</option>
+          <option value="credential">Format: { "credential": "..." }</option>
           <option value="custom">Custom Format</option>
         </select>
       </div>
@@ -175,14 +208,6 @@
         <label for="customFormat">Custom JSON Format:</label>
         <textarea id="customFormat" rows="5">{"token": "CREDENTIAL"}</textarea>
         <p><small>Use CREDENTIAL as a placeholder for the actual token</small></p>
-      </div>
-      
-      <div id="queryParamContainer" style="display: none;">
-        <div class="warning">
-          Query parameter method is not supported by the API. Please use request body.
-        </div>
-        <label for="queryParamName">Query Parameter Name:</label>
-        <input type="text" id="queryParamName" value="token">
       </div>
       
       <button id="testApiButton">Test API Call</button>
@@ -239,23 +264,10 @@
       
       document.querySelectorAll('input[name="tokenMethod"]').forEach(radio => {
         radio.addEventListener('change', function() {
-          const isBody = this.value === 'body';
-          document.getElementById('bodyFormatContainer').style.display = isBody ? 'block' : 'none';
-          document.getElementById('queryParamContainer').style.display = isBody ? 'none' : 'block';
+          const method = this.value;
+          document.getElementById('bodyFormatContainer').style.display = method === 'body' ? 'block' : 'none';
+          document.getElementById('queryParamContainer').style.display = method === 'body' ? 'none' : 'block';
           document.getElementById('customFormatContainer').style.display = 'none';
-          
-          // Show warning if using query parameters
-          if (!isBody) {
-            alert('Warning: The API only supports POST requests with the token in the request body.');
-          }
-        });
-      });
-      
-      document.querySelectorAll('input[name="requestMethod"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-          if (this.value !== 'POST') {
-            alert('Warning: The API only supports POST requests for Google authentication.');
-          }
         });
       });
       
@@ -305,13 +317,14 @@
         }
       };
       
-      // Handle query parameter method
-      if (tokenMethod === 'query') {
+      // Handle query parameter method (or hybrid)
+      if (tokenMethod === 'query' || tokenMethod === 'hybrid') {
         const paramName = document.getElementById('queryParamName').value;
         apiUrl += `?${paramName}=${encodeURIComponent(credential)}`;
       } 
+      
       // Handle body method
-      else {
+      if (tokenMethod === 'body') {
         requestOptions.headers["Content-Type"] = "application/json";
         
         const payloadFormat = document.getElementById('payloadFormat').value;
@@ -358,15 +371,22 @@
         
         const response = await fetch(apiUrl, requestOptions);
         
-        // Get response data
-        const data = await response.json();
-        
-        // Update UI with response
-        responseStatus.textContent = response.status + ' ' + response.statusText;
-        responseStatus.className = response.ok ? 'success' : 'error';
-        
-        // Format JSON nicely
-        responseData.innerHTML = formatJson(data);
+        try {
+          // Get response data (if available)
+          const data = await response.json();
+          
+          // Update UI with response
+          responseStatus.textContent = response.status + ' ' + response.statusText;
+          responseStatus.className = response.ok ? 'success' : 'error';
+          
+          // Format JSON nicely
+          responseData.innerHTML = formatJson(data);
+        } catch (e) {
+          // Handle non-JSON responses
+          responseStatus.textContent = response.status + ' ' + response.statusText;
+          responseStatus.className = response.ok ? 'success' : 'error';
+          responseData.textContent = 'Response is not valid JSON. Check network tab for details.';
+        }
       } catch (error) {
         responseStatus.textContent = 'Error: ' + error.message;
         responseStatus.className = 'error';

@@ -1,0 +1,197 @@
+@import "./global.css";
+
+.container {
+  padding: 120px 20px 60px;
+  max-width: 800px;
+  margin: 0 auto;
+  min-height: 80vh;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+  padding: 40px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.title {
+  font-size: 2rem;
+  color: #333;
+  margin: 0;
+  font-weight: 600;
+}
+
+.profileInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.infoRow {
+  display: flex;
+  padding: 15px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.label {
+  font-weight: 600;
+  color: #666;
+  width: 150px;
+  flex-shrink: 0;
+}
+
+.value {
+  color: #333;
+  flex-grow: 1;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input {
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.input:focus {
+  border-color: var(--blue-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(35, 81, 255, 0.1);
+}
+
+.disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+.helperText {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 4px 0 0;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.editButton, .cancelButton, .saveButton {
+  border-radius: var(--border-radius);
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  font-weight: 550;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: 0.01em;
+}
+
+.editButton {
+  background: transparent;
+  color: var(--blue-primary);
+  border: 1px solid var(--blue-primary);
+}
+
+.editButton:hover {
+  background-color: rgba(35, 81, 255, 0.05);
+  transform: translateY(-1px);
+}
+
+.cancelButton {
+  background: transparent;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.cancelButton:hover {
+  color: #333;
+  border-color: #ccc;
+  transform: translateY(-1px);
+}
+
+.saveButton {
+  background: var(--blue-primary);
+  color: white;
+  border: none;
+}
+
+.saveButton:hover {
+  background: var(--blue-secondary);
+  transform: translateY(-1px);
+}
+
+.saveButton:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.errorMessage {
+  color: #e53935;
+  font-size: 0.9rem;
+  padding: 10px;
+  background-color: rgba(229, 57, 53, 0.1);
+  border-radius: var(--border-radius);
+}
+
+.successMessage {
+  color: #43a047;
+  font-size: 0.9rem;
+  padding: 15px;
+  background-color: rgba(67, 160, 71, 0.1);
+  border-radius: var(--border-radius);
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 100px 15px 40px;
+  }
+  
+  .card {
+    padding: 30px 20px;
+  }
+  
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .infoRow {
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .label {
+    width: 100%;
+  }
+  
+  .buttonGroup {
+    justify-content: space-between;
+  }
+} 

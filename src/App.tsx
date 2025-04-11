@@ -22,6 +22,7 @@ import { Analytics } from "@vercel/analytics/react";
 import Pricing from "./pages/Pricing";
 import Resources from "./pages/Resources";
 import NotFoundPage from "./pages/NotFoundPage";
+import ProfilePage from "./pages/ProfilePage";
 
 // Extend Window interface to include React DevTools hook
 declare global {
@@ -103,6 +104,7 @@ const App = () => {
               <Route path="/terms" element={<TermsPage />} />
               <Route path="/privacy" element={<PrivacyPolicyPage />} />
               <Route path="/resources" element={<Resources />} />
+              <Route path="/profile" element={<ProfilePage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </div>

@@ -11,12 +11,13 @@ const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "https://casepreparedcrud.onrender.com";
 
 interface User {
-  id: number;
+  id: string;
   email: string;
   full_name?: string;
   organization_name?: string;
-  is_active: boolean;
+  is_active?: boolean;
   created_at: string;
+  updated_at?: string;
 }
 
 interface AuthContextType {
@@ -32,6 +33,8 @@ interface AuthContextType {
   logout: () => void;
   loading: boolean;
   error: string | null;
+  fetchUserProfile: () => Promise<void>;
+  updateUserProfile: (userData: Partial<User>) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -53,17 +56,79 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  const fetchUserProfile = async () => {
+    try {
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        throw new Error("No access token available");
+      }
+
+      const response = await fetch(`${API_BASE_URL}/api/v1/users/me`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user profile");
+      }
+
+      const userData = await response.json();
+      setUser(userData);
+      localStorage.setItem("user", JSON.stringify(userData));
+      return userData;
+    } catch (err) {
+      console.error("Error fetching user profile:", err);
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to fetch user profile";
+      setError(errorMessage);
+      throw err;
+    }
+  };
+
+  const updateUserProfile = async (userData: Partial<User>) => {
+    try {
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        throw new Error("No access token available");
+      }
+
+      const response = await fetch(`${API_BASE_URL}/api/v1/users/me`, {
+        method: "PATCH",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update user profile");
+      }
+
+      const updatedUserData = await response.json();
+      setUser(updatedUserData);
+      localStorage.setItem("user", JSON.stringify(updatedUserData));
+      return updatedUserData;
+    } catch (err) {
+      console.error("Error updating user profile:", err);
+      const errorMessage =
+        err instanceof Error ? err.message : "Failed to update user profile";
+      setError(errorMessage);
+      throw err;
+    }
+  };
+
   useEffect(() => {
     // Check for existing token on mount
     const checkAuth = async () => {
       try {
         const token = localStorage.getItem("access_token");
         if (token) {
-          // Fetch user data or validate token
-          const userData = JSON.parse(localStorage.getItem("user") || "null");
-          if (userData) {
-            setUser(userData);
-          }
+          // Try to fetch current user profile
+          await fetchUserProfile();
         }
       } catch (err) {
         console.error("Authentication check failed:", err);
@@ -97,12 +162,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       const data = await response.json();
 
-      // Store tokens and user data
+      // Store tokens
       localStorage.setItem("access_token", data.access_token);
-      localStorage.setItem("refresh_token", data.refresh_token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("refresh_token", data.refresh_token || "");
 
-      setUser(data.user);
+      // Fetch the user profile using the token
+      await fetchUserProfile();
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "An unknown error occurred";
@@ -143,12 +208,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       const data = await response.json();
 
-      // Store tokens and user data
+      // Store tokens
       localStorage.setItem("access_token", data.access_token);
-      localStorage.setItem("refresh_token", data.refresh_token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("refresh_token", data.refresh_token || "");
 
-      setUser(data.user);
+      // Fetch the user profile using the token
+      await fetchUserProfile();
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "An unknown error occurred";
@@ -221,12 +286,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         throw new Error(errorMessage);
       }
 
-      // Store tokens and user data
+      // Store tokens
       localStorage.setItem("access_token", responseData.access_token);
       localStorage.setItem("refresh_token", responseData.refresh_token || "");
-      localStorage.setItem("user", JSON.stringify(responseData.user));
 
-      setUser(responseData.user);
+      // Fetch the user profile
+      await fetchUserProfile();
     } catch (err) {
       console.error("Google login error details:", err);
       const errorMessage =
@@ -256,6 +321,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         logout,
         loading,
         error,
+        fetchUserProfile,
+        updateUserProfile,
       }}
     >
       {children}
