@@ -51,6 +51,10 @@
     .success {
       color: #5cb85c;
     }
+    .warning {
+      color: #f0ad4e;
+      font-weight: bold;
+    }
     button {
       padding: 8px 16px;
       background-color: #0066cc;
@@ -89,11 +93,22 @@
       width: auto;
       margin-right: 5px;
     }
+    .info-box {
+      background-color: #e7f3ff;
+      border-left: 4px solid #0066cc;
+      padding: 12px;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Google OAuth Debugging Tool</h1>
+    
+    <div class="info-box">
+      <strong>Important:</strong> The CasePrepared API requires a POST request with the token in the request body,
+      not a GET request with query parameters.
+    </div>
     
     <div class="panel">
       <h2>Step 1: Get Google Credential</h2>
@@ -129,29 +144,29 @@
       <div class="radio-group">
         <label>Request Method:</label>
         <label class="radio-label">
-          <input type="radio" name="requestMethod" value="POST" checked> POST
+          <input type="radio" name="requestMethod" value="POST" checked> POST (Required)
         </label>
         <label class="radio-label">
-          <input type="radio" name="requestMethod" value="GET"> GET
+          <input type="radio" name="requestMethod" value="GET"> GET (Not Supported)
         </label>
       </div>
       
       <div class="radio-group">
         <label>Token Transmission:</label>
         <label class="radio-label">
-          <input type="radio" name="tokenMethod" value="body" checked> Request Body
+          <input type="radio" name="tokenMethod" value="body" checked> Request Body (Required)
         </label>
         <label class="radio-label">
-          <input type="radio" name="tokenMethod" value="query"> Query Parameter
+          <input type="radio" name="tokenMethod" value="query"> Query Parameter (Not Supported)
         </label>
       </div>
       
       <div id="bodyFormatContainer">
         <label for="payloadFormat">Payload Format (for Body):</label>
         <select id="payloadFormat">
-          <option value="token">Format 1: { "token": "..." }</option>
-          <option value="id_token">Format 2: { "id_token": "..." }</option>
-          <option value="credential">Format 3: { "credential": "..." }</option>
+          <option value="token">Required Format: { "token": "..." }</option>
+          <option value="id_token">Alternative: { "id_token": "..." }</option>
+          <option value="credential">Alternative: { "credential": "..." }</option>
           <option value="custom">Custom Format</option>
         </select>
       </div>
@@ -163,6 +178,9 @@
       </div>
       
       <div id="queryParamContainer" style="display: none;">
+        <div class="warning">
+          Query parameter method is not supported by the API. Please use request body.
+        </div>
         <label for="queryParamName">Query Parameter Name:</label>
         <input type="text" id="queryParamName" value="token">
       </div>
@@ -225,6 +243,19 @@
           document.getElementById('bodyFormatContainer').style.display = isBody ? 'block' : 'none';
           document.getElementById('queryParamContainer').style.display = isBody ? 'none' : 'block';
           document.getElementById('customFormatContainer').style.display = 'none';
+          
+          // Show warning if using query parameters
+          if (!isBody) {
+            alert('Warning: The API only supports POST requests with the token in the request body.');
+          }
+        });
+      });
+      
+      document.querySelectorAll('input[name="requestMethod"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+          if (this.value !== 'POST') {
+            alert('Warning: The API only supports POST requests for Google authentication.');
+          }
         });
       });
       

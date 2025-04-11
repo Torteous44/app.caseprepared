@@ -168,14 +168,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         token.substring(0, 10) + "..."
       );
 
-      // Using POST with token in the request body as required by the API
-      const response = await fetch(`${API_BASE_URL}/api/v1/auth/google-login`, {
-        method: "POST",
+      // Use a hybrid approach - POST request but with token in query parameter
+      // This matches the actual backend implementation based on the error message
+      const queryUrl = `${API_BASE_URL}/api/v1/auth/google-login?token=${encodeURIComponent(
+        token
+      )}`;
+
+      const response = await fetch(queryUrl, {
+        method: "POST", // Using POST as per documentation, but with query parameter as per actual implementation
         headers: {
-          "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify({ token }),
+        // No body needed as the token is in the query parameter
       });
 
       // Log full response details for debugging
