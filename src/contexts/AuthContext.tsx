@@ -168,16 +168,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         token.substring(0, 10) + "..."
       );
 
-      // Using query parameter instead of request body as per the error message
-      const queryUrl = `${API_BASE_URL}/api/v1/auth/google-login?token=${encodeURIComponent(
-        token
-      )}`;
-
-      const response = await fetch(queryUrl, {
-        method: "GET", // Changed to GET since we're using query parameters
+      // Using POST with token in the request body as required by the API
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/google-login`, {
+        method: "POST",
         headers: {
+          "Content-Type": "application/json",
           Accept: "application/json",
         },
+        body: JSON.stringify({ token }),
       });
 
       // Log full response details for debugging
