@@ -2,13 +2,18 @@
 
 :root {
   /* Colors */
-  --blue-primary: #2351FF;
+  --blue-primary: #174EA6;
   --border-color: #d9d9d9;
   --text-color: #333333;
   --background-light: #f8f8f8;
+  --blue-secondary: #003381;
+  --border-radius: 4px;
+  --header-font-size: 36px;
+  --header-font-weight: 600;
+  --header-margin-bottom: 16px;
+  --header-p-font-size: 18px;
+  --header-p-color: #555;
 }
-
-/* Fonts - using preloaded version from HTML */
 
 body {
   font-family: 'Figtree', sans-serif;
@@ -16,23 +21,109 @@ body {
   color: var(--text-color);
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Figtree', sans-serif;
   letter-spacing: -0.03em; /* -3% spacing for titles */
-  margin: 0;
 }
 
-p {
-  margin: 0;
+
+.header h1 {
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 16px;
 }
 
-button {
-  font-family: 'Figtree', sans-serif;
+.header p {
+  font-size: 18px;
+  color: #555;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
-* {
-  box-sizing: border-box;
+/* Common Component Styles */
+.button-primary {
+  background-color: var(--blue-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.bordered-element {
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+}
+
+
+
+.university-item {
+  padding: 15px 25px;
+  background-color: white;
+  font-weight: 600;
+}
+
+/* Interviews Section */
+.interviews-section {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.interviews-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.interview-card {
+  width: 300px;
+  padding: 20px;
+  text-align: left;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.interview-image {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+}
+
+.interview-content blockquote {
+  font-style: italic;
+  margin: 0 0 15px 0;
+}
+
+.interview-author {
+  margin-top: 15px;
+}
+
+.interview-author p {
+  margin: 5px 0 0 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Landing Page */
+.landing-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.landing-content {
+  padding: 20px;
+}
+
+.about-section {
+  text-align: center;
+  padding: 60px 20px;
+  max-width: 800px;
+  margin: 0 auto;
 } 

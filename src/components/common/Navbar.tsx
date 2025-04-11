@@ -65,13 +65,11 @@ const Navbar: React.FC = () => {
         <div className={styles.navCta}>
           {isAuthenticated ? (
             <>
-              <Link to="/profile" className={styles.profileLink}>
-                <span className={styles.userName}>
-                  {user?.full_name || user?.email}
-                </span>
+              <Link to="/profile" className={styles.navButton}>
+                Profile
               </Link>
-              <button className={styles.loginButton} onClick={logout}>
-                Log out
+              <button className={styles.navButton} onClick={logout}>
+                Sign out
               </button>
             </>
           ) : (
