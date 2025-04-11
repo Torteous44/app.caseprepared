@@ -9,7 +9,7 @@ const LoginForm: React.FC = () => {
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState("");
   const { login, loading } = useAuth();
-  const { openModal } = useModal();
+  const { openModal, closeModal } = useModal();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,6 +23,8 @@ const LoginForm: React.FC = () => {
 
     try {
       await login(email, password);
+      // Close the modal after successful login
+      closeModal();
     } catch (error) {
       if (error instanceof Error) {
         setFormError(error.message);

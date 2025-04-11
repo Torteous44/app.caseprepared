@@ -10,7 +10,7 @@ const RegisterForm: React.FC = () => {
   const [fullName, setFullName] = useState("");
   const [formError, setFormError] = useState("");
   const { register, loading } = useAuth();
-  const { openModal } = useModal();
+  const { openModal, closeModal } = useModal();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,6 +29,8 @@ const RegisterForm: React.FC = () => {
 
     try {
       await register(email, password, fullName);
+      // Close the modal after successful registration
+      closeModal();
     } catch (error) {
       if (error instanceof Error) {
         setFormError(error.message);

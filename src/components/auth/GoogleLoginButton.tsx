@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
+import { useModal } from "../../contexts/ModalContext";
 import styles from "../../styles/Modal.module.css";
 
 declare global {
@@ -27,6 +28,7 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
   mode,
 }) => {
   const { googleLogin } = useAuth();
+  const { closeModal } = useModal();
   const [initialized, setInitialized] = useState(false);
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
@@ -57,6 +59,8 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
           localStorage.removeItem("googleCredential");
           // Use the credential for login
           await googleLogin(credential);
+          // Close the modal after successful login
+          closeModal();
         } catch (error) {
           console.error("Error using redirect credential:", error);
           if (error instanceof Error) {
@@ -165,6 +169,8 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
 
       console.log("Got credential, sending to backend");
       await googleLogin(token);
+      // Close the modal after successful login
+      closeModal();
     } catch (error) {
       console.error("Google login error:", error);
       if (error instanceof Error) {
