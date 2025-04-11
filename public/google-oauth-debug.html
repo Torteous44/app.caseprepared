@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Google OAuth Debug Tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    pre {
+      background-color: #f5f5f5;
+      padding: 10px;
+      border-radius: 4px;
+      overflow: auto;
+      max-height: 300px;
+    }
+    .json-key {
+      color: #881391;
+    }
+    .json-string {
+      color: #1c00cf;
+    }
+    .json-boolean {
+      color: #1c00cf;
+    }
+    .json-number {
+      color: #1c00cf;
+    }
+    .panel {
+      margin-bottom: 20px;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    .error {
+      color: #d9534f;
+    }
+    .success {
+      color: #5cb85c;
+    }
+    button {
+      padding: 8px 16px;
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+    button:hover {
+      background-color: #0055aa;
+    }
+    select, input, textarea {
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    .radio-group {
+      margin-bottom: 15px;
+    }
+    .radio-label {
+      display: inline-flex;
+      align-items: center;
+      margin-right: 15px;
+      font-weight: normal;
+    }
+    .radio-label input {
+      width: auto;
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Google OAuth Debugging Tool</h1>
+    
+    <div class="panel">
+      <h2>Step 1: Get Google Credential</h2>
+      <p>Click the button below to sign in with Google and get a token:</p>
+      <div id="googleButtonContainer"></div>
+      <div id="tokenInfo" style="display: none;">
+        <h3>Token Information</h3>
+        <pre id="tokenPreview"></pre>
+      </div>
+    </div>
+
+    <div class="panel" id="apiPanel" style="display: none;">
+      <h2>Step 2: Test API Endpoint</h2>
+      
+      <div>
+        <label for="apiBaseUrl">API Base URL:</label>
+        <input 
+          type="text" 
+          id="apiBaseUrl" 
+          value="https://casepreparedcrud.onrender.com"
+        >
+      </div>
+      
+      <div>
+        <label for="apiPath">API Path:</label>
+        <input 
+          type="text" 
+          id="apiPath" 
+          value="/api/v1/auth/google-login"
+        >
+      </div>
+      
+      <div class="radio-group">
+        <label>Request Method:</label>
+        <label class="radio-label">
+          <input type="radio" name="requestMethod" value="POST" checked> POST
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="requestMethod" value="GET"> GET
+        </label>
+      </div>
+      
+      <div class="radio-group">
+        <label>Token Transmission:</label>
+        <label class="radio-label">
+          <input type="radio" name="tokenMethod" value="body" checked> Request Body
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="tokenMethod" value="query"> Query Parameter
+        </label>
+      </div>
+      
+      <div id="bodyFormatContainer">
+        <label for="payloadFormat">Payload Format (for Body):</label>
+        <select id="payloadFormat">
+          <option value="token">Format 1: { "token": "..." }</option>
+          <option value="id_token">Format 2: { "id_token": "..." }</option>
+          <option value="credential">Format 3: { "credential": "..." }</option>
+          <option value="custom">Custom Format</option>
+        </select>
+      </div>
+      
+      <div id="customFormatContainer" style="display: none;">
+        <label for="customFormat">Custom JSON Format:</label>
+        <textarea id="customFormat" rows="5">{"token": "CREDENTIAL"}</textarea>
+        <p><small>Use CREDENTIAL as a placeholder for the actual token</small></p>
+      </div>
+      
+      <div id="queryParamContainer" style="display: none;">
+        <label for="queryParamName">Query Parameter Name:</label>
+        <input type="text" id="queryParamName" value="token">
+      </div>
+      
+      <button id="testApiButton">Test API Call</button>
+      
+      <div id="apiResponseContainer" style="display: none;">
+        <h3>API Response</h3>
+        <div>
+          <strong>Status:</strong> <span id="responseStatus"></span>
+        </div>
+        <div>
+          <strong>Response:</strong>
+          <pre id="responseData"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Global variables
+    let credential = null;
+    
+    // Initialize Google Sign-In when the page loads
+    window.onload = function() {
+      try {
+        google.accounts.id.initialize({
+          client_id: "607050121369-r0ntm51ksokt8k92an2u3g4peu24tplg.apps.googleusercontent.com",
+          callback: handleCredentialResponse,
+          auto_select: false,
+          cancel_on_tap_outside: true
+        });
+        
+        google.accounts.id.renderButton(
+          document.getElementById("googleButtonContainer"),
+          { 
+            theme: "outline", 
+            size: "large",
+            type: "standard",
+            text: "signin_with",
+            shape: "rectangular",
+            logo_alignment: "left",
+            width: 250
+          }
+        );
+      } catch (error) {
+        console.error('Error initializing Google Sign-In:', error);
+        alert('Error initializing Google Sign-In: ' + error.message);
+      }
+      
+      // Setup event listeners
+      document.getElementById('payloadFormat').addEventListener('change', function() {
+        document.getElementById('customFormatContainer').style.display = 
+          this.value === 'custom' ? 'block' : 'none';
+      });
+      
+      document.querySelectorAll('input[name="tokenMethod"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+          const isBody = this.value === 'body';
+          document.getElementById('bodyFormatContainer').style.display = isBody ? 'block' : 'none';
+          document.getElementById('queryParamContainer').style.display = isBody ? 'none' : 'block';
+          document.getElementById('customFormatContainer').style.display = 'none';
+        });
+      });
+      
+      document.getElementById('testApiButton').addEventListener('click', testApiCall);
+    };
+    
+    // Handle Google Sign-In response
+    function handleCredentialResponse(response) {
+      console.log('Google credential response received');
+      
+      if (response && response.credential) {
+        credential = response.credential;
+        
+        // Show token information
+        const tokenInfo = document.getElementById('tokenInfo');
+        const tokenPreview = document.getElementById('tokenPreview');
+        tokenInfo.style.display = 'block';
+        
+        // Show truncated token
+        const preview = credential.substring(0, 15) + '...' + credential.substring(credential.length - 10);
+        tokenPreview.textContent = 'Token: ' + preview;
+        
+        // Show API panel
+        document.getElementById('apiPanel').style.display = 'block';
+      } else {
+        alert('Error: No valid credential received from Google');
+      }
+    }
+    
+    // Test API call with the selected format
+    async function testApiCall() {
+      if (!credential) {
+        alert('Please sign in with Google first to get a token');
+        return;
+      }
+      
+      const baseUrl = document.getElementById('apiBaseUrl').value;
+      const apiPath = document.getElementById('apiPath').value;
+      const requestMethod = document.querySelector('input[name="requestMethod"]:checked').value;
+      const tokenMethod = document.querySelector('input[name="tokenMethod"]:checked').value;
+      
+      let apiUrl = baseUrl + apiPath;
+      let requestOptions = {
+        method: requestMethod,
+        headers: {
+          "Accept": "application/json"
+        }
+      };
+      
+      // Handle query parameter method
+      if (tokenMethod === 'query') {
+        const paramName = document.getElementById('queryParamName').value;
+        apiUrl += `?${paramName}=${encodeURIComponent(credential)}`;
+      } 
+      // Handle body method
+      else {
+        requestOptions.headers["Content-Type"] = "application/json";
+        
+        const payloadFormat = document.getElementById('payloadFormat').value;
+        let payload;
+        
+        // Prepare payload based on selected format
+        switch (payloadFormat) {
+          case 'token':
+            payload = { token: credential };
+            break;
+          case 'id_token':
+            payload = { id_token: credential };
+            break;
+          case 'credential':
+            payload = { credential: credential };
+            break;
+          case 'custom':
+            try {
+              const customFormat = document.getElementById('customFormat').value;
+              payload = JSON.parse(customFormat.replace('CREDENTIAL', credential));
+            } catch (error) {
+              alert('Invalid JSON format: ' + error.message);
+              return;
+            }
+            break;
+        }
+        
+        requestOptions.body = JSON.stringify(payload);
+      }
+      
+      // Display response container
+      const responseContainer = document.getElementById('apiResponseContainer');
+      const responseStatus = document.getElementById('responseStatus');
+      const responseData = document.getElementById('responseData');
+      responseContainer.style.display = 'block';
+      responseStatus.textContent = 'Sending request...';
+      responseStatus.className = '';
+      responseData.textContent = '';
+      
+      try {
+        // Make API call
+        console.log('Making API call to:', apiUrl);
+        console.log('Request options:', JSON.stringify(requestOptions, null, 2));
+        
+        const response = await fetch(apiUrl, requestOptions);
+        
+        // Get response data
+        const data = await response.json();
+        
+        // Update UI with response
+        responseStatus.textContent = response.status + ' ' + response.statusText;
+        responseStatus.className = response.ok ? 'success' : 'error';
+        
+        // Format JSON nicely
+        responseData.innerHTML = formatJson(data);
+      } catch (error) {
+        responseStatus.textContent = 'Error: ' + error.message;
+        responseStatus.className = 'error';
+        responseData.textContent = error.stack || error.toString();
+      }
+    }
+    
+    // Helper function to format JSON with syntax highlighting
+    function formatJson(obj) {
+      const json = JSON.stringify(obj, null, 2);
+      
+      return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, 
+        function (match) {
+          let cls = 'json-number';
+          if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+              cls = 'json-key';
+            } else {
+              cls = 'json-string';
+            }
+          } else if (/true|false/.test(match)) {
+            cls = 'json-boolean';
+          } else if (/null/.test(match)) {
+            cls = 'json-null';
+          }
+          return '<span class="' + cls + '">' + match + '</span>';
+        }
+      );
+    }
+  </script>
+</body>
+</html> 

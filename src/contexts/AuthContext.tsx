@@ -6,8 +6,9 @@ import React, {
   ReactNode,
 } from "react";
 
-// API base URL
-const API_BASE_URL = "https://demobackend-p2e1.onrender.com";
+// API base URL from environment
+const API_BASE_URL =
+  process.env.REACT_APP_API_BASE_URL || "https://casepreparedcrud.onrender.com";
 
 interface User {
   id: number;
@@ -27,6 +28,7 @@ interface AuthContextType {
     password: string,
     full_name: string
   ) => Promise<void>;
+  googleLogin: (token: string) => Promise<void>;
   logout: () => void;
   loading: boolean;
   error: string | null;
@@ -80,7 +82,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/login`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -126,7 +128,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         organization_name: null, // Add organization_name field
       };
 
-      const response = await fetch(`${API_BASE_URL}/auth/register`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -157,6 +159,83 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const googleLogin = async (token: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      console.log(
+        "Sending Google token to backend:",
+        token.substring(0, 10) + "..."
+      );
+
+      // Using query parameter instead of request body as per the error message
+      const queryUrl = `${API_BASE_URL}/api/v1/auth/google-login?token=${encodeURIComponent(
+        token
+      )}`;
+
+      const response = await fetch(queryUrl, {
+        method: "GET", // Changed to GET since we're using query parameters
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      // Log full response details for debugging
+      console.log("Response status:", response.status);
+
+      const responseData = await response.json();
+      console.log("Response data:", responseData);
+
+      if (!response.ok) {
+        // Extract detailed error message if available
+        let errorMessage = "Google login failed";
+
+        if (responseData.detail) {
+          // Handle FastAPI-style errors
+          if (typeof responseData.detail === "object") {
+            console.error(
+              "Detailed validation errors:",
+              JSON.stringify(responseData.detail)
+            );
+            // Try to extract all validation errors
+            errorMessage = "Validation error: ";
+            if (Array.isArray(responseData.detail)) {
+              errorMessage += responseData.detail
+                .map(
+                  (err: any) =>
+                    `${err.loc ? err.loc.join(".") + ": " : ""}${err.msg}`
+                )
+                .join("; ");
+            } else {
+              errorMessage += JSON.stringify(responseData.detail);
+            }
+          } else {
+            errorMessage = responseData.detail;
+          }
+        } else if (responseData.message) {
+          errorMessage = responseData.message;
+        }
+
+        throw new Error(errorMessage);
+      }
+
+      // Store tokens and user data
+      localStorage.setItem("access_token", responseData.access_token);
+      localStorage.setItem("refresh_token", responseData.refresh_token || "");
+      localStorage.setItem("user", JSON.stringify(responseData.user));
+
+      setUser(responseData.user);
+    } catch (err) {
+      console.error("Google login error details:", err);
+      const errorMessage =
+        err instanceof Error ? err.message : "An unknown error occurred";
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
@@ -171,6 +250,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         isAuthenticated: !!user,
         login,
         register,
+        googleLogin,
         logout,
         loading,
         error,

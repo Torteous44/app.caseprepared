@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Google OAuth Test</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    h1 {
+      color: #333;
+    }
+    p {
+      margin-bottom: 20px;
+    }
+    #buttonContainer {
+      margin: 30px 0;
+    }
+    #result {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px dashed #ccc;
+      background-color: #f9f9f9;
+      white-space: pre-wrap;
+      display: none;
+    }
+    .instructions {
+      background-color: #f5f5f5;
+      padding: 15px;
+      border-left: 4px solid #007bff;
+      margin-bottom: 20px;
+    }
+    .error {
+      color: #d9534f;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Google OAuth Test Page</h1>
+    
+    <div class="instructions">
+      <p>This page tests Google OAuth sign-in independently from the React application. Use this to verify your OAuth configuration works correctly.</p>
+      <p>If this succeeds but the main app fails, then the issue is likely in the React implementation, not in the OAuth credentials themselves.</p>
+    </div>
+    
+    <p>Current Origin: <span id="origin"></span></p>
+    <p>Client ID: <span id="clientId"></span></p>
+    <p>API Base: <span id="apiBase"></span></p>
+    
+    <div id="buttonContainer"></div>
+    
+    <div id="result"></div>
+  </div>
+
+  <script>
+    // Use the same client ID from window or fallback
+    const clientId = "607050121369-r0ntm51ksokt8k92an2u3g4peu24tplg.apps.googleusercontent.com";
+    const origin = window.location.origin;
+    // API base URL - make sure to update this if yours is different
+    const apiBase = "https://casepreparedcrud.onrender.com";
+    
+    document.getElementById('origin').textContent = origin;
+    document.getElementById('clientId').textContent = clientId;
+    document.getElementById('apiBase').textContent = apiBase;
+    
+    window.onload = function() {
+      console.log('Initializing Google Sign-In with client ID:', clientId);
+      
+      try {
+        // Initialize Google Sign-In
+        google.accounts.id.initialize({
+          client_id: clientId,
+          callback: handleCredentialResponse,
+          auto_select: false,
+          cancel_on_tap_outside: true
+        });
+        
+        // Render the button
+        google.accounts.id.renderButton(
+          document.getElementById("buttonContainer"),
+          { 
+            theme: "outline", 
+            size: "large",
+            type: "standard",
+            text: "signin_with",
+            shape: "rectangular",
+            logo_alignment: "left",
+            width: 250
+          }
+        );
+      } catch (error) {
+        console.error('Error initializing Google Sign-In:', error);
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('result').innerHTML = '<span class="error">Error initializing Google Sign-In:</span>\n' + error.toString();
+      }
+    };
+    
+    function handleCredentialResponse(response) {
+      console.log('Received Google credential response');
+      
+      // Display the response (but hide the actual token for security)
+      const resultElement = document.getElementById('result');
+      resultElement.style.display = 'block';
+      
+      if (response && response.credential) {
+        const tokenPreview = response.credential.substring(0, 10) + '...[token truncated]';
+        resultElement.textContent = 'Success! Received valid credential.\n\nToken preview: ' + tokenPreview;
+        
+        // Add option to send to backend
+        const sendButton = document.createElement('button');
+        sendButton.textContent = 'Send to Backend';
+        sendButton.style.margin = '10px 0';
+        sendButton.style.padding = '8px 16px';
+        sendButton.onclick = () => testBackendAuth(response.credential);
+        resultElement.appendChild(document.createElement('br'));
+        resultElement.appendChild(sendButton);
+      } else {
+        resultElement.innerHTML = '<span class="error">Error: No valid credential received</span>';
+      }
+    }
+    
+    async function testBackendAuth(token) {
+      const resultElement = document.getElementById('result');
+      resultElement.textContent += '\n\nSending token to backend...';
+      
+      try {
+        const response = await fetch(`${apiBase}/api/v1/auth/google-login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ token }),
+        });
+        
+        const responseData = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(responseData.message || 'Failed to authenticate with backend');
+        }
+        
+        resultElement.textContent += '\n\nBackend authentication successful!';
+        resultElement.textContent += '\nReceived access token: ' + responseData.access_token.substring(0, 10) + '...';
+      } catch (error) {
+        console.error('Backend authentication error:', error);
+        resultElement.textContent += '\n\n<span class="error">Backend Error: ' + error.message + '</span>';
+      }
+    }
+  </script>
+</body>
+</html> 

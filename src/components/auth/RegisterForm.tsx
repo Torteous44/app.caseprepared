@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useModal } from "../../contexts/ModalContext";
 import styles from "../../styles/Modal.module.css";
+import GoogleLoginButton from "./GoogleLoginButton";
 
 const RegisterForm: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -46,6 +47,8 @@ const RegisterForm: React.FC = () => {
       />
       <h2 className={styles.modalTitle}>Sign up to continue</h2>
       {formError && <div className={styles.error}>{formError}</div>}
+
+      <GoogleLoginButton setFormError={setFormError} mode="signup" />
 
       <div className={styles.formGroup}>
         <label htmlFor="full-name" className={styles.label}>
