@@ -607,4 +607,157 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
+}
+
+/* Question Cards Section */
+.questionCardsSection {
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 1px solid #eaeaea;
+}
+
+.questionCardsSection h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.questionCardsSection > p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.questionCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.questionCard {
+  border: 1px solid #eaeaea;
+  border-radius: 12px;
+  padding: 20px;
+  background-color: white;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.questionCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.questionCardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.questionNumber {
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+}
+
+.questionStatus {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background-color: #f0f0f0;
+  color: #666;
+}
+
+.status-completed .questionStatus {
+  background-color: #e6f7ed;
+  color: #0a6b39;
+}
+
+.status-current .questionStatus {
+  background-color: #e6f0ff;
+  color: #0056b3;
+}
+
+.status-locked .questionStatus {
+  background-color: #f0f0f0;
+  color: #666;
+}
+
+.questionTitle {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.questionDescription {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 16px;
+  line-height: 1.5;
+  flex-grow: 1;
+}
+
+.startQuestionButton {
+  background-color: var(--blue-primary);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+  margin-top: auto;
+}
+
+.startQuestionButton:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.startQuestionButton:disabled {
+  background-color: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.status-locked .startQuestionButton {
+  background-color: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.tokenError {
+  color: #d32f2f;
+  background-color: #fee;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.questionCardNote {
+  text-align: center;
+  padding: 12px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #666;
+  margin-top: 16px;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .questionCards {
+    grid-template-columns: 1fr;
+  }
+  
+  .interviewLayout {
+    grid-template-columns: 1fr;
+  }
 } 

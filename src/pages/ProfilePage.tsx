@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 // API base URL
 const API_BASE_URL =
-  process.env.REACT_APP_API_BASE_URL || "https://casepreparedcrud.onrender.com";
+  process.env.REACT_APP_API_BASE_URL || "http://localhost:8000";
 
 // Updated interface to match actual API response
 interface SubscriptionStatus {

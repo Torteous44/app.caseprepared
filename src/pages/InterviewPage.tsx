@@ -29,6 +29,14 @@ interface CaseContentMap {
   [key: string]: CaseContent;
 }
 
+// Question interface for question cards
+interface QuestionData {
+  id: number;
+  title: string;
+  description: string;
+  status: "completed" | "current" | "locked";
+}
+
 // Hardcoded interview data
 const interviewsData: { [key: string]: InterviewData } = {
   "1": {
@@ -82,7 +90,7 @@ const idToDemoType: { [key: string]: string } = {
 };
 
 const BASE_URL = "https://demobackend-p2e1.onrender.com";
-const DEMO_API_BASE_URL = "https://casepreparedcrud.onrender.com/api/v1/demo"; // Demo API base URL
+const DEMO_API_BASE_URL = "http://localhost:8000/api/v1/demo"; // Demo API base URL
 
 // Case-specific content
 const caseContent: CaseContentMap = {
@@ -150,6 +158,98 @@ const caseContent: CaseContentMap = {
   },
 };
 
+// Demo questions for each interview type
+const demoQuestions: { [key: string]: QuestionData[] } = {
+  profitability: [
+    {
+      id: 1,
+      title: "Problem Structuring",
+      description:
+        "Structure the problem to identify key factors affecting beauty consultants' effectiveness.",
+      status: "current",
+    },
+    {
+      id: 2,
+      title: "Data Analysis",
+      description:
+        "Analyze customer behavior and preferences for virtual vs in-store interactions.",
+      status: "current",
+    },
+    {
+      id: 3,
+      title: "Strategy Development",
+      description:
+        "Develop recommendations for beauty consultants in a digital environment.",
+      status: "current",
+    },
+    {
+      id: 4,
+      title: "Implementation Plan",
+      description:
+        "Create an implementation roadmap for training beauty consultants.",
+      status: "current",
+    },
+  ],
+  "market-entry": [
+    {
+      id: 1,
+      title: "Environmental Impact Analysis",
+      description:
+        "Assess the company's current environmental footprint and identify key impact areas.",
+      status: "current",
+    },
+    {
+      id: 2,
+      title: "Target Setting",
+      description:
+        "Determine appropriate science-based targets for emissions reduction.",
+      status: "current",
+    },
+    {
+      id: 3,
+      title: "Initiative Prioritization",
+      description:
+        "Identify and prioritize initiatives to achieve the climate targets.",
+      status: "current",
+    },
+    {
+      id: 4,
+      title: "Business Case Development",
+      description:
+        "Build a business case for climate action including costs and benefits.",
+      status: "current",
+    },
+  ],
+  merger: [
+    {
+      id: 1,
+      title: "Market Assessment",
+      description:
+        "Evaluate the coffee shop market in Cambridge and identify growth opportunities.",
+      status: "current",
+    },
+    {
+      id: 2,
+      title: "Competitor Analysis",
+      description:
+        "Analyze existing coffee shops and identify competitive advantages.",
+      status: "current",
+    },
+    {
+      id: 3,
+      title: "Financial Modeling",
+      description: "Develop financial projections for the coffee shop venture.",
+      status: "current",
+    },
+    {
+      id: 4,
+      title: "Location Strategy",
+      description: "Determine optimal locations and expansion strategy.",
+      status: "current",
+    },
+  ],
+};
+
 const InterviewPage: React.FC = () => {
   const { id, company } = useParams();
   const navigate = useNavigate();
@@ -197,6 +297,14 @@ const InterviewPage: React.FC = () => {
   const [startError, setStartError] = useState<string | null>(null);
 
   const localStreamRef = useRef<MediaStream | null>(null);
+
+  // Track token loading state for each question
+  const [questionTokenLoading, setQuestionTokenLoading] = useState<
+    Record<string, boolean>
+  >({});
+  const [questionTokenError, setQuestionTokenError] = useState<string | null>(
+    null
+  );
 
   // Fetch just the interview ID if needed
   useEffect(() => {
@@ -348,6 +456,59 @@ const InterviewPage: React.FC = () => {
     }
   };
 
+  // Get questions for the current interview
+  const getQuestionsForInterview = (): QuestionData[] => {
+    if (!interview) return [];
+
+    const interviewId = interview.id.toString();
+    const demoTypeForInterview = idToDemoType[interviewId];
+
+    if (!demoTypeForInterview) return [];
+
+    return demoQuestions[demoTypeForInterview] || [];
+  };
+
+  // Start a specific question
+  const handleStartQuestion = async (questionNumber: number) => {
+    if (!interview) {
+      setQuestionTokenError("Interview data is missing.");
+      return;
+    }
+
+    const demoTypeToUse = demoType || idToDemoType[interview.id.toString()];
+    if (!demoTypeToUse) {
+      setQuestionTokenError("Invalid demo interview type");
+      return;
+    }
+
+    // Set loading state for this question
+    setQuestionTokenLoading((prev) => ({ ...prev, [questionNumber]: true }));
+    setQuestionTokenError(null);
+
+    try {
+      // Stop the local stream to release camera/mic before navigation
+      if (localStreamRef.current) {
+        localStreamRef.current.getTracks().forEach((track) => track.stop());
+      }
+
+      // Navigate to the correct session with the specific question number
+      navigate(`/interview/demo-session/${demoTypeToUse}`, {
+        state: {
+          title: interview.title,
+          questionNumber: questionNumber,
+          demoType: demoTypeToUse,
+        },
+      });
+    } catch (error: any) {
+      console.error("Failed to start question:", error);
+      setQuestionTokenError(
+        error instanceof Error ? error.message : "Failed to start the question"
+      );
+    } finally {
+      setQuestionTokenLoading((prev) => ({ ...prev, [questionNumber]: false }));
+    }
+  };
+
   if (isLoading && !interview) {
     return <div className={styles.container}>Loading interview data...</div>;
   }
@@ -480,6 +641,55 @@ const InterviewPage: React.FC = () => {
             {section.additionalContent && <p>{section.additionalContent}</p>}
           </div>
         ))}
+      </div>
+
+      {/* Question Cards Section */}
+      <div className={styles.questionCardsSection}>
+        <h3>Case Questions</h3>
+        <p>Practice individual questions from this case</p>
+
+        <div className={styles.questionCards}>
+          {getQuestionsForInterview().map((question) => (
+            <div
+              key={question.id}
+              className={`${styles.questionCard} ${
+                styles[`status-${question.status}`]
+              }`}
+            >
+              <div className={styles.questionCardHeader}>
+                <span className={styles.questionNumber}>
+                  Question {question.id}
+                </span>
+                <span className={styles.questionStatus}>
+                  {question.status === "completed"
+                    ? "Completed"
+                    : question.status === "current"
+                    ? "Available"
+                    : "Locked"}
+                </span>
+              </div>
+
+              <h4 className={styles.questionTitle}>{question.title}</h4>
+              <p className={styles.questionDescription}>
+                {question.description}
+              </p>
+
+              <button
+                className={styles.startQuestionButton}
+                onClick={() => handleStartQuestion(question.id)}
+                disabled={questionTokenLoading[question.id]}
+              >
+                {questionTokenLoading[question.id]
+                  ? "Starting..."
+                  : "Start Question"}
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {questionTokenError && (
+          <div className={styles.tokenError}>{questionTokenError}</div>
+        )}
       </div>
     </div>
   );

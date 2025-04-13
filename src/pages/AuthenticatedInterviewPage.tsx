@@ -4,7 +4,7 @@ import styles from "../styles/InterviewPage.module.css";
 import { useAuth } from "../contexts/AuthContext";
 
 // API base URL defined in AuthContext
-const API_BASE_URL = "https://casepreparedcrud.onrender.com";
+const API_BASE_URL = "http://localhost:8000";
 
 interface Interview {
   id: string;

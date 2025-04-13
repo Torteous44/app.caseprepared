@@ -11,7 +11,7 @@ import { useAuth } from "../contexts/AuthContext";
 import styles from "../styles/SubscriptionPage.module.css";
 
 // API base URL
-const API_BASE_URL = "https://casepreparedcrud.onrender.com";
+const API_BASE_URL = "http://localhost:8000";
 
 // Use test key for development
 const STRIPE_PUBLISHABLE_KEY =
