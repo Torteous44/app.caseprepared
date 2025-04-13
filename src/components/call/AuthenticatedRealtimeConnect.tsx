@@ -5,7 +5,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import axios from "axios";
 
 // API base URL defined in AuthContext
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = "https://casepreparedcrud.onrender.com";
 
 // Types
 type ConnectionState =

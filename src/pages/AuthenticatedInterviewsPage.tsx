@@ -73,8 +73,8 @@ interface EnhancedDemoInterview extends DemoInterview {
 }
 
 // API base URLs
-const API_BASE_URL = "http://localhost:8000"; // Matches AuthContext
-const DEMO_API_BASE_URL = "http://localhost:8000/api/v1/demo"; // Demo endpoint
+const API_BASE_URL = "https://casepreparedcrud.onrender.com"; // Matches AuthContext
+const DEMO_API_BASE_URL = "https://casepreparedcrud.onrender.com/api/v1/demo"; // Demo endpoint
 
 // Define demo interview templates
 const demoInterviews: DemoInterview[] = [
