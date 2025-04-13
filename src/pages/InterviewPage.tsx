@@ -68,9 +68,21 @@ const codeToId: { [key: string]: string } = {
   "6276": "1",
   A72B: "2",
   "3DE0": "3",
+  // Demo interview codes
+  profitability: "1",
+  "market-entry": "2",
+  merger: "3",
+};
+
+// Map interview IDs to demo types
+const idToDemoType: { [key: string]: string } = {
+  "1": "profitability",
+  "2": "market-entry",
+  "3": "merger",
 };
 
 const BASE_URL = "https://demobackend-p2e1.onrender.com";
+const DEMO_API_BASE_URL = "https://casepreparedcrud.onrender.com/api/v1/demo"; // Demo API base URL
 
 // Case-specific content
 const caseContent: CaseContentMap = {
@@ -143,6 +155,8 @@ const InterviewPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const locationState = location.state || {};
+  const isDemo = locationState.isDemo || false;
+  const demoType = locationState.demoType || null;
 
   // Determine which interview to show based on params or state
   const [interview, setInterview] = useState<InterviewData | null>(() => {
@@ -186,7 +200,7 @@ const InterviewPage: React.FC = () => {
 
   // Fetch just the interview ID if needed
   useEffect(() => {
-    if (interview && !backendId) {
+    if (interview && !backendId && !isDemo) {
       const fetchInterviewId = async () => {
         setIsLoading(true);
         try {
@@ -220,7 +234,7 @@ const InterviewPage: React.FC = () => {
 
       fetchInterviewId();
     }
-  }, [interview]);
+  }, [interview, isDemo]);
 
   useEffect(() => {
     const setupMedia = async () => {
@@ -260,14 +274,6 @@ const InterviewPage: React.FC = () => {
       return;
     }
 
-    // Use the backendId if available, otherwise use the interview code
-    const interviewIdToUse = backendId || interview.code;
-
-    if (!interviewIdToUse) {
-      setStartError("Interview ID is missing.");
-      return;
-    }
-
     setIsLoading(true);
     setStartError(null);
 
@@ -277,32 +283,59 @@ const InterviewPage: React.FC = () => {
         localStreamRef.current.getTracks().forEach((track) => track.stop());
       }
 
-      const response = await fetch(`${BASE_URL}/sessions/start`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          interview_id: interviewIdToUse,
-        }),
-      });
+      if (isDemo) {
+        // Handle demo interview start
+        const demoTypeToUse = demoType || idToDemoType[interview.id.toString()];
 
-      const data = await response.json();
+        if (!demoTypeToUse) {
+          throw new Error("Invalid demo interview type");
+        }
 
-      if (!response.ok) {
-        throw new Error(data.detail || "Failed to start session");
+        // For demo interviews, we don't need to create a session first
+        // Instead, we directly navigate to the RealtimeConnect component
+        navigate(`/interview/demo-session/${demoTypeToUse}`, {
+          state: {
+            title: interview.title,
+            questionNumber: 1, // Start with the first question
+            demoType: demoTypeToUse,
+          },
+        });
+      } else {
+        // Regular interview flow
+        // Use the backendId if available, otherwise use the interview code
+        const interviewIdToUse = backendId || interview.code;
+
+        if (!interviewIdToUse) {
+          throw new Error("Interview ID is missing.");
+        }
+
+        const response = await fetch(`${BASE_URL}/sessions/start`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            interview_id: interviewIdToUse,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.detail || "Failed to start session");
+        }
+
+        if (!data.id) {
+          throw new Error("No session ID received");
+        }
+
+        // Navigate to the correct session route
+        navigate(`/interview/session/${data.id}`, {
+          state: {
+            title: interview.title,
+          },
+        });
       }
-
-      if (!data.id) {
-        throw new Error("No session ID received");
-      }
-
-      // Navigate to the correct session route
-      navigate(`/interview/session/${data.id}`, {
-        state: {
-          title: interview.title,
-        },
-      });
     } catch (error: any) {
       console.error("Failed to start session:", error);
       setStartError(

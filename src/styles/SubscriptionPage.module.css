@@ -1,0 +1,225 @@
+.container {
+  max-width: 1200px;
+  margin: 120px auto;
+  padding: 0 20px;
+  font-family: 'Figtree', sans-serif;
+}
+
+.subscriptionCard {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  padding: 40px;
+  max-width: 800px;
+  margin: 0 auto;
+  letter-spacing: -0.01em;
+  border: 1px solid var(--border-color);
+}
+
+.subscriptionCard h1 {
+  font-size: var(--header-font-size, 36px);
+  font-weight: var(--header-font-weight, 600);
+  margin-bottom: var(--header-margin-bottom, 16px);
+  text-align: center;
+  color: var(--blue-primary, #174EA6);
+  letter-spacing: -0.03em; /* Match global.css header styling */
+}
+
+.planDetails {
+  margin: 30px 0;
+  text-align: center;
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--border-color, #d9d9d9);
+}
+
+.planDetails h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--text-color, #333333);
+}
+
+.price {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--blue-primary, #174EA6);
+  margin: 20px 0;
+}
+
+.features {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px auto;
+  max-width: 400px;
+  text-align: left;
+}
+
+.features li {
+  padding: 8px 0;
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 8px;
+}
+
+.features li:before {
+  content: "✓";
+  color: var(--blue-primary, #174EA6);
+  font-weight: bold;
+  position: absolute;
+  left: 0;
+}
+
+.currentSubscription {
+  margin: 20px 0;
+  padding: 20px;
+  background-color: var(--background-light, #f8f8f8);
+  border-radius: var(--border-radius, 4px);
+  border: 1px solid var(--border-color, #d9d9d9);
+}
+
+.currentSubscription h2 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: var(--text-color, #333333);
+}
+
+.status {
+  font-weight: 600;
+  color: var(--blue-primary, #174EA6);
+}
+
+.paymentForm {
+  margin-top: 30px;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.cardLabel {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 500;
+  color: var(--text-color, #333333);
+}
+
+.cardElementContainer {
+  border: 1px solid var(--border-color, #d9d9d9);
+  padding: 15px;
+  border-radius: var(--border-radius, 4px);
+  background-color: white;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.cardElementContainer:hover {
+  border-color: var(--blue-primary, #174EA6);
+}
+
+.cardElementContainer:focus-within {
+  border-color: var(--blue-primary, #174EA6);
+  box-shadow: 0 0 0 2px rgba(23, 78, 166, 0.2);
+}
+
+.subscribeButton, .cancelButton {
+  background-color: var(--blue-primary, #174EA6);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius, 4px);
+  padding: 12px 24px;
+  cursor: pointer;
+  font-weight: 600;
+  width: 100%;
+  margin-top: 20px;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
+}
+
+.subscribeButton:hover {
+  background-color: var(--blue-secondary, #003381);
+}
+
+.subscribeButton:disabled, .cancelButton:disabled {
+  background-color: #bbbbbb;
+  cursor: not-allowed;
+}
+
+.cancelButton {
+  background-color: #e76f51;
+  margin-top: 15px;
+}
+
+.cancelButton:hover {
+  background-color: #e05d3b;
+}
+
+.message {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: var(--border-radius, 4px);
+  text-align: center;
+}
+
+.error {
+  background-color: #ffebee;
+  color: #d32f2f;
+  border: 1px solid #ffcdd2;
+}
+
+.success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.loadingPayment {
+  margin: 30px 0;
+  padding: 20px;
+  text-align: center;
+  color: #666;
+  background-color: var(--background-light, #f8f8f8);
+  border-radius: var(--border-radius, 4px);
+  border: 1px solid var(--border-color, #d9d9d9);
+}
+
+.testingInfo {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+  padding: 10px;
+  background-color: var(--background-light, #f8f8f8);
+  border-radius: var(--border-radius, 4px);
+}
+
+.incompleteSubscription {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #fff3e0;
+  border: 1px solid #ffe0b2;
+  border-radius: var(--border-radius, 4px);
+  text-align: center;
+}
+
+/* Responsiveness */
+@media (max-width: 600px) {
+  .container {
+    padding: 0 15px;
+    margin: 20px auto;
+  }
+
+  .subscriptionCard {
+    padding: 25px 15px;
+  }
+
+  .subscriptionCard h1 {
+    font-size: 28px;
+  }
+
+  .planDetails h2 {
+    font-size: 22px;
+  }
+
+  .price {
+    font-size: 28px;
+  }
+} 

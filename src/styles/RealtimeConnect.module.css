@@ -9,7 +9,9 @@
   color: white;
   position: relative;
   overflow: hidden;
-  padding: 20px;
+  padding: 0;
+  box-sizing: border-box;
+  max-height: 100vh;
 }
 
 .header {
@@ -24,13 +26,15 @@
   width: 100%;
   max-width: 1200px;
   height: 100%;
-  max-height: 85vh;
+  max-height: 100vh;
   gap: 20px;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .videoContainer {
   width: 100%;
-  height: 100%;
+  height: 80%;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -39,6 +43,7 @@
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   background-color: #2a2a2a;
+  margin-top: 10px;
 }
 
 .localVideo {
@@ -176,6 +181,25 @@
   background-color: #dc2626;
 }
 
+.endQuestion {
+  background-color: #0066cc;
+  border-radius: 24px;
+  padding: 0 16px;
+  width: auto;
+  gap: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.endQuestion:hover {
+  background-color: #0056b3;
+}
+
+.buttonText {
+  font-size: 14px;
+  font-weight: 500;
+}
+
 .volumeControl {
   display: flex;
   align-items: center;
@@ -214,10 +238,10 @@
 }
 
 .connectionIndicator {
+  display: flex;
   position: absolute;
   top: 20px;
   left: 20px;
-  display: flex;
   align-items: center;
   gap: 8px;
   background-color: rgba(0, 0, 0, 0.5);
@@ -315,7 +339,8 @@
 @media (max-width: 768px) {
   .callContainer {
     max-width: 100%;
-    max-height: 80vh;
+    max-height: 100vh;
+    padding: 10px;
   }
   
   .bottomControls {
@@ -340,6 +365,11 @@
     width: 45px;
     height: 45px;
   }
+  
+  .videoContainer {
+    height: 75%;
+    margin-top: 20px;
+  }
 }
 
 /* Modal Styles */
@@ -356,6 +386,7 @@
   z-index: 1001;
   backdrop-filter: blur(4px);
   animation: fadeIn 0.3s ease-out;
+  overflow: hidden;
 }
 
 .modalContent {

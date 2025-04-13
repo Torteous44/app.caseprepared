@@ -1,7 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "../styles/Pricing.module.css";
 import { useModal } from "../contexts/ModalContext";
+import { useAuth } from "../contexts/AuthContext";
 
 const CheckIcon = () => (
   <svg
@@ -23,6 +24,18 @@ const CheckIcon = () => (
 
 const Pricing: React.FC = () => {
   const { openModal } = useModal();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubscribe = () => {
+    if (isAuthenticated) {
+      // If authenticated, navigate to subscription page
+      navigate("/subscription");
+    } else {
+      // If not authenticated, open registration modal
+      openModal("register");
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -36,7 +49,7 @@ const Pricing: React.FC = () => {
       <div className={styles.pricingGrid}>
         <div className={styles.pricingCard}>
           <h2>CasePrepared</h2>
-          <div className={styles.price}>$40.00*</div>
+          <div className={styles.price}>€40.00*</div>
           <div className={styles.period}>per month</div>
           <div className={styles.trialText}>*Free for the first 7 days</div>
 
@@ -59,11 +72,8 @@ const Pricing: React.FC = () => {
             </li>
           </ul>
 
-          <button
-            onClick={() => openModal("register")}
-            className={styles.memberButton}
-          >
-            Become a member
+          <button onClick={handleSubscribe} className={styles.memberButton}>
+            {isAuthenticated ? "Subscribe Now" : "Become a member"}
           </button>
         </div>
 

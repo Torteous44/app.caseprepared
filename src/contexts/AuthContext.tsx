@@ -6,9 +6,11 @@ import React, {
   ReactNode,
 } from "react";
 
-// API base URL from environment
-const API_BASE_URL =
-  process.env.REACT_APP_API_BASE_URL || "https://casepreparedcrud.onrender.com";
+// // API base URL from environment
+// const API_BASE_URL =
+//   process.env.REACT_APP_API_BASE_URL || "https://casepreparedcrud.onrender.com";
+
+const API_BASE_URL = "https://casepreparedcrud.onrender.com";
 
 interface User {
   id: string;
@@ -147,7 +149,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/json-login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

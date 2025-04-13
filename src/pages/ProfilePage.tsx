@@ -1,6 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import styles from "../styles/ProfilePage.module.css";
+import { Link } from "react-router-dom";
+
+// API base URL
+const API_BASE_URL =
+  process.env.REACT_APP_API_BASE_URL || "https://casepreparedcrud.onrender.com";
+
+// Updated interface to match actual API response
+interface SubscriptionStatus {
+  status?: string;
+  current_period_end?: string;
+  cancel_at_period_end?: boolean;
+  id?: string;
+  user_id?: string;
+  plan?: string;
+  stripe_customer_id?: string | null;
+  stripe_subscription_id?: string | null;
+  created_at?: string;
+  updated_at?: string;
+}
 
 interface FormState {
   full_name: string;
@@ -10,9 +29,20 @@ interface FormState {
   success: boolean;
 }
 
+// Debug helper
+const logDebug = (message: string, data?: any) => {
+  if (process.env.NODE_ENV !== "production") {
+    console.log(`[DEBUG] ${message}`, data);
+  }
+};
+
 const ProfilePage: React.FC = () => {
   const { user, updateUserProfile } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
+  const [subscription, setSubscription] = useState<SubscriptionStatus | null>(
+    null
+  );
+  const [subscriptionLoading, setSubscriptionLoading] = useState(false);
   const [formData, setFormData] = useState<FormState>({
     full_name: user?.full_name || "",
     email: user?.email || "",
@@ -29,8 +59,45 @@ const ProfilePage: React.FC = () => {
         full_name: user.full_name || "",
         email: user.email,
       }));
+
+      // Fetch subscription status when user is available
+      fetchSubscription();
     }
   }, [user]);
+
+  const fetchSubscription = async () => {
+    try {
+      setSubscriptionLoading(true);
+      const token = localStorage.getItem("access_token");
+      if (!token) return;
+
+      logDebug("Fetching subscription data");
+
+      const response = await fetch(`${API_BASE_URL}/api/v1/subscriptions/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        logDebug("Raw subscription data:", data);
+
+        // Handle if the response is an array (take the first element)
+        const subscriptionData = Array.isArray(data) ? data[0] : data;
+        logDebug("Processed subscription data:", subscriptionData);
+
+        setSubscription(subscriptionData);
+      } else {
+        console.error("Failed to fetch subscription:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching subscription:", error);
+    } finally {
+      setSubscriptionLoading(false);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -89,6 +156,63 @@ const ProfilePage: React.FC = () => {
       day: "numeric",
     });
   };
+
+  const formatSubscriptionDate = (timestamp?: string) => {
+    if (!timestamp) return "N/A";
+    return new Date(parseInt(timestamp) * 1000).toLocaleDateString();
+  };
+
+  // Helper to get subscription status details
+  const getSubscriptionDetails = () => {
+    if (!subscription)
+      return {
+        statusDisplay: "No Subscription",
+        statusClass: "inactive",
+        hasPlan: false,
+      };
+
+    // Convert status to display format
+    let statusDisplay = subscription.status || "Unknown";
+    let statusClass = "";
+    let hasPlan = false;
+
+    switch (subscription.status) {
+      case "active":
+        statusDisplay = "Active";
+        statusClass = "active";
+        hasPlan = true;
+        break;
+      case "canceled":
+        statusDisplay = "Canceled";
+        statusClass = "canceled";
+        break;
+      case "past_due":
+        statusDisplay = "Past Due";
+        statusClass = "pastDue";
+        hasPlan = true;
+        break;
+      case "incomplete":
+        statusDisplay = "Incomplete";
+        statusClass = "incomplete";
+        break;
+      case "trialing":
+        statusDisplay = "Trial";
+        statusClass = "active";
+        hasPlan = true;
+        break;
+      case "unpaid":
+        statusDisplay = "Unpaid";
+        statusClass = "unpaid";
+        break;
+      default:
+        statusDisplay = subscription.status || "Unknown";
+        statusClass = "unknown";
+    }
+
+    return { statusDisplay, statusClass, hasPlan };
+  };
+
+  const { statusDisplay, statusClass, hasPlan } = getSubscriptionDetails();
 
   return (
     <div className={styles.container}>
@@ -192,6 +316,72 @@ const ProfilePage: React.FC = () => {
                 Your profile has been updated successfully!
               </div>
             )}
+          </div>
+        )}
+      </div>
+
+      {/* Subscription information card */}
+      <div className={styles.card}>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Subscription</h1>
+        </div>
+
+        {subscriptionLoading ? (
+          <div className={styles.subscriptionLoading}>
+            Loading subscription information...
+          </div>
+        ) : subscription ? (
+          <div className={styles.subscriptionInfo}>
+            <div className={styles.infoRow}>
+              <span className={styles.label}>Status</span>
+              <span
+                className={`${styles.value} ${styles.status} ${styles[statusClass]}`}
+              >
+                {statusDisplay}
+              </span>
+            </div>
+
+            {subscription.plan && (
+              <div className={styles.infoRow}>
+                <span className={styles.label}>Plan</span>
+                <span className={styles.value}>
+                  {subscription.plan === "premium"
+                    ? "Premium Plan"
+                    : subscription.plan}
+                </span>
+              </div>
+            )}
+
+            {subscription.current_period_end && (
+              <div className={styles.infoRow}>
+                <span className={styles.label}>Current Period Ends</span>
+                <span className={styles.value}>
+                  {formatSubscriptionDate(subscription.current_period_end)}
+                </span>
+              </div>
+            )}
+
+            {subscription.status === "active" && (
+              <div className={styles.infoRow}>
+                <span className={styles.label}>Auto-Renewal</span>
+                <span className={styles.value}>
+                  {subscription.cancel_at_period_end ? "Off" : "On"}
+                </span>
+              </div>
+            )}
+
+            <div className={styles.subscriptionActions}>
+              <Link to="/subscription" className={styles.manageButton}>
+                {hasPlan ? "Manage Subscription" : "Subscribe Now"}
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <div className={styles.noSubscription}>
+            <p>You don't have an active subscription.</p>
+            <Link to="/subscription" className={styles.subscribeButton}>
+              Subscribe Now
+            </Link>
           </div>
         )}
       </div>

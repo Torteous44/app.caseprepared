@@ -30,7 +30,10 @@ const Navbar: React.FC = () => {
     <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ""}`}>
       <div className={styles.container}>
         <div className={styles.logo}>
-          <Link to="/" className={styles.logoText}>
+          <Link
+            to={isAuthenticated ? "/interviews" : "/"}
+            className={styles.logoText}
+          >
             <img
               src="/assets/Logo Text.svg"
               alt="Case Prepared"
@@ -39,28 +42,30 @@ const Navbar: React.FC = () => {
           </Link>
         </div>
 
-        <ul className={styles.navLinks}>
-          <li className={styles.navItem}>
-            <Link to="/interviews" className={styles.navLink}>
-              Interviews
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link to="/resources" className={styles.navLink}>
-              Resources
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link to="/pricing" className={styles.navLink}>
-              Pricing
-            </Link>
-          </li>
-          <li className={styles.navItem}>
-            <Link to="/about" className={styles.navLink}>
-              About
-            </Link>
-          </li>
-        </ul>
+        {!isAuthenticated && (
+          <ul className={styles.navLinks}>
+            <li className={styles.navItem}>
+              <Link to="/interviews" className={styles.navLink}>
+                Interviews
+              </Link>
+            </li>
+            <li className={styles.navItem}>
+              <Link to="/resources" className={styles.navLink}>
+                Resources
+              </Link>
+            </li>
+            <li className={styles.navItem}>
+              <Link to="/pricing" className={styles.navLink}>
+                Pricing
+              </Link>
+            </li>
+            <li className={styles.navItem}>
+              <Link to="/about" className={styles.navLink}>
+                About
+              </Link>
+            </li>
+          </ul>
+        )}
 
         <div className={styles.navCta}>
           {isAuthenticated ? (

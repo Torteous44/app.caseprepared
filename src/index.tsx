@@ -21,14 +21,7 @@ const rootElement = document.getElementById("root") as HTMLElement;
 const root = ReactDOM.createRoot(rootElement);
 
 // Conditionally render with StrictMode in development
-const app =
-  process.env.NODE_ENV === "development" ? (
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  ) : (
-    <App />
-  );
+const app = process.env.NODE_ENV === "development" ? <App /> : <App />;
 
 root.render(app);
 

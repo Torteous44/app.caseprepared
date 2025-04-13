@@ -25,17 +25,42 @@ type NotificationType = "info" | "warning" | "error" | "success";
 
 interface LocationState {
   title?: string;
+  questionNumber?: number;
+  demoType?: string;
 }
 
-const BASE_URL = "https://demobackend-p2e1.onrender.com";
+// Demo API base URL
+// Ensure backend URL is correct for the environment
+const DEMO_API_BASE_URL =
+  process.env.REACT_APP_DEMO_API_URL ||
+  "https://casepreparedcrud.onrender.com/api/v1/demo";
+console.log("Initialized with DEMO_API_BASE_URL:", DEMO_API_BASE_URL);
 
-const RealtimeConnect: React.FC = () => {
-  const { sessionId } = useParams<{ sessionId: string }>();
+const DemoRealtimeConnect: React.FC = () => {
+  const { demoTypeId, sessionId } = useParams<{
+    demoTypeId: string;
+    sessionId: string;
+  }>();
   const location = useLocation();
   const navigate = useNavigate();
   const locationState = (location.state as LocationState) || {};
   const { openModal } = useModal();
   const { isAuthenticated } = useAuth();
+
+  // TROUBLESHOOTING: Log initial params
+  console.log("DemoRealtimeConnect MOUNTED with params:", {
+    demoTypeId,
+    sessionId,
+    locationState,
+    path: location.pathname,
+  });
+
+  // Get demo type and question number from params or location state
+  const demoType = demoTypeId || sessionId || locationState.demoType;
+  const questionNumber = locationState.questionNumber || 1;
+
+  // TROUBLESHOOTING: Log derived values
+  console.log("Demo values:", { demoType, questionNumber });
 
   // State
   const [connectionState, setConnectionState] =
@@ -129,7 +154,7 @@ const RealtimeConnect: React.FC = () => {
   // Create API instance before other code that depends on it
   const api = useMemo(() => {
     const instance = axios.create({
-      baseURL: BASE_URL,
+      baseURL: DEMO_API_BASE_URL,
       timeout: 10000,
       headers: {
         "Content-Type": "application/json",
@@ -209,17 +234,36 @@ const RealtimeConnect: React.FC = () => {
 
   // Initiate connection when component mounts with session ID
   useEffect(() => {
-    if (sessionId && !callActive && !isConnecting) {
+    console.log("Connection effect triggered:", {
+      demoType,
+      callActive,
+      isConnecting,
+    });
+
+    if (demoType && !callActive && !isConnecting) {
       // Allow a short delay for the media setup to complete
+      console.log(
+        "Starting connection for demo type:",
+        demoType,
+        "question:",
+        questionNumber
+      );
       const timer = setTimeout(() => {
+        console.log("Calling handleConnect()");
         handleConnect();
       }, 1000);
 
       return () => clearTimeout(timer);
+    } else {
+      console.log("Not starting connection because:", {
+        hasDemoType: !!demoType,
+        callNotActive: !callActive,
+        notConnecting: !isConnecting,
+      });
     }
-  }, [sessionId, callActive, isConnecting]);
+  }, [demoType, callActive, isConnecting]);
 
-  // Check for 40 second trial end
+  // Check for 60 second trial end
   useEffect(() => {
     if (callActive && callDuration === 60) {
       // Stop all tracks
@@ -252,9 +296,9 @@ const RealtimeConnect: React.FC = () => {
         // For non-logged in users, show the registration modal
         openModal("register");
 
-        // Navigate back to interviews page after a short delay
+        // Navigate back to home page after a short delay
         setTimeout(() => {
-          navigate("/interviews");
+          navigate("/");
         }, 500);
       }
     }
@@ -340,6 +384,40 @@ const RealtimeConnect: React.FC = () => {
     }
   }, [isMuted]);
 
+  // Mark the current question as complete
+  const markQuestionAsComplete = useCallback(async () => {
+    if (!demoType) return;
+
+    try {
+      const response = await fetch(
+        `${DEMO_API_BASE_URL}/interviews/complete-question`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            case_type: demoType,
+            question_number: questionNumber,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        console.log(
+          `Question ${questionNumber} for demo ${demoType} marked as complete`
+        );
+      } else {
+        console.error(
+          "Failed to mark question as complete:",
+          await response.text()
+        );
+      }
+    } catch (error) {
+      console.error("Error marking question as complete:", error);
+    }
+  }, [demoType, questionNumber]);
+
   // End call
   const handleEndCall = useCallback(() => {
     if (peerConnectionRef.current) {
@@ -355,28 +433,42 @@ const RealtimeConnect: React.FC = () => {
       durationIntervalRef.current = null;
     }
 
+    // Mark question as complete before navigating
+    markQuestionAsComplete();
+
     // Navigate back to interviews page
     navigate("/interviews");
-  }, [navigate]);
+  }, [navigate, markQuestionAsComplete]);
 
   // Connect to interview
   async function handleConnect() {
-    if (isConnecting) return;
+    console.log("=== handleConnect STARTED ===");
+    if (isConnecting) {
+      console.log("Already connecting, exiting handleConnect");
+      return;
+    }
 
     setIsConnecting(true);
+    console.log("handleConnect called - connecting to backend");
+    console.log("DEMO_API_BASE_URL:", DEMO_API_BASE_URL);
 
     try {
       setConnectionState("connecting");
 
-      if (!sessionId) {
-        showNotification("Invalid session ID", "error");
+      if (!demoType) {
+        console.error("No demo type provided");
+        showNotification("Invalid demo type", "error");
         setIsConnecting(false);
         return;
       }
 
+      console.log("Demo type validated:", demoType);
+
       // Check if media stream is already initialized
       if (!localStreamRef.current) {
+        console.log("No local stream found, requesting permissions");
         try {
+          console.log("Requesting camera/microphone permissions");
           const stream = await navigator.mediaDevices.getUserMedia({
             video: true, // Enable video
             audio: {
@@ -390,105 +482,101 @@ const RealtimeConnect: React.FC = () => {
           if (videoRef.current) {
             videoRef.current.srcObject = stream;
           }
+          console.log("Camera/microphone permissions granted");
         } catch (err) {
           console.error("Error accessing media devices:", err);
           showNotification("Failed to access camera/microphone.", "error");
           setIsConnecting(false);
           return;
         }
+      } else {
+        console.log("Local stream already exists, skipping media setup");
       }
 
-      // Get TURN credentials from the backend
-      const turnResp = await fetch(`${BASE_URL}/webrtc/turn-credentials`);
-      const turnData = await turnResp.json();
-      console.log("Got TURN credentials:", turnData);
-
-      // Get ephemeral token for the OpenAI Realtime API
-      const rtResp = await fetch(
-        `${BASE_URL}/realtime/token?session_id=${sessionId}`
+      // Get TURN credentials from the demo backend
+      console.log(
+        "Attempting to fetch TURN credentials from:",
+        `${DEMO_API_BASE_URL}/turn-credentials`
       );
-      const rtData = await rtResp.json();
-      const ephemeralKey = rtData.client_secret.value;
-      console.log("Got ephemeral key:", ephemeralKey.substring(0, 15) + "...");
-
-      // Create RTCPeerConnection with ICE servers from the backend
-      const configuration: RTCConfiguration = {
-        iceServers: [
-          ...turnData.iceServers,
-          { urls: "stun:stun.l.google.com:19302" },
-          { urls: "stun:stun1.l.google.com:19302" },
-        ],
-        iceCandidatePoolSize: 10,
-      };
-
-      const pc = new RTCPeerConnection(configuration);
-      peerConnectionRef.current = pc;
-
-      // Set up data channel for heartbeats
-      dataChannelRef.current = pc.createDataChannel("heartbeat", {
-        ordered: true,
-      });
-
-      dataChannelRef.current.onopen = () => {
-        console.log("Data channel opened");
-      };
-
-      dataChannelRef.current.onclose = () => {
-        console.log("Data channel closed");
-      };
-
-      // Set up event handlers
-      pc.onicecandidate = (event) => {
-        if (event.candidate) {
-          console.log("New ICE candidate:", event.candidate);
+      try {
+        const turnResp = await fetch(`${DEMO_API_BASE_URL}/turn-credentials`);
+        if (!turnResp.ok) {
+          throw new Error(
+            `Failed to get TURN credentials: ${turnResp.status} ${turnResp.statusText}`
+          );
         }
-      };
+        const turnData = await turnResp.json();
+        console.log("Got TURN credentials:", turnData);
 
-      pc.oniceconnectionstatechange = () => {
-        console.log("ICE connection state:", pc.iceConnectionState);
+        // Get ephemeral token for the OpenAI Realtime API using the demo endpoint
+        console.log(
+          "Fetching token from:",
+          `${DEMO_API_BASE_URL}/direct-token/${demoType}/${questionNumber}?ttl=3600`
+        );
+        const rtResp = await fetch(
+          `${DEMO_API_BASE_URL}/direct-token/${demoType}/${questionNumber}?ttl=3600`
+        );
+        if (!rtResp.ok) {
+          throw new Error(
+            `Failed to get token: ${rtResp.status} ${rtResp.statusText}`
+          );
+        }
+        const rtData = await rtResp.json();
+        console.log("Received token data:", rtData);
 
-        if (pc.iceConnectionState === "connected") {
-          setConnectionState("connected");
-          setIsConnecting(false);
-          setCallActive(true);
+        // Use the simplified token format
+        const ephemeralKey = rtData.token;
+        if (!ephemeralKey) {
+          throw new Error("No token received from server");
+        }
 
-          // Start call duration timer
-          callStartTimeRef.current = Date.now();
-          durationIntervalRef.current = setInterval(() => {
-            if (callStartTimeRef.current) {
-              const seconds = Math.floor(
-                (Date.now() - callStartTimeRef.current) / 1000
-              );
-              setCallDuration(seconds);
-            }
-          }, 1000);
-        } else if (
-          pc.iceConnectionState === "failed" ||
-          pc.iceConnectionState === "disconnected" ||
-          pc.iceConnectionState === "closed"
-        ) {
-          setConnectionState(pc.iceConnectionState as ConnectionState);
-          setIsConnecting(false);
+        console.log(
+          "Got ephemeral key:",
+          ephemeralKey.substring(0, 15) + "..."
+        );
 
-          if (durationIntervalRef.current) {
-            clearInterval(durationIntervalRef.current);
-            durationIntervalRef.current = null;
+        // Create RTCPeerConnection with ICE servers from the backend
+        const configuration: RTCConfiguration = {
+          iceServers: [
+            ...(Array.isArray(turnData.iceServers) ? turnData.iceServers : []),
+            { urls: "stun:stun.l.google.com:19302" },
+            { urls: "stun:stun1.l.google.com:19302" },
+          ],
+          iceCandidatePoolSize: 10,
+        };
+
+        const pc = new RTCPeerConnection(configuration);
+        peerConnectionRef.current = pc;
+
+        // Set up data channel for heartbeats
+        dataChannelRef.current = pc.createDataChannel("heartbeat", {
+          ordered: true,
+        });
+
+        dataChannelRef.current.onopen = () => {
+          console.log("Data channel opened");
+        };
+
+        dataChannelRef.current.onclose = () => {
+          console.log("Data channel closed");
+        };
+
+        // Set up event handlers
+        pc.onicecandidate = (event) => {
+          if (event.candidate) {
+            console.log("New ICE candidate:", event.candidate);
           }
+        };
 
-          showNotification("Connection lost. Try reconnecting.", "error");
-        }
-      };
+        pc.oniceconnectionstatechange = () => {
+          console.log("ICE connection state:", pc.iceConnectionState);
 
-      pc.onconnectionstatechange = () => {
-        console.log("Connection state:", pc.connectionState);
+          if (pc.iceConnectionState === "connected") {
+            setConnectionState("connected");
+            setIsConnecting(false);
+            setCallActive(true);
 
-        if (pc.connectionState === "connected") {
-          setConnectionState("connected");
-          setIsConnecting(false);
-          setCallActive(true);
-
-          if (!callStartTimeRef.current) {
-            // Start call duration timer if not already started
+            // Start call duration timer
             callStartTimeRef.current = Date.now();
             durationIntervalRef.current = setInterval(() => {
               if (callStartTimeRef.current) {
@@ -498,197 +586,249 @@ const RealtimeConnect: React.FC = () => {
                 setCallDuration(seconds);
               }
             }, 1000);
-          }
-        }
-      };
+          } else if (
+            pc.iceConnectionState === "failed" ||
+            pc.iceConnectionState === "disconnected" ||
+            pc.iceConnectionState === "closed"
+          ) {
+            setConnectionState(pc.iceConnectionState as ConnectionState);
+            setIsConnecting(false);
 
-      pc.ontrack = (event) => {
-        console.log("Received remote track:", event.track.kind);
-
-        if (event.track.kind === "audio") {
-          try {
-            console.log("Processing audio track:", event.track.id);
-
-            // Handle track events
-            event.track.onunmute = () => {
-              console.log("Audio track unmuted - should be audible now");
-            };
-
-            event.track.onmute = () => {
-              console.log("Audio track muted - audio paused");
-            };
-
-            event.track.onended = () => {
-              console.log("Audio track ended");
-            };
-
-            // Create a brand new stream for each track to avoid stale references
-            const newStream = new MediaStream([event.track]);
-            remoteMediaStreamRef.current = newStream;
-
-            // Set up audio playback elements without visible controls
-            const setupAudioPlayback = () => {
-              // Create multiple audio elements with different approaches
-
-              // 1. Main audio element in the component
-              if (audioRef.current) {
-                audioRef.current.srcObject = null; // Clear first
-                audioRef.current.srcObject = newStream;
-                audioRef.current.volume = 1.0; // Full volume
-                audioRef.current.muted = false;
-
-                const playPromise = audioRef.current.play();
-                playPromise.catch((error) => {
-                  console.error("Failed to play in main audio element:", error);
-                });
-              }
-
-              // 2. Create a completely separate audio element in the body
-              const existingBackupAudio =
-                document.getElementById("backup-audio");
-              if (existingBackupAudio) {
-                existingBackupAudio.remove();
-              }
-
-              const backupAudio = document.createElement("audio");
-              backupAudio.id = "backup-audio";
-              backupAudio.autoplay = true;
-              backupAudio.srcObject = newStream;
-              backupAudio.volume = 1.0;
-              backupAudio.muted = false;
-              backupAudio.style.display = "none";
-              document.body.appendChild(backupAudio);
-
-              backupAudio.play().catch((error) => {
-                console.error("Backup audio play failed:", error);
-              });
-
-              // 3. Use AudioContext directly for maximum compatibility
-              try {
-                const AudioContext =
-                  window.AudioContext || (window as any).webkitAudioContext;
-                const audioCtx = new AudioContext();
-
-                // Create a MediaStreamAudioSourceNode
-                const sourceNode = audioCtx.createMediaStreamSource(newStream);
-
-                // Connect directly to destination (speakers)
-                sourceNode.connect(audioCtx.destination);
-
-                console.log("Direct AudioContext connection established");
-              } catch (error) {
-                console.error("AudioContext approach failed:", error);
-              }
-            };
-
-            // Call immediately and also schedule a few retries to handle delayed tracks
-            setupAudioPlayback();
-            setTimeout(setupAudioPlayback, 500);
-            setTimeout(setupAudioPlayback, 1500);
-            setTimeout(setupAudioPlayback, 3000);
-
-            // Also try to unlock audio on next user interaction
-            const unlockOnInteraction = () => {
-              console.log("User interaction - unlocking audio");
-              setupAudioPlayback();
-              document.removeEventListener("click", unlockOnInteraction);
-              document.removeEventListener("touchstart", unlockOnInteraction);
-            };
-
-            document.addEventListener("click", unlockOnInteraction);
-            document.addEventListener("touchstart", unlockOnInteraction);
-          } catch (err) {
-            console.error("Error processing audio track:", err);
-          }
-        }
-      };
-
-      // Add local stream to peer connection
-      if (localStreamRef.current) {
-        localStreamRef.current.getTracks().forEach((track) => {
-          if (localStreamRef.current) {
-            pc.addTrack(track, localStreamRef.current);
-          }
-        });
-      }
-
-      // Create offer
-      const offer = await pc.createOffer({
-        offerToReceiveAudio: true,
-      });
-
-      await pc.setLocalDescription(offer);
-
-      // Wait for ICE gathering to complete or timeout
-      await Promise.race([
-        new Promise<void>((resolve) => {
-          const checkState = () => {
-            if (pc.iceGatheringState === "complete") {
-              pc.removeEventListener("icegatheringstatechange", checkState);
-              resolve();
+            if (durationIntervalRef.current) {
+              clearInterval(durationIntervalRef.current);
+              durationIntervalRef.current = null;
             }
-          };
 
-          if (pc.iceGatheringState === "complete") {
-            resolve();
-          } else {
-            pc.addEventListener("icegatheringstatechange", checkState);
+            showNotification("Connection lost. Try reconnecting.", "error");
           }
-        }),
-        new Promise<void>((resolve) => {
-          setTimeout(() => {
-            console.log(
-              "ICE gathering timed out, continuing with available candidates"
-            );
-            resolve();
-          }, 5000);
-        }),
-      ]);
+        };
 
-      // Get the current SDP
-      const currentSdp = pc.localDescription?.sdp;
-      if (!currentSdp) {
-        throw new Error("No local SDP available");
-      }
+        pc.onconnectionstatechange = () => {
+          console.log("Connection state:", pc.connectionState);
 
-      // Send SDP to OpenAI Realtime API
-      try {
-        const response = await axios({
-          url: "https://api.openai.com/v1/realtime?model=gpt-4o-mini-realtime-preview",
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${ephemeralKey}`,
-            "Content-Type": "application/sdp",
-          },
-          data: currentSdp,
-          timeout: 10000,
+          if (pc.connectionState === "connected") {
+            setConnectionState("connected");
+            setIsConnecting(false);
+            setCallActive(true);
+
+            if (!callStartTimeRef.current) {
+              // Start call duration timer if not already started
+              callStartTimeRef.current = Date.now();
+              durationIntervalRef.current = setInterval(() => {
+                if (callStartTimeRef.current) {
+                  const seconds = Math.floor(
+                    (Date.now() - callStartTimeRef.current) / 1000
+                  );
+                  setCallDuration(seconds);
+                }
+              }, 1000);
+            }
+          }
+        };
+
+        pc.ontrack = (event) => {
+          console.log("Received remote track:", event.track.kind);
+
+          if (event.track.kind === "audio") {
+            try {
+              console.log("Processing audio track:", event.track.id);
+
+              // Handle track events
+              event.track.onunmute = () => {
+                console.log("Audio track unmuted - should be audible now");
+              };
+
+              event.track.onmute = () => {
+                console.log("Audio track muted - audio paused");
+              };
+
+              event.track.onended = () => {
+                console.log("Audio track ended");
+              };
+
+              // Create a brand new stream for each track to avoid stale references
+              const newStream = new MediaStream([event.track]);
+              remoteMediaStreamRef.current = newStream;
+
+              // Set up audio playback elements without visible controls
+              const setupAudioPlayback = () => {
+                // Create multiple audio elements with different approaches
+
+                // 1. Main audio element in the component
+                if (audioRef.current) {
+                  audioRef.current.srcObject = null; // Clear first
+                  audioRef.current.srcObject = newStream;
+                  audioRef.current.volume = 1.0; // Full volume
+                  audioRef.current.muted = false;
+
+                  const playPromise = audioRef.current.play();
+                  playPromise.catch((error) => {
+                    console.error(
+                      "Failed to play in main audio element:",
+                      error
+                    );
+                  });
+                }
+
+                // 2. Create a completely separate audio element in the body
+                const existingBackupAudio =
+                  document.getElementById("backup-audio");
+                if (existingBackupAudio) {
+                  existingBackupAudio.remove();
+                }
+
+                const backupAudio = document.createElement("audio");
+                backupAudio.id = "backup-audio";
+                backupAudio.autoplay = true;
+                backupAudio.srcObject = newStream;
+                backupAudio.volume = 1.0;
+                backupAudio.muted = false;
+                backupAudio.style.display = "none";
+                document.body.appendChild(backupAudio);
+
+                backupAudio.play().catch((error) => {
+                  console.error("Backup audio play failed:", error);
+                });
+
+                // 3. Use AudioContext directly for maximum compatibility
+                try {
+                  const AudioContext =
+                    window.AudioContext || (window as any).webkitAudioContext;
+                  const audioCtx = new AudioContext();
+
+                  // Create a MediaStreamAudioSourceNode
+                  const sourceNode =
+                    audioCtx.createMediaStreamSource(newStream);
+
+                  // Connect directly to destination (speakers)
+                  sourceNode.connect(audioCtx.destination);
+
+                  console.log("Direct AudioContext connection established");
+                } catch (error) {
+                  console.error("AudioContext approach failed:", error);
+                }
+              };
+
+              // Call immediately and also schedule a few retries to handle delayed tracks
+              setupAudioPlayback();
+              setTimeout(setupAudioPlayback, 500);
+              setTimeout(setupAudioPlayback, 1500);
+              setTimeout(setupAudioPlayback, 3000);
+
+              // Also try to unlock audio on next user interaction
+              const unlockOnInteraction = () => {
+                console.log("User interaction - unlocking audio");
+                setupAudioPlayback();
+                document.removeEventListener("click", unlockOnInteraction);
+                document.removeEventListener("touchstart", unlockOnInteraction);
+              };
+
+              document.addEventListener("click", unlockOnInteraction);
+              document.addEventListener("touchstart", unlockOnInteraction);
+            } catch (err) {
+              console.error("Error processing audio track:", err);
+            }
+          }
+        };
+
+        // Add local stream to peer connection
+        if (localStreamRef.current) {
+          localStreamRef.current.getTracks().forEach((track) => {
+            if (localStreamRef.current) {
+              pc.addTrack(track, localStreamRef.current);
+            }
+          });
+        }
+
+        // Create offer
+        const offer = await pc.createOffer({
+          offerToReceiveAudio: true,
         });
 
-        const answerSDP = response.data;
-        console.log("Received SDP answer from OpenAI Realtime API");
+        await pc.setLocalDescription(offer);
 
-        await pc.setRemoteDescription({ type: "answer", sdp: answerSDP });
-        console.log("Remote SDP set successfully");
+        // Wait for ICE gathering to complete or timeout
+        await Promise.race([
+          new Promise<void>((resolve) => {
+            const checkState = () => {
+              if (pc.iceGatheringState === "complete") {
+                pc.removeEventListener("icegatheringstatechange", checkState);
+                resolve();
+              }
+            };
 
-        showNotification("Connected to AI interviewer", "success");
-      } catch (error: any) {
-        let errorMessage = "Unknown error";
-        if (error.response) {
-          errorMessage = `API returned status ${error.response.status}: ${
-            error.response.data?.error?.message || error.response.statusText
-          }`;
-        } else if (error.request) {
-          errorMessage = `Request timeout: ${error.message}`;
-        } else {
-          errorMessage = error.message;
+            if (pc.iceGatheringState === "complete") {
+              resolve();
+            } else {
+              pc.addEventListener("icegatheringstatechange", checkState);
+            }
+          }),
+          new Promise<void>((resolve) => {
+            setTimeout(() => {
+              console.log(
+                "ICE gathering timed out, continuing with available candidates"
+              );
+              resolve();
+            }, 5000);
+          }),
+        ]);
+
+        // Get the current SDP
+        const currentSdp = pc.localDescription?.sdp;
+        if (!currentSdp) {
+          throw new Error("No local SDP available");
         }
-        console.error(
-          `Error sending offer to OpenAI Realtime API: ${errorMessage}`
+
+        // Send SDP to OpenAI Realtime API
+        try {
+          const response = await axios({
+            url: "https://api.openai.com/v1/realtime?model=gpt-4o-mini-realtime-preview",
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${ephemeralKey}`,
+              "Content-Type": "application/sdp",
+            },
+            data: currentSdp,
+            timeout: 10000,
+          });
+
+          const answerSDP = response.data;
+          console.log("Received SDP answer from OpenAI Realtime API");
+
+          await pc.setRemoteDescription({ type: "answer", sdp: answerSDP });
+          console.log("Remote SDP set successfully");
+
+          showNotification("Connected to AI interviewer", "success");
+        } catch (error: any) {
+          let errorMessage = "Unknown error";
+          if (error.response) {
+            errorMessage = `API returned status ${error.response.status}: ${
+              error.response.data?.error?.message || error.response.statusText
+            }`;
+          } else if (error.request) {
+            errorMessage = `Request timeout: ${error.message}`;
+          } else {
+            errorMessage = error.message;
+          }
+          console.error(
+            `Error sending offer to OpenAI Realtime API: ${errorMessage}`
+          );
+          throw new Error(errorMessage);
+        }
+      } catch (fetchError) {
+        console.error("Fetch error:", fetchError);
+        showNotification(
+          `Backend error: ${
+            fetchError instanceof Error ? fetchError.message : "Unknown error"
+          }`,
+          "error"
         );
-        throw new Error(errorMessage);
+        setIsConnecting(false);
+        setConnectionState("failed");
+        return;
       }
     } catch (error) {
-      console.error("Connection error:", error);
+      console.error("Connection error in main try/catch:", error);
       showNotification("Failed to establish connection", "error");
       setIsConnecting(false);
       setConnectionState("failed");
@@ -712,8 +852,8 @@ const RealtimeConnect: React.FC = () => {
   // Handle submit button click for "almost ready" modal
   const handleSubmit = () => {
     setShowAlmostReadyModal(false);
-    // Navigate to landing page
-    navigate("/");
+    // Navigate to the subscription page
+    navigate("/subscription");
   };
 
   // Show start prompt after connection is established
@@ -735,32 +875,23 @@ const RealtimeConnect: React.FC = () => {
     }
   }, [audioLevel, showStartPrompt]);
 
-  // Fetch interview details based on sessionId
+  // Set interview title based on location state
   useEffect(() => {
-    const fetchInterviewDetails = async () => {
-      if (!sessionId) return;
+    if (locationState.title) {
+      setInterviewTitle(locationState.title);
+    } else {
+      // Set default titles based on demo type
+      const demoTitles: Record<string, string> = {
+        "market-entry": "Climate Case - BCG Case",
+        profitability: "Beautify - McKinsey Case",
+        merger: "Coffee Shop Co. - Bain Case",
+      };
 
-      try {
-        // First check if title is in location state
-        if (locationState.title) {
-          setInterviewTitle(locationState.title);
-          return;
-        }
-
-        // If not in location state, try to fetch from API
-        const response = await api.get(`/interviews/session/${sessionId}`);
-        if (response.data && response.data.interview) {
-          const { company, title } = response.data.interview;
-          setInterviewTitle(`${company} - ${title}`);
-        }
-      } catch (error) {
-        console.error("Error fetching interview details:", error);
-        // Keep default title if fetch fails
+      if (demoType && demoTitles[demoType]) {
+        setInterviewTitle(demoTitles[demoType]);
       }
-    };
-
-    fetchInterviewDetails();
-  }, [sessionId, locationState.title, api]);
+    }
+  }, [locationState.title, demoType]);
 
   return (
     <div className={styles.container}>
@@ -923,13 +1054,13 @@ const RealtimeConnect: React.FC = () => {
       {showAlmostReadyModal && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
-            <h2 className={styles.modalTitle}>We're almost ready</h2>
+            <h2 className={styles.modalTitle}>Ready to continue?</h2>
             <p className={styles.modalText}>
-              We'll be in contact with you soon we can help build ConsultAI with
-              your help.
+              Upgrade to premium to continue your practice session and access
+              all interviews without time limits.
             </p>
             <button className={styles.primaryButton} onClick={handleSubmit}>
-              Submit →
+              Get Premium →
             </button>
           </div>
         </div>
@@ -938,4 +1069,4 @@ const RealtimeConnect: React.FC = () => {
   );
 };
 
-export default RealtimeConnect;
+export default DemoRealtimeConnect;

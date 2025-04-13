@@ -5,6 +5,9 @@
   margin: 0 auto;
   padding: 120px 24px 60px;
   --container-padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 
 .card {
@@ -169,6 +172,110 @@
   margin-top: 20px;
 }
 
+/* Subscription styles */
+.subscriptionInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.subscriptionLoading {
+  padding: 20px 0;
+  color: #666;
+  text-align: center;
+  font-style: italic;
+}
+
+.status {
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.active {
+  background-color: #e6f7f0;
+  color: #2a9d8f;
+}
+
+.canceled {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.incomplete {
+  background-color: #fff3e0;
+  color: #f39c12;
+}
+
+.pastDue {
+  background-color: #ffebee;
+  color: #c0392b;
+}
+
+.unpaid {
+  background-color: #ffebee;
+  color: #e74c3c;
+}
+
+.inactive {
+  background-color: #f5f5f5;
+  color: #888;
+}
+
+.unknown {
+  background-color: #e0f2f1;
+  color: #607d8b;
+}
+
+.subscriptionActions {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.manageButton, .subscribeButton {
+  padding: 12px 24px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.manageButton {
+  background-color: transparent;
+  border: 1px solid #2a9d8f;
+  color: #2a9d8f;
+}
+
+.manageButton:hover {
+  background-color: rgba(42, 157, 143, 0.05);
+}
+
+.subscribeButton {
+  background-color: #2a9d8f;
+  color: white;
+  border: none;
+}
+
+.subscribeButton:hover {
+  background-color: #238b7e;
+}
+
+.noSubscription {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px 0;
+  gap: 20px;
+}
+
+.noSubscription p {
+  color: #666;
+  text-align: center;
+  font-size: 16px;
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 110px 20px 40px;
@@ -208,6 +315,15 @@
   .editButton, .cancelButton, .saveButton {
     padding: 10px 16px;
     font-size: 14px;
+  }
+  
+  .subscriptionActions {
+    justify-content: center;
+  }
+  
+  .manageButton, .subscribeButton {
+    width: 100%;
+    padding: 10px 16px;
   }
 }
 
