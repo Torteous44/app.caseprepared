@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "../styles/InterviewsPage.module.css";
+import Footer from "../components/common/Footer";
 
 interface InterviewCard {
   id: number;
@@ -154,6 +155,156 @@ const InterviewsPage: React.FC = () => {
           </div>
         ))}
       </div>
+
+      <div className={styles.header} style={{ marginTop: '2rem' }}>
+        <h2>Access all interviews with <span style={{ color: 'var(--blue-primary)' }}>Premium</span></h2>
+        <p>Upgrade today to unlock our complete case library.</p>
+        <button 
+          onClick={() => navigate('/pricing')}
+          className={styles.getPremiumButton} 
+          style={{ 
+            backgroundColor: 'var(--blue-primary)', 
+            color: 'white', 
+            border: 'none', 
+            borderRadius: 'var(--border-radius)', 
+            padding: '12px 36px',
+            margin: '20px 0',
+            fontWeight: 'bold',
+            cursor: 'pointer'
+          }}
+        >
+          Get Premium
+        </button>
+      </div>
+
+      <div className={styles.interviewCards} style={{ position: 'relative' }}>
+        <div className={styles.gradientOverlay} style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'linear-gradient(to bottom, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,1) 100%)',
+          zIndex: 1,
+          pointerEvents: 'none'
+        }}></div>
+        {[
+          {
+            id: 4,
+            company: "McKinsey", 
+            logo: "/assets/interviewCards/Logos/Mckinsey.svg",
+            title: "Tech Transformation - McKinsey Case",
+            subtitle: "Premium",
+            description: "A major retail chain needs to modernize its IT infrastructure to support online growth. Develop a technology roadmap and identify key investment priorities.",
+            thumbnail: "/assets/interviewCards/Deloitte.webp",
+            buttonText: "Premium Access"
+          },
+          {
+            id: 5,
+            company: "Accenture",
+            logo: "/assets/interviewCards/Logos/Accenture.svg",
+            title: "Digital Banking - Accenture Case",
+            subtitle: "Premium",
+            description: "A traditional bank is losing market share to fintech startups. Develop a digital strategy to help them compete in the evolving financial services landscape.",
+            thumbnail: "/assets/interviewCards/Accenture.webp",
+            buttonText: "Premium Access"
+          },
+          {
+            id: 6,
+            company: "Bain & Company",
+            logo: "/assets/interviewCards/Logos/Bain.svg",
+            title: "Healthcare Innovation - Bain & Company Case",
+            subtitle: "Premium",
+            description: "A healthcare provider wants to leverage AI to improve patient outcomes. Identify key application areas and develop an implementation roadmap.",
+            thumbnail: "/assets/interviewCards/BainHealthcare.webp",
+            buttonText: "Premium Access"
+          },
+          {
+            id: 7,
+            company: "Kearney",
+            logo: "/assets/interviewCards/Logos/Kearney.svg",
+            title: "Retail Expansion - Kearney Case",
+            subtitle: "Premium",
+            description: "A luxury retail brand wants to expand into emerging markets. Evaluate potential countries, entry strategies, and develop a five-year growth plan.",
+            thumbnail: "/assets/interviewCards/KearneyLux.webp",
+            buttonText: "Premium Access"
+          },
+          {
+            id: 8,
+            company: "McKinsey",
+            logo: "/assets/interviewCards/Logos/Mckinsey.svg",
+            title: "Airline Profitability - McKinsey Case",
+            subtitle: "Premium",
+            description: "A major airline is facing declining profits despite increasing passenger numbers. Identify cost-saving opportunities and revenue enhancement strategies.",
+            thumbnail: "/assets/interviewCards/airline.webp",
+            buttonText: "Premium Access"
+          },
+          {
+            id: 9,
+            company: "BCG",
+            logo: "/assets/interviewCards/Logos/BCG.svg",
+            title: "Pharmaceutical Launch - BCG Case",
+            subtitle: "Premium",
+            description: "A pharmaceutical company is preparing to launch a new drug. Evaluate the market potential, pricing strategy, and marketing approach to maximize ROI.",
+            thumbnail: "/assets/interviewCards/McKinseyPharma.webp",
+            buttonText: "Premium Access"
+          }
+        ].map((card) => (
+          <div
+            key={`premium-${card.id}`}
+            className={`${styles.card} ${styles.demoCard}`}
+            style={{ position: 'relative', zIndex: 0 }}
+            onClick={() => navigate('/pricing')}
+          >
+            <div className={styles.cardHeader}>
+              <img
+                src={card.logo}
+                alt={`${card.company} logo`}
+                className={styles.logo}
+              />
+              <span className={styles.officialTag}>{card.subtitle}</span>
+            </div>
+
+            <div className={styles.cardImage}>
+              <img src={card.thumbnail} alt={card.title} />
+            </div>
+
+            <div className={styles.cardContent}>
+              <h3>{card.title}</h3>
+              <p>{card.description}</p>
+
+              <div className={styles.buttonWrapper}>
+                <button 
+                  disabled={true} 
+                  className={`${styles.mockButton} ${styles.disabledButton}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate('/pricing');
+                  }}
+                >
+                  {card.buttonText}
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 12L10 8L6 4"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      <Footer />
     </div>
   );
 };

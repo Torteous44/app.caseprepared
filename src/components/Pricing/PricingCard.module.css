@@ -2,11 +2,11 @@
   width: 100%;
   max-width: 36rem;
   margin: 0 auto;
-  border-radius: 1.5rem;
+  border-radius: var(--border-radius);
   overflow: hidden;
-  border: 1px solid #f3f4f6;
+  border: 1px solid var(--border-color);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
 }
 
 .header {
@@ -14,17 +14,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #f3f4f6;
-  font-family: 'Inter', sans-serif;
+  border-bottom: 1px solid var(--border-color);
+  font-family: 'Figtree', sans-serif;
 }
 
 .title {
   font-size: 1.5rem;
   font-weight: 700;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  letter-spacing: -0.03em;
 }
 
 .titleBlue {
@@ -37,32 +38,32 @@
 
 .subtitle {
   font-size: 1rem;
-  color: #4b5563;
+  color: var(--text-color);
   margin-top: 0.0rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
 }
 
 .price {
   text-align: right;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
 }
 
 .priceAmount {
   font-size: 2rem;
   font-weight: 700;
-  color: #111827;
-  font-family: 'Inter', sans-serif;
+  color: var(--text-color);
+  font-family: 'Figtree', sans-serif;
 }
 
 .pricePeriod {
   font-size: 1.0rem;
   color: #6b7280;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
 }
 
 .featuresSection {
   padding: 2rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
 }
 
 .featuresTitle {
@@ -72,14 +73,14 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 1.5rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
 }
 
 .featuresGrid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
 }
 
 @media (min-width: 768px) {
@@ -98,7 +99,7 @@
   display: flex;
   align-items: center;
   gap: 1.25rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
 }
 
 .checkIcon {
@@ -119,9 +120,10 @@
 }
 
 .featureText {
-  color: #1f2937;
+  color: var(--text-color);
   font-weight: 500;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
+  letter-spacing: -0.01em;
 }
 
 .trialText {
@@ -129,28 +131,31 @@
   font-size: 0.75rem;
   color: #6b7280;
   text-align: center;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
 }
 
 .ctaSection {
   margin-top: 2rem;
+  display: flex;
+  justify-content: center;
 }
 
 .ctaButton {
-  width: 100%;
+  width: 80%;
   padding: 1rem 1.5rem;
   color: white;
-  font-weight: 500;
-  background-color: #2563eb;
-  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.9rem; /* Increased font size */
+  background-color: var(--blue-primary);
+  border-radius: var(--border-radius);
   transition: background-color 0.2s;
   cursor: pointer;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   border: none;
   outline: none;
   box-shadow: none;
 }
 
 .ctaButton:hover {
-  background-color: #1d4ed8;
+  background-color: var(--blue-secondary);
 } 

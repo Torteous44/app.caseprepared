@@ -16,7 +16,7 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 6.25rem 1.5rem 3rem;
+  padding: 3.4rem 1.5rem 3rem;
   background-color: var(--background-light);
   position: relative;
 }
@@ -155,7 +155,7 @@
   align-items: center;
   text-align: center;
   width: 100%;
-  padding-top: 6.25rem; /* 100px - space from top of page */
+  padding-top: 5rem;
 }
 
 /* Main heading with larger font size */
@@ -448,7 +448,7 @@
   
   /* SPACING CONTROL: Adjust padding-top (5rem) to change distance from top on tablets */
   .headerContainer {
-    padding-top: 5rem; /* 80px - reduced top padding for tablets */
+    padding-top: 4rem;
   }
   
   .mainHeader {
@@ -553,7 +553,7 @@
   
   /* SPACING CONTROL: Adjust padding-top (8rem) to change distance from top on mobile */
   .headerContainer {
-    padding-top: 8rem; /* 128px - increased top padding for mobile */
+    padding-top: 6.4rem;
   }
   
   .mainHeader {

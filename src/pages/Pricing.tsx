@@ -95,13 +95,13 @@ const Pricing: React.FC = () => {
               <Star className={styles.starIcon} fill="#ffd700" />
             </div>
             <p className={styles.testimonialText}>
-              "CasePrepared completely transformed my interview preparation. The AI feedback was incredibly detailed and helped me identify weaknesses I didn't even know I had. Landed an offer at McKinsey within 2 months!"
+              "CasePrepared completely transformed my interview preparation. The AI feedback was incredibly detailed and helped me identify weaknesses I didn't even know I had."
             </p>
             <div className={styles.testimonialAuthor}>
               <div className={styles.authorAvatar}>AC</div>
               <div className={styles.authorInfo}>
                 <p className={styles.authorName}>A.C</p>
-                <p className={styles.authorTitle}>Consultant at Bain</p>
+                <p className={styles.authorTitle}>BEL Consultant at Bain</p>
               </div>
             </div>
           </div>
@@ -115,7 +115,7 @@ const Pricing: React.FC = () => {
               <Star className={styles.starIcon} fill="#ffd700" />
             </div>
             <p className={styles.testimonialText}>
-              "As someone with no consulting background, I was struggling with case interviews. The guided walkthroughs and performance analytics gave me the structure I needed. Now I'm working at BCG!"
+              "As someone with no consulting background, I was struggling with case interviews. The guided walkthroughs and performance analytics gave me the structure I needed."
             </p>
             <div className={styles.testimonialAuthor}>
               <div className={styles.authorAvatar}>JR</div>
@@ -135,7 +135,7 @@ const Pricing: React.FC = () => {
               <Star className={styles.starIcon} fill="#ffd700" />
             </div>
             <p className={styles.testimonialText}>
-              "The variety of case types and the detailed feedback helped me prepare for any scenario. I went from failing my first interviews to receiving multiple offers. Worth every penny!"
+              "The variety of case types and the detailed feedback helped me prepare for any scenario. I went from failing my first interviews to receiving multiple offers."
             </p>
             <div className={styles.testimonialAuthor}>
               <div className={styles.authorAvatar}>SG</div>
