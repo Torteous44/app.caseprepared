@@ -109,8 +109,7 @@
   margin-top: 40px;
   padding: 40px 24px;
   background-color: transparent;
-
-  border-radius: 8px;
+  border-radius: var(--border-radius);
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -136,7 +135,7 @@
   padding: 14px 28px;
   font-size: 0.95rem;
   font-weight: 500;
-  border-radius: 36px;
+  border-radius: var(--border-radius);
   cursor: pointer;
   transition: background-color 0.2s ease;
   text-decoration: none;
@@ -161,7 +160,7 @@
 /* Main heading with larger font size */
 /* SPACING CONTROL: Adjust margin-bottom (0.5rem) to change space between header and subheader */
 .mainHeader {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: 2.1rem; /* 28px + 20% = ~33.6px */
   font-weight: 600; /* semibold */
   line-height: 1.3;
@@ -177,7 +176,7 @@
 /* Subheader with medium gray color */
 /* SPACING CONTROL: Adjust margin-bottom (2rem) to change space between subheader and button */
 .subHeader {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: 1.2rem; /* 16px + 20% = ~19.2px */
   font-weight: 600; /* semibold */
   color: #848484;
@@ -187,13 +186,13 @@
 /* Call-to-action button */
 .ctaButton {
   margin-top: 1rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: 1rem;
   font-weight: 500;
   color: white;
   background-color: var(--blue-primary);
   border: none;
-  border-radius: 2rem;
+  border-radius: var(--border-radius);
   padding: 0.75rem 2.5rem;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -242,7 +241,7 @@
 /* Story header */
 /* SPACING CONTROL: Adjust margin-bottom (0.5rem) to change space between header and text */
 .storyHeader {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: 1.5rem; /* 24px */
   font-weight: 600; /* semibold */
   color: #000000;
@@ -252,7 +251,7 @@
 
 /* Story text */
 .storyText {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: 1rem; /* 16px */
   color: #848484;
   line-height: 1.4;
@@ -275,7 +274,7 @@
 
 /* Establishment text */
 .estText {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: 1.5rem; /* 24px - same as story header */
   font-weight: 400; /* regular */
   color: #174EA6; /* blue */
@@ -284,7 +283,7 @@
 
 /* Establishment subtext */
 .estSubtext {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: 1rem; /* 16px - same as story text */
   color: #848484;
   line-height: 1.4;
@@ -303,7 +302,7 @@
 }
 
 .reviewQuote {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: 1.5rem; /* 24px */
   font-weight: 500; /* medium */
   line-height: 1.4;
@@ -313,7 +312,7 @@
 }
 
 .reviewAttribution {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: 1rem; /* 16px */
   color: #848484;
   margin-top: 0.5rem; /* 8px padding from quote text */
@@ -330,7 +329,7 @@
 }
 
 .howItWorksContainer h2 {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: 1.5rem; /* 24px - same as story header */
   font-weight: 600; /* semibold */
   color: #000000;
@@ -338,7 +337,7 @@
 }
 
 .howItWorksContainer p {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: 1rem; /* 16px - same as story text */
   color: #848484;
   line-height: 1.4;
@@ -367,7 +366,7 @@
 }
 
 .missionContainer h2 {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: 1.5rem; /* 24px - same as story header */
   font-weight: 600; /* semibold */
   color: #000000;
@@ -375,12 +374,24 @@
 }
 
 .missionContainer p {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: 1rem; /* 16px - same as story text */
   color: #848484;
   line-height: 1.4;
   margin: 0;
   max-width: 800px;
+}
+
+.logoContainer {
+  margin-top: 3rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.logoImage {
+  max-width: 200px;
+  height: auto;
 }
 
 .longPopupContainer {
@@ -524,6 +535,10 @@
   .missionContainer h2 {
     font-size: 1.4rem; /* Slightly smaller on tablets */
   }
+  
+  .logoImage {
+    max-width: 240px;
+  }
 }
 
 /* Mobile responsive styles */
@@ -621,6 +636,10 @@
   .missionContainer h2 {
     font-size: 1.3rem; /* Further reduced on mobile */
   }
+  
+  .logoImage {
+    max-width: 200px;
+  }
 }
 
 .ctaContainer {
@@ -635,7 +654,7 @@
 }
 
 .ctaHeader {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: 1.5rem;
   font-weight: 600;
   color: #000000;
@@ -643,7 +662,7 @@
 }
 
 .ctaText {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: 1rem;
   color: #848484;
   margin: 0;
@@ -651,13 +670,13 @@
 
 .ctaButton {
   margin-top: 1rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Figtree', sans-serif;
   font-size: 1rem;
   font-weight: 500;
   color: white;
   background-color: var(--blue-primary);
   border: none;
-  border-radius: 2rem;
+  border-radius: var(--border-radius);
   padding: 0.75rem 2.5rem;
   cursor: pointer;
   transition: background-color 0.2s ease;
@@ -698,4 +717,32 @@
 
 .blueText {
   color: var(--blue-primary);
+}
+
+.howItWorksSection {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  margin: 3rem 0;
+}
+
+.howItWorksContainer {
+  flex: 1;
+}
+
+.sampleCardContainer {
+  flex: 0 0 350px;
+  max-width: 350px;
+  margin-top: 2rem;
+}
+
+@media (max-width: 1024px) {
+  .howItWorksSection {
+    flex-direction: column;
+  }
+  
+  .sampleCardContainer {
+    max-width: 100%;
+    margin: 0 auto;
+  }
 } 

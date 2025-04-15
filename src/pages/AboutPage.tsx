@@ -1,13 +1,49 @@
-import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import styles from "../styles/AboutPage.module.css";
 import Footer from "../components/common/Footer";
+import InterviewCardPublic from "../components/InterviewCardPublic";
+
+// Sample interview card data
+const sampleCard = {
+  id: 1,
+  company: "McKinsey",
+  logo: "/assets/interviewCards/Logos/Mckinsey.svg",
+  title: "Beautify - McKinsey Case",
+  subtitle: "Official Interview",
+  description:
+    "Evaluating whether a global beauty products company should be training in-store beauty consultants in the effective use of virtual channels to connect with customers.",
+  thumbnail: "/assets/interviewCards/image@2x.webp",
+  buttonText: "Try Interview",
+  code: "6276",
+};
 
 const AboutPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState<Record<number, boolean>>({});
+  const [error, setError] = useState<string | null>(null);
+
+  // Following the same logic as in InterviewsPage.tsx
+  const handleInterviewClick = async (card: any) => {
+    setLoading((prev) => ({ ...prev, [card.id]: true }));
+    setError(null);
+
+    try {
+      // For demo purposes, we'll just navigate to the interview page directly
+      // In a real implementation, we'd make the API call to check if the interview exists
+      navigate(`/interview/${card.id}`);
+    } catch (err) {
+      console.error("Error navigating to interview:", err);
+      setError(err instanceof Error ? err.message : "Failed to load interview");
+    } finally {
+      setLoading((prev) => ({ ...prev, [card.id]: false }));
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -66,20 +102,32 @@ const AboutPage = () => {
           </div>
         </div>
         
-        <div className={styles.howItWorksContainer}>
-          <h2 className={styles.storyHeader}>How CasePrepared Works</h2>
-          <p className={styles.storyText}>
-            <span className={styles.darkText}>Our AI-powered platform simulates real interview scenarios</span>, providing instant feedback on your responses. Unlike traditional methods that rely on generic advice, our system analyzes your specific answers, <span className={styles.darkText}>offering tailored recommendations for improvement.</span>
-          </p>
-          <p className={styles.storyText}>
-            <span className={styles.darkText}>Practice at your own pace, anytime, anywhere.</span> Choose from a variety of industry-specific interview templates or customize your own. <span className={styles.darkText}>Each session is designed to challenge you with questions that match the actual interviews in your field.</span>
-          </p>
-          <p className={styles.storyText}>
-            <span className={styles.darkText}>Track your progress over time with detailed performance analytics.</span> Identify patterns in your responses and focus your preparation on areas that need the most attention.
-          </p>
-          <Link to="/interviews" className={styles.ctaButton}>
-            Try an interview
-          </Link>
+        <div className={styles.howItWorksSection}>
+          <div className={styles.howItWorksContainer}>
+            <h2 className={styles.storyHeader}>How CasePrepared Works</h2>
+            <p className={styles.storyText}>
+              <span className={styles.darkText}>Our AI-powered platform simulates real interview scenarios</span>, providing instant feedback on your responses. Unlike traditional methods that rely on generic advice, our system analyzes your specific answers, <span className={styles.darkText}>offering tailored recommendations for improvement.</span>
+            </p>
+            <p className={styles.storyText}>
+              <span className={styles.darkText}>Practice at your own pace, anytime, anywhere.</span> Choose from a variety of industry-specific interview templates or customize your own. <span className={styles.darkText}>Each session is designed to challenge you with questions that match the actual interviews in your field.</span>
+            </p>
+            <p className={styles.storyText}>
+              <span className={styles.darkText}>Track your progress over time with detailed performance analytics.</span> Identify patterns in your responses and focus your preparation on areas that need the most attention.
+            </p>
+            <Link to="/interviews" className={styles.ctaButton}>
+              See more interviews 
+            </Link>
+          </div>
+          
+          {error && <div className={styles.errorMessage}>{error}</div>}
+          
+          <div className={styles.sampleCardContainer}>
+            <InterviewCardPublic 
+              card={sampleCard}
+              loading={loading}
+              onInterviewClick={handleInterviewClick}
+            />
+          </div>
         </div>
         
         <div className={styles.missionContainer}>
@@ -87,6 +135,13 @@ const AboutPage = () => {
           <p className={styles.storyText}>
             <span className={styles.darkText}>Case Prepared is dedicated to revolutionizing the way professionals prepare for interviews.</span> Our platform combines artificial intelligence with proven interview techniques to <span className={styles.darkText}>provide personalized, interactive practice experiences that boost confidence and improve outcomes.</span>
           </p>
+          <div className={styles.logoContainer}>
+            <img 
+              src="/assets/Logo Text.svg" 
+              alt="CasePrepared Logo" 
+              className={styles.logoImage}
+            />
+          </div>
         </div>
 
         <div className={styles.ctaContainer}>

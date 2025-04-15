@@ -2,7 +2,7 @@
   width: 100%;
   max-width: 36rem;
   margin: 0 auto;
-  border-radius: var(--border-radius);
+  border-radius: calc(var(--border-radius) * 1.4);
   overflow: hidden;
   border: 1px solid var(--border-color);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -147,7 +147,7 @@
   font-weight: 600;
   font-size: 0.9rem; /* Increased font size */
   background-color: var(--blue-primary);
-  border-radius: var(--border-radius);
+  border-radius: calc(var(--border-radius) * 1.4);
   transition: background-color 0.2s;
   cursor: pointer;
   font-family: 'Figtree', sans-serif;

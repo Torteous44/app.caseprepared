@@ -3,11 +3,31 @@ import styles from "./PricingCard.module.css"
 import { useModal } from "../../contexts/ModalContext"
 import { useAuth } from "../../contexts/AuthContext"
 import { useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
 
 export default function PricingCard() {
   const { openModal } = useModal();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const [currencySymbol, setCurrencySymbol] = useState("€");
+  const [price, setPrice] = useState("39.99");
+
+  useEffect(() => {
+    // Get user's location based on browser timezone
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const isEurope = /Europe|Berlin|Paris|Rome|Madrid|Amsterdam/.test(timezone);
+    const isAmerica = /America|New_York|Los_Angeles|Chicago|Toronto/.test(timezone);
+    
+    // Set currency based on location
+    if (isAmerica) {
+      setCurrencySymbol("$");
+    } else if (isEurope) {
+      setCurrencySymbol("€");
+    } else {
+      // Default to euros for other regions
+      setCurrencySymbol("€");
+    }
+  }, []);
 
   const handleSubscribe = () => {
     if (isAuthenticated) {
@@ -31,7 +51,7 @@ export default function PricingCard() {
           <p className={styles.subtitle}>Our most popular plan</p>
         </div>
         <div className={styles.price}>
-          <span className={styles.priceAmount}>€40.00</span>
+          <span className={styles.priceAmount}>{currencySymbol}{price}</span>
           <span className={styles.pricePeriod}>/mo</span>
         </div>
       </div>
