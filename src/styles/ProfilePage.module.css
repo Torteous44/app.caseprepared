@@ -1,9 +1,152 @@
 @import "./global.css";
 
+/* Page header styles */
+.pageHeader {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 120px 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-bottom: 1px solid #eaeaea;
+  margin-bottom: 30px;
+}
+
+.pageHeader h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #111;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.premiumBadge {
+  color: #174ea6;
+  font-weight: 600;
+  font-size: 18px;
+  margin-top: 8px;
+}
+
+/* Profile box styles */
+.profileBox {
+  margin: 0 0 30px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+.profileImageContainer {
+  margin-right: 20px;
+}
+
+.profileImagePlaceholder {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #666;
+  cursor: pointer;
+}
+
+.profileInfo {
+  flex: 1;
+}
+
+.profileName {
+  font-size: 32px;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 8px;
+}
+
+.profileMemberSince {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+
+.profileStatus {
+  margin-left: auto;
+}
+
+.premiumLabel {
+  font-size: 24px;
+  font-weight: 600;
+  color: #174ea6;
+}
+
+/* Two-column layout */
+.layoutContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 60px;
+  display: flex;
+  gap: 30px;
+}
+
+.profileSidebar {
+  flex: 0 0 300px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #eaeaea;
+  padding: 30px;
+  height: fit-content;
+}
+
+.profileSidebar h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #111;
+  margin: 0 0 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #eaeaea;
+  letter-spacing: -0.02em;
+}
+
+.sidebarNav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.navButton {
+  text-align: left;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.navButton:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+  color: #333;
+}
+
+.navButton.active {
+  color: var(--blue-primary);
+  font-weight: 600;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 120px 24px 60px;
+  padding: 40px 24px 60px;
   --container-padding: 24px;
   display: flex;
   flex-direction: column;
@@ -35,7 +178,8 @@
   letter-spacing: -0.02em;
 }
 
-.profileInfo {
+/* Card content styles */
+.profileInfoCard {
   display: flex;
   flex-direction: column;
 }
@@ -277,12 +421,24 @@
 }
 
 @media (max-width: 768px) {
-  .container {
-    padding: 110px 20px 40px;
+  .pageHeader {
+    padding: 70px 20px 0;
   }
   
+  .pageHeader h1 {
+    font-size: 28px;
+  }
+  
+  .premiumBadge {
+    font-size: 16px;
+  }
+
+  .container {
+    padding: 30px 20px 40px;
+  }
+
   .card {
-    padding: 30px 20px;
+    padding: 24px;
   }
   
   .header {
@@ -325,11 +481,69 @@
     width: 100%;
     padding: 10px 16px;
   }
+  
+  .layoutContainer {
+    flex-direction: column;
+    padding: 0 20px 40px;
+  }
+  
+  .profileSidebar {
+    flex: none;
+    width: 100%;
+  }
+  
+  .sidebarNav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .navButton {
+    text-align: center;
+    white-space: nowrap;
+  }
+  
+  .profileBox {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 25px;
+  }
+  
+  .profileImageContainer {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+  
+  .profileImagePlaceholder {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .profileInfo {
+    margin-bottom: 16px;
+  }
+  
+  .profileName {
+    font-size: 28px;
+  }
+  
+  .profileStatus {
+    margin-left: 0;
+  }
 }
 
 @media (max-width: 480px) {
+  .pageHeader {
+    padding: 60px 16px 0;
+  }
+  
+  .pageHeader h1 {
+    font-size: 24px;
+  }
+
   .container {
-    padding: 100px 16px 30px;
+    padding: 24px 16px 32px;
   }
   
   .buttonGroup {
@@ -340,5 +554,31 @@
   .editButton, .cancelButton, .saveButton {
     width: 100%;
     margin-bottom: 8px;
+  }
+  
+  .layoutContainer {
+    padding: 0 16px 32px;
+  }
+  
+  .profileSidebar {
+    padding: 20px;
+  }
+  
+  .profileBox {
+    padding: 16px;
+  }
+  
+  .profileImagePlaceholder {
+    width: 80px;
+    height: 80px;
+    font-size: 24px;
+  }
+  
+  .profileName {
+    font-size: 24px;
+  }
+  
+  .premiumLabel {
+    font-size: 20px;
   }
 } 
