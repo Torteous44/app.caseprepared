@@ -1,15 +1,18 @@
 @import "../../styles.css";
 
 .join-section {
-    padding: 4rem 1.25rem;
+    padding: 4rem 2rem;
     margin: 0 auto;
+    max-width: 1600px;
 }
 
 .join-container {
     display: grid;
-    grid-template-columns: minmax(400px, 500px) 1fr;
+    grid-template-columns: minmax(500px, 600px) 1fr;
     gap: 8rem;
     align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 .join-title {

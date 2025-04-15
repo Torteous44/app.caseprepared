@@ -212,180 +212,217 @@ const ProfilePage: React.FC = () => {
     return { statusDisplay, statusClass, hasPlan };
   };
 
+  // Helper to check if user has premium subscription
+  const isPremiumMember = () => {
+    return subscription?.plan === "premium" && subscription?.status === "active";
+  };
+
   const { statusDisplay, statusClass, hasPlan } = getSubscriptionDetails();
 
   return (
-    <div className={styles.container}>
-      <div className={styles.card}>
-        <div className={styles.header}>
-          <h1 className={styles.title}>Profile</h1>
-          {!isEditing && (
-            <button
-              className={styles.editButton}
-              onClick={() => setIsEditing(true)}
-            >
-              Edit Profile
-            </button>
-          )}
-        </div>
-
-        {isEditing ? (
-          <form onSubmit={handleSubmit} className={styles.form}>
-            <div className={styles.formGroup}>
-              <label htmlFor="full_name" className={styles.label}>
-                Full Name
-              </label>
-              <input
-                type="text"
-                id="full_name"
-                name="full_name"
-                value={formData.full_name}
-                onChange={handleChange}
-                className={styles.input}
-                placeholder="Your full name"
-              />
-            </div>
-
-            <div className={styles.formGroup}>
-              <label htmlFor="email" className={styles.label}>
-                Email Address
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                disabled
-                className={`${styles.input} ${styles.disabled}`}
-                placeholder="Your email address"
-              />
-              <p className={styles.helperText}>
-                Email address cannot be changed
-              </p>
-            </div>
-
-            {formData.error && (
-              <div className={styles.errorMessage}>{formData.error}</div>
-            )}
-
-            <div className={styles.buttonGroup}>
-              <button
-                type="button"
-                className={styles.cancelButton}
-                onClick={() => {
-                  setIsEditing(false);
-                  setFormData({
-                    ...formData,
-                    full_name: user.full_name || "",
-                    error: null,
-                  });
-                }}
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className={styles.saveButton}
-                disabled={formData.loading}
-              >
-                {formData.loading ? "Saving..." : "Save Changes"}
-              </button>
-            </div>
-          </form>
-        ) : (
-          <div className={styles.profileInfo}>
-            <div className={styles.infoRow}>
-              <span className={styles.label}>Full Name</span>
-              <span className={styles.value}>
-                {user.full_name || "Not provided"}
-              </span>
-            </div>
-            <div className={styles.infoRow}>
-              <span className={styles.label}>Email Address</span>
-              <span className={styles.value}>{user.email}</span>
-            </div>
-            <div className={styles.infoRow}>
-              <span className={styles.label}>Member Since</span>
-              <span className={styles.value}>
-                {formatDate(user.created_at)}
-              </span>
-            </div>
-
-            {formData.success && (
-              <div className={styles.successMessage}>
-                Your profile has been updated successfully!
-              </div>
-            )}
-          </div>
-        )}
+    <>
+      <div className={styles.pageHeader}>
+        <h1>Profile</h1>
+        {isPremiumMember() && <span className={styles.premiumBadge}>Premium member</span>}
       </div>
-
-      {/* Subscription information card */}
-      <div className={styles.card}>
-        <div className={styles.header}>
-          <h1 className={styles.title}>Subscription</h1>
+      
+      <div className={styles.layoutContainer}>
+        <div className={styles.profileSidebar}>
+          <h2>Navigation</h2>
+          <nav className={styles.sidebarNav}>
+            <button className={`${styles.navButton} ${styles.active}`}>Profile</button>
+            <button className={styles.navButton}>Completed Interviews</button>
+          </nav>
         </div>
-
-        {subscriptionLoading ? (
-          <div className={styles.subscriptionLoading}>
-            Loading subscription information...
-          </div>
-        ) : subscription ? (
-          <div className={styles.subscriptionInfo}>
-            <div className={styles.infoRow}>
-              <span className={styles.label}>Status</span>
-              <span
-                className={`${styles.value} ${styles.status} ${styles[statusClass]}`}
-              >
-                {statusDisplay}
-              </span>
+        
+        <div className={styles.content}>
+          <div className={styles.card}>
+            <div className={styles.profileBox}>
+              <div className={styles.profileImageContainer}>
+                <div className={styles.profileImagePlaceholder}>
+                  <span>+</span>
+                </div>
+              </div>
+              <div className={styles.profileInfo}>
+                <h2 className={styles.profileName}>{user.full_name || "User"}</h2>
+                <p className={styles.profileMemberSince}>Member since {formatDate(user.created_at)}</p>
+              </div>
+              <div className={styles.profileStatus}>
+                {isPremiumMember() && <span className={styles.premiumLabel}>Premium</span>}
+              </div>
+            </div>
+            
+            <div className={styles.header}>
+              <h1 className={styles.title}>Profile Details</h1>
+              {!isEditing && (
+                <button
+                  className={styles.editButton}
+                  onClick={() => setIsEditing(true)}
+                >
+                  Edit Profile
+                </button>
+              )}
             </div>
 
-            {subscription.plan && (
-              <div className={styles.infoRow}>
-                <span className={styles.label}>Plan</span>
-                <span className={styles.value}>
-                  {subscription.plan === "premium"
-                    ? "Premium Plan"
-                    : subscription.plan}
-                </span>
+            {isEditing ? (
+              <form onSubmit={handleSubmit} className={styles.form}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="full_name" className={styles.label}>
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    id="full_name"
+                    name="full_name"
+                    value={formData.full_name}
+                    onChange={handleChange}
+                    className={styles.input}
+                    placeholder="Your full name"
+                  />
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label htmlFor="email" className={styles.label}>
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    disabled
+                    className={`${styles.input} ${styles.disabled}`}
+                    placeholder="Your email address"
+                  />
+                  <p className={styles.helperText}>
+                    Email address cannot be changed
+                  </p>
+                </div>
+
+                {formData.error && (
+                  <div className={styles.errorMessage}>{formData.error}</div>
+                )}
+
+                <div className={styles.buttonGroup}>
+                  <button
+                    type="button"
+                    className={styles.cancelButton}
+                    onClick={() => {
+                      setIsEditing(false);
+                      setFormData({
+                        ...formData,
+                        full_name: user.full_name || "",
+                        error: null,
+                      });
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className={styles.saveButton}
+                    disabled={formData.loading}
+                  >
+                    {formData.loading ? "Saving..." : "Save Changes"}
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div className={styles.profileInfoCard}>
+                <div className={styles.infoRow}>
+                  <span className={styles.label}>Full Name</span>
+                  <span className={styles.value}>
+                    {user.full_name || "Not provided"}
+                  </span>
+                </div>
+                <div className={styles.infoRow}>
+                  <span className={styles.label}>Email Address</span>
+                  <span className={styles.value}>{user.email}</span>
+                </div>
+                <div className={styles.infoRow}>
+                  <span className={styles.label}>Member Since</span>
+                  <span className={styles.value}>
+                    {formatDate(user.created_at)}
+                  </span>
+                </div>
+                
+                {formData.success && (
+                  <div className={styles.successMessage}>
+                    Your profile has been updated successfully!
+                  </div>
+                )}
               </div>
             )}
+          </div>
 
-            {subscription.current_period_end && (
-              <div className={styles.infoRow}>
-                <span className={styles.label}>Current Period Ends</span>
-                <span className={styles.value}>
-                  {formatSubscriptionDate(subscription.current_period_end)}
-                </span>
-              </div>
-            )}
-
-            {subscription.status === "active" && (
-              <div className={styles.infoRow}>
-                <span className={styles.label}>Auto-Renewal</span>
-                <span className={styles.value}>
-                  {subscription.cancel_at_period_end ? "Off" : "On"}
-                </span>
-              </div>
-            )}
-
-            <div className={styles.subscriptionActions}>
-              <Link to="/subscription" className={styles.manageButton}>
-                {hasPlan ? "Manage Subscription" : "Subscribe Now"}
-              </Link>
+          {/* Subscription information card */}
+          <div className={styles.card}>
+            <div className={styles.header}>
+              <h1 className={styles.title}>Subscription</h1>
             </div>
+
+            {subscriptionLoading ? (
+              <div className={styles.subscriptionLoading}>
+                Loading subscription information...
+              </div>
+            ) : subscription ? (
+              <div className={styles.subscriptionInfo}>
+                <div className={styles.infoRow}>
+                  <span className={styles.label}>Status</span>
+                  <span
+                    className={`${styles.value} ${styles.status} ${styles[statusClass]}`}
+                  >
+                    {statusDisplay}
+                  </span>
+                </div>
+
+                {subscription.plan && (
+                  <div className={styles.infoRow}>
+                    <span className={styles.label}>Plan</span>
+                    <span className={styles.value}>
+                      {subscription.plan === "premium"
+                        ? "Premium Plan"
+                        : subscription.plan}
+                    </span>
+                  </div>
+                )}
+
+                {subscription.current_period_end && (
+                  <div className={styles.infoRow}>
+                    <span className={styles.label}>Current Period Ends</span>
+                    <span className={styles.value}>
+                      {formatSubscriptionDate(subscription.current_period_end)}
+                    </span>
+                  </div>
+                )}
+
+                {subscription.status === "active" && (
+                  <div className={styles.infoRow}>
+                    <span className={styles.label}>Auto-Renewal</span>
+                    <span className={styles.value}>
+                      {subscription.cancel_at_period_end ? "Off" : "On"}
+                    </span>
+                  </div>
+                )}
+
+                <div className={styles.subscriptionActions}>
+                  <Link to="/subscription" className={styles.manageButton}>
+                    {hasPlan ? "Manage Subscription" : "Subscribe Now"}
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <div className={styles.noSubscription}>
+                <p>You don't have an active subscription.</p>
+                <Link to="/subscription" className={styles.subscribeButton}>
+                  Subscribe Now
+                </Link>
+              </div>
+            )}
           </div>
-        ) : (
-          <div className={styles.noSubscription}>
-            <p>You don't have an active subscription.</p>
-            <Link to="/subscription" className={styles.subscribeButton}>
-              Subscribe Now
-            </Link>
-          </div>
-        )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

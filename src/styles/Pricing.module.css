@@ -1,14 +1,18 @@
 @import "../styles.css";
 
+* {
+    font-family: 'Inter', sans-serif;
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 120px 20px;
+    padding: 160px 20px 220px;
 }
 
 @media (max-width: 768px) {
     .container {
-        padding: 80px 20px;
+        padding: 30px 20px 80px;
     }
 }
 
@@ -23,7 +27,8 @@
   font-size: 36px;
   font-weight: 600;
   margin-bottom: 16px;
-  color: var(--header-color);
+  color: #111827;
+  font-family: 'Inter', sans-serif;
 }
 
 .header p {
@@ -31,6 +36,7 @@
   color: #555;
   max-width: 700px;
   margin: 0 auto;
+  font-family: 'Inter', sans-serif;
 }
 
 @media (max-width: 768px) {
@@ -54,6 +60,7 @@
   transition: background-color 0.3s;
   display: inline-block;
   margin-top: 2rem;
+  font-family: 'Inter', sans-serif;
 }
 
 .mockInterviewButton:hover {
@@ -63,18 +70,101 @@
 .pricingGrid {
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    margin-top: 2rem;
-    gap: 2rem;
+    justify-content: space-between;
+    margin-top: 3rem;
+    gap: 4rem;
     max-width: 1200px;
     margin-left: auto;
     margin-right: auto;
+    align-items: flex-start;
 }
 
 @media (max-width: 768px) {
     .pricingGrid {
         flex-direction: column;
         align-items: center;
+        gap: 2rem;
+    }
+}
+
+.leftContent {
+    flex: 0 1 45%;
+    padding: 6rem 0;
+}
+
+.leftHeader {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--header-color);
+    margin-bottom: 1rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.leftSubheader {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    font-family: 'Inter', sans-serif;
+}
+
+.featureList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.featureListItem {
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    font-size: 16px;
+    color: #333;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    font-family: 'Inter', sans-serif;
+}
+
+.featureIcon {
+    width: 24px;
+    height: 24px;
+    color: var(--blue-primary);
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+}
+
+.featureTitle {
+    font-weight: 600;
+    color: var(--blue-primary);
+    font-family: 'Inter', sans-serif;
+}
+
+.rightContent {
+    flex: 0 1 55%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 6rem 0;
+}
+
+@media (max-width: 768px) {
+    .leftContent {
+        max-width: 100%;
+        padding: 1rem 0;
+    }
+    
+    .rightContent {
+        max-width: 100%;
+        justify-content: center;
+        width: 100%;
+        padding: 1rem 0;
+    }
+    
+    .leftHeader {
+        font-size: 28px;
+    }
+    
+    .leftSubheader {
+        font-size: 16px;
     }
 }
 
@@ -84,6 +174,7 @@
     padding: 2rem;
     border-radius: 1rem;
     text-align: left;
+    font-family: 'Inter', sans-serif;
 }
 
 /* First pricing card (smaller one) */
@@ -114,6 +205,7 @@
   font-weight: 600;
   margin-bottom: 1.25rem;
   color: white;
+  font-family: 'Inter', sans-serif;
 }
 
 .price {
@@ -122,6 +214,7 @@
   color: #E9C46A;
   margin-bottom: 0.5rem;
   line-height: 1.1;
+  font-family: 'Inter', sans-serif;
 }
 
 @media (max-width: 768px) {
@@ -135,12 +228,14 @@
   font-size: 1rem;
   font-weight: 500;
   margin-bottom: 1.25rem;
+  font-family: 'Inter', sans-serif;
 }
 
 .trialText {
   font-size: 1rem;
   line-height: 1.4;
   margin-bottom: 2rem;
+  font-family: 'Inter', sans-serif;
 }
 
 .featuresList {
@@ -156,6 +251,7 @@
   gap: 0.75rem;
   font-size: 1.05rem;
   line-height: 1.4;
+  font-family: 'Inter', sans-serif;
 }
 
 .featureItem strong {
@@ -180,7 +276,7 @@
   border: none;
   cursor: pointer;
   font-size: 1rem;
-  font-family: inherit;
+  font-family: 'Inter', sans-serif;
 }
 
 @media (max-width: 768px) {
@@ -201,6 +297,7 @@
   padding: 3rem;
   border-radius: 1rem;
   text-align: left;
+  font-family: 'Inter', sans-serif;
 }
 
 @media (max-width: 768px) {
@@ -233,9 +330,134 @@
   font-size: 2rem;
   margin-bottom: 1rem;
   color: white;
+  font-family: 'Inter', sans-serif;
 }
 
 .infoText {
   color: #E9C46A;
   font-size: 1.2rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.titleBlue {
+  color: var(--blue-primary);
+}
+
+.testimonialsSection {
+  margin-top: 120px;
+  padding: 0 24px;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 200px;
+}
+
+.testimonialsTitle {
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 48px;
+  color: #1a1a1a;
+  font-family: 'Inter', sans-serif;
+}
+
+.testimonialsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.testimonialCard {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.testimonialCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.testimonialStars {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+
+.starIcon {
+  width: 20px;
+  height: 20px;
+  color: #ffd700;
+}
+
+.testimonialText {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #4a4a4a;
+  margin-bottom: 24px;
+  font-style: italic;
+  font-family: 'Inter', sans-serif;
+}
+
+.testimonialAuthor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.authorAvatar {
+  width: 40px;
+  height: 40px;
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+}
+
+.authorInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.authorName {
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.authorTitle {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+@media (max-width: 1024px) {
+  .testimonialsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .testimonialsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .testimonialsTitle {
+    font-size: 28px;
+    margin-bottom: 32px;
+  }
+  
+  .testimonialCard {
+    padding: 24px;
+  }
 } 

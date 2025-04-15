@@ -3,6 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "../styles/Pricing.module.css";
 import { useModal } from "../contexts/ModalContext";
 import { useAuth } from "../contexts/AuthContext";
+import PricingCard from "../components/Pricing/PricingCard";
+import { BookOpen, BarChart2, Compass, Star } from "lucide-react";
+import Footer from "../components/common/Footer";
 
 const CheckIcon = () => (
   <svg
@@ -41,56 +44,110 @@ const Pricing: React.FC = () => {
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>
-          Start landing offers today, through AI case interview practice
+          <span className={styles.titleBlue}>Start landing offers today</span>, through AI case interview practice
         </h1>
         <p>Choose the plan that best fits your preparation needs.</p>
       </div>
 
       <div className={styles.pricingGrid}>
-        <div className={styles.pricingCard}>
-          <h2>CasePrepared</h2>
-          <div className={styles.price}>€40.00*</div>
-          <div className={styles.period}>per month</div>
-          <div className={styles.trialText}>*Free for the first 7 days</div>
-
-          <ul className={styles.featuresList}>
-            <li className={styles.featureItem}>
-              <CheckIcon />
-              100+ mock interviews
+        <div className={styles.leftContent}>
+          <h2 className={styles.leftHeader}>Unlock all features</h2>
+          <p className={styles.leftSubheader}>
+            CasePrepared gives you everything you need to master consulting interviews, from full-length mocks to performance analytics. All in one platform built for aspiring consultants.
+          </p>
+          
+          <ul className={styles.featureList}>
+            <li className={styles.featureListItem}>
+              <BookOpen className={styles.featureIcon} />
+              <div>
+                <span className={styles.featureTitle}>Full Case Library:</span> Access a growing library of structured mock interviews, modeled on real consulting firm case styles.
+              </div>
             </li>
-            <li className={styles.featureItem}>
-              <CheckIcon />
-              Real time interview insights
+            <li className={styles.featureListItem}>
+              <BarChart2 className={styles.featureIcon} />
+              <div>
+                <span className={styles.featureTitle}>Performance Reports:</span> Track your progress with insights on speed, accuracy, and framework completeness, so you always know what to improve before your next interview.
+              </div>
             </li>
-            <li className={styles.featureItem}>
-              <CheckIcon />
-              AI powered performance reviews
-            </li>
-            <li className={styles.featureItem}>
-              <CheckIcon />
-              Direct access to professionals
+            <li className={styles.featureListItem}>
+              <Compass className={styles.featureIcon} />
+              <div>
+                <span className={styles.featureTitle}>Guided Walkthroughs:</span> Don't just practice — learn. Each case comes with detailed frameworks, benchmark answers, and step-by-step guidance to help you internalize what great looks like.
+              </div>
             </li>
           </ul>
-
-          <button onClick={handleSubscribe} className={styles.memberButton}>
-            {isAuthenticated ? "Subscribe Now" : "Become a member"}
-          </button>
         </div>
-
-        <div className={styles.infoBox}>
-          <h2 className={styles.infoTitle}>
-            Join students from all over the world, and land your dream role
-            today.
-          </h2>
-          <p className={styles.infoText}>
-            All it takes is practice. Successful candidates often do 30+ mock
-            interviews before the real one.
-          </p>
-          <Link to="/interviews" className={styles.mockInterviewButton}>
-            Start a Mock Interview
-          </Link>
+        
+        <div className={styles.rightContent}>
+          <PricingCard />
         </div>
       </div>
+
+      <div className={styles.testimonialsSection}>
+        <h2 className={styles.testimonialsTitle}>Still not convinced? Don't take our word for it.</h2>
+        <div className={styles.testimonialsGrid}>
+          <div className={styles.testimonialCard}>
+            <div className={styles.testimonialStars}>
+              <Star className={styles.starIcon} fill="#ffd700" />
+              <Star className={styles.starIcon} fill="#ffd700" />
+              <Star className={styles.starIcon} fill="#ffd700" />
+              <Star className={styles.starIcon} fill="#ffd700" />
+              <Star className={styles.starIcon} fill="#ffd700" />
+            </div>
+            <p className={styles.testimonialText}>
+              "CasePrepared completely transformed my interview preparation. The AI feedback was incredibly detailed and helped me identify weaknesses I didn't even know I had."
+            </p>
+            <div className={styles.testimonialAuthor}>
+              <div className={styles.authorAvatar}>AC</div>
+              <div className={styles.authorInfo}>
+                <p className={styles.authorName}>A.C</p>
+                <p className={styles.authorTitle}>BEL Consultant at Bain</p>
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.testimonialCard}>
+            <div className={styles.testimonialStars}>
+              <Star className={styles.starIcon} fill="#ffd700" />
+              <Star className={styles.starIcon} fill="#ffd700" />
+              <Star className={styles.starIcon} fill="#ffd700" />
+              <Star className={styles.starIcon} fill="#ffd700" />
+              <Star className={styles.starIcon} fill="#ffd700" />
+            </div>
+            <p className={styles.testimonialText}>
+              "As someone with no consulting background, I was struggling with case interviews. The guided walkthroughs and performance analytics gave me the structure I needed."
+            </p>
+            <div className={styles.testimonialAuthor}>
+              <div className={styles.authorAvatar}>JR</div>
+              <div className={styles.authorInfo}>
+                <p className={styles.authorName}>J.R</p>
+                <p className={styles.authorTitle}>Consultant at BCG</p>
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.testimonialCard}>
+            <div className={styles.testimonialStars}>
+              <Star className={styles.starIcon} fill="#ffd700" />
+              <Star className={styles.starIcon} fill="#ffd700" />
+              <Star className={styles.starIcon} fill="#ffd700" />
+              <Star className={styles.starIcon} fill="#ffd700" />
+              <Star className={styles.starIcon} fill="#ffd700" />
+            </div>
+            <p className={styles.testimonialText}>
+              "The variety of case types and the detailed feedback helped me prepare for any scenario. I went from failing my first interviews to receiving multiple offers."
+            </p>
+            <div className={styles.testimonialAuthor}>
+              <div className={styles.authorAvatar}>SG</div>
+              <div className={styles.authorInfo}>
+                <p className={styles.authorName}>S.GS</p>
+                <p className={styles.authorTitle}>Consultant at Bain</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <Footer />
     </div>
   );
 };
