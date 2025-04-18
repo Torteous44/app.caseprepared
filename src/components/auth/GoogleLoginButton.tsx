@@ -41,11 +41,9 @@ const GoogleLoginButton: React.FC<GoogleLoginButtonProps> = ({
 
   // Alternative method using the redirect page - moved outside of other functions
   const redirectToAuthPage = () => {
-    console.log("Using redirect method for Google Sign-In");
     // Store client ID for use in the redirect page
     localStorage.setItem("googleClientId", GOOGLE_CLIENT_ID);
     // Navigate to the redirect page
-    window.location.href = "/google-auth-redirect.html";
   };
 
   // Check for credential from redirect flow
