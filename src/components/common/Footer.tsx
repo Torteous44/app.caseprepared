@@ -65,9 +65,6 @@ const Footer: React.FC<FooterProps> = ({
               <h3>Sections</h3>
               <ul>
                 <li>
-                  <a href="/about">About us</a>
-                </li>
-                <li>
                   <a href="/interviews">Mock Interviews</a>
                 </li>
                 <li>

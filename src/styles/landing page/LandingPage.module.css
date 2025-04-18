@@ -1,15 +1,17 @@
+@import "../../styles.css";
+
 .landing-page {
-  max-width: 1200px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
 }
 
 .landing-content {
-  padding: 20px;
+  padding: var(--space-md);
 }
 
 .about-section {
   text-align: center;
-  padding: 60px 20px;
+  padding: var(--space-3xl) var(--space-md);
   max-width: 800px;
   margin: 0 auto;
 } 

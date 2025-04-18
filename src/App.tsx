@@ -12,7 +12,7 @@ import InterviewsPage from "./pages/InterviewsPage";
 import AuthenticatedInterviewsPage from "./pages/AuthenticatedInterviewsPage";
 import InterviewPage from "./pages/InterviewPage";
 import AuthenticatedInterviewPage from "./pages/AuthenticatedInterviewPage";
-import PostQuestionScreen from "./pages/PostQuestionScreen";
+import PostQuestionScreen from "./components/interview/PostQuestionScreen";
 import TermsPage from "./pages/TermsPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import Navbar from "./components/common/Navbar";
@@ -168,6 +168,37 @@ const ProtectedLandingRoute = () => {
   return isAuthenticated ? <Navigate to="/interviews" /> : <LandingPage />;
 };
 
+// Protected route components for pages that redirect authenticated users to interviews
+const ProtectedAboutRoute = () => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
+  return isAuthenticated ? <Navigate to="/interviews" /> : <AboutPage />;
+};
+
+const ProtectedPricingRoute = () => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
+  return isAuthenticated ? <Navigate to="/interviews" /> : <Pricing />;
+};
+
+const ProtectedResourcesRoute = () => {
+  const { isAuthenticated, loading } = useAuth();
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
+  return isAuthenticated ? <Navigate to="/interviews" /> : <Resources />;
+};
+
 // ScrollToTop component to handle scrolling to top on route changes
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -197,11 +228,11 @@ const NavbarWrapper = () => {
   console.log(`Current path: ${location.pathname}`, {
     isInterviewSession,
     isPostQuestionScreen,
-    hideNavbar: isInterviewSession || isPostQuestionScreen,
+    hideNavbar: isInterviewSession,
   });
 
-  // Don't show navbar on any interview session or post-question screens
-  if (isInterviewSession || isPostQuestionScreen) return null;
+  // Only hide navbar on interview sessions, but show on post-question screens
+  if (isInterviewSession) return null;
 
   return <Navbar />;
 };
@@ -226,7 +257,7 @@ const App = () => {
               <AuthModal />
               <Routes>
                 <Route path="/" element={<ProtectedLandingRoute />} />
-                <Route path="/about" element={<AboutPage />} />
+                <Route path="/about" element={<ProtectedAboutRoute />} />
                 <Route path="/interviews" element={<InterviewsRoute />} />
                 <Route path="/interview/:id" element={<InterviewPage />} />
                 <Route
@@ -251,14 +282,17 @@ const App = () => {
                 />
                 <Route path="/blogs" element={<Blogs />} />
                 <Route path="/blog/:id" element={<BlogPost />} />
-                <Route path="/pricing" element={<Pricing />} />
+                <Route path="/pricing" element={<ProtectedPricingRoute />} />
                 <Route
                   path="/subscription"
                   element={<ProtectedSubscriptionRoute />}
                 />
                 <Route path="/terms" element={<TermsPage />} />
                 <Route path="/privacy" element={<PrivacyPolicyPage />} />
-                <Route path="/resources" element={<Resources />} />
+                <Route
+                  path="/resources"
+                  element={<ProtectedResourcesRoute />}
+                />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>

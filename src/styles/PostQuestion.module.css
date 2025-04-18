@@ -1,0 +1,327 @@
+/* Import Figtree font from Google Fonts */
+@import "../styles.css";
+/* Container */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 120px 24px;
+  font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #344054;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+
+.breadcrumb a {
+  color: #667085;
+  text-decoration: none;
+}
+
+.breadcrumb a:hover {
+  color: #0952BD;
+  text-decoration: underline;
+}
+
+.breadcrumb span {
+  color: #D0D5DD;
+}
+
+/* Header */
+.header {
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #101828;
+  margin: 0 0 8px 0;
+}
+
+.metadata {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #475467;
+  font-size: 14px;
+}
+
+.durationPill {
+  background-color: #F2F4F7;
+  padding: 2px 8px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.caseType {
+  font-size: 14px;
+  color: #475467;
+}
+
+/* Content layout */
+.content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 40px;
+  min-height: calc(100vh - 400px);
+}
+
+/* Report column */
+.reportColumn {
+  padding-right: 24px;
+}
+
+.reportHeading {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  color: #101828;
+}
+
+/* Action column */
+.actionColumn {
+  position: sticky;
+  top: 100px;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Loading spinner */
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: #0073E6;
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* No analysis message */
+.noAnalysisContainer {
+  background-color: #F9FAFB;
+  border-radius: 8px;
+  padding: 24px;
+  text-align: center;
+  color: #667085;
+}
+
+/* Competency items */
+.competencies {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.competencyItem {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  border: 1px solid #EAECF0;
+  overflow: hidden;
+}
+
+.competencyPill {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  gap: 12px;
+  min-height: 56px;
+  border-radius: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.competencyIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.competencyIcon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.competencyTitle {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.competencyName {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.competencySubtitle {
+  font-size: 14px;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+.competencyFeedback {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #344054;
+  padding: 12px 16px;
+  margin: 0;
+  background-color: #FFFFFF;
+}
+
+/* Competency colors */
+.structure {
+  background-color: var(--blue-bg);
+  color: var(--blue-primary);
+}
+
+.structure .competencyIcon {
+  color: var(--blue-primary);
+}
+
+.communication {
+  background-color: var(--red-bg);
+  color: var(--red-primary);
+}
+
+.communication .competencyIcon {
+  color: var(--red-primary);
+}
+
+.hypothesis {
+  background-color: var(--orange-bg);
+  color: var(--orange-primary);
+}
+
+.hypothesis .competencyIcon {
+  color: var(--orange-primary);
+}
+
+.qualitative {
+  background-color: var(--purple-bg);
+  color: var(--purple-primary);
+}
+
+.qualitative .competencyIcon {
+  color: var(--purple-primary);
+}
+
+.adaptability {
+  background-color: var(--green-bg);
+  color: var(--green-primary);
+}
+
+.adaptability .competencyIcon {
+  color: var(--green-primary);
+}
+
+/* Action card */
+.actionCard {
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0px 1px 3px rgba(16, 24, 40, 0.1), 0px 1px 2px rgba(16, 24, 40, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  border: 1px solid #EAECF0;
+}
+
+.congratulation {
+  font-size: 14px;
+  font-weight: 500;
+  color: #344054;
+  margin: 0;
+  text-align: center;
+}
+
+.nextPrompt {
+  font-size: 16px;
+  font-weight: 600;
+  color: #101828;
+  margin: 0;
+  text-align: center;
+}
+
+.actionButton {
+  background-color: #0952BD;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+  height: 44px;
+  margin-bottom: 0;
+}
+
+.actionButton:hover {
+  background-color: #0742A6;
+}
+
+.backLink {
+  display: block;
+  text-align: center;
+  color: #0952BD;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  margin-top: 4px;
+}
+
+.backLink:hover {
+  text-decoration: underline;
+}
+
+/* Hide the progress container but keep it for accessibility */
+.progressContainer {
+  display: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .content {
+    grid-template-columns: 1fr;
+  }
+  
+  .content:before {
+    display: none;
+  }
+  
+  .reportColumn {
+    padding-right: 0;
+  }
+  
+  .actionColumn {
+    padding-left: 0;
+  }
+} 

@@ -89,7 +89,7 @@ const idToDemoType: { [key: string]: string } = {
   "3": "merger",
 };
 
-const BASE_URL = "https://demobackend-p2e1.onrender.com";
+const BASE_URL = "https://casepreparedcrud.onrender.com";
 const DEMO_API_BASE_URL = "https://casepreparedcrud.onrender.com/api/v1/demo"; // Demo API base URL
 
 // Case-specific content
@@ -309,38 +309,9 @@ const InterviewPage: React.FC = () => {
   // Fetch just the interview ID if needed
   useEffect(() => {
     if (interview && !backendId && !isDemo) {
-      const fetchInterviewId = async () => {
-        setIsLoading(true);
-        try {
-          // Only fetch the backend ID using the code
-          const response = await fetch(
-            `${BASE_URL}/interviews/code/${interview.code}`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.detail || "Failed to load interview ID");
-          }
-
-          const data = await response.json();
-          setBackendId(data.id);
-        } catch (err) {
-          console.error("Error fetching interview ID:", err);
-          setStartError(
-            err instanceof Error ? err.message : "Failed to load interview ID"
-          );
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      fetchInterviewId();
+      // For demo mode, just use a fake backend ID
+      setBackendId("demo-" + interview.id);
+      setIsLoading(false);
     }
   }, [interview, isDemo]);
 
@@ -391,59 +362,22 @@ const InterviewPage: React.FC = () => {
         localStreamRef.current.getTracks().forEach((track) => track.stop());
       }
 
-      if (isDemo) {
-        // Handle demo interview start
-        const demoTypeToUse = demoType || idToDemoType[interview.id.toString()];
+      // All interviews are treated as demo interviews
+      const demoTypeToUse = demoType || idToDemoType[interview.id.toString()];
 
-        if (!demoTypeToUse) {
-          throw new Error("Invalid demo interview type");
-        }
-
-        // For demo interviews, we don't need to create a session first
-        // Instead, we directly navigate to the RealtimeConnect component
-        navigate(`/interview/demo-session/${demoTypeToUse}`, {
-          state: {
-            title: interview.title,
-            questionNumber: 1, // Start with the first question
-            demoType: demoTypeToUse,
-          },
-        });
-      } else {
-        // Regular interview flow
-        // Use the backendId if available, otherwise use the interview code
-        const interviewIdToUse = backendId || interview.code;
-
-        if (!interviewIdToUse) {
-          throw new Error("Interview ID is missing.");
-        }
-
-        const response = await fetch(`${BASE_URL}/sessions/start`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            interview_id: interviewIdToUse,
-          }),
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.detail || "Failed to start session");
-        }
-
-        if (!data.id) {
-          throw new Error("No session ID received");
-        }
-
-        // Navigate to the correct session route
-        navigate(`/interview/session/${data.id}`, {
-          state: {
-            title: interview.title,
-          },
-        });
+      if (!demoTypeToUse) {
+        throw new Error("Invalid demo interview type");
       }
+
+      // For demo interviews, we don't need to create a session first
+      // Instead, we directly navigate to the RealtimeConnect component
+      navigate(`/interview/demo-session/${demoTypeToUse}`, {
+        state: {
+          title: interview.title,
+          questionNumber: 1, // Start with the first question
+          demoType: demoTypeToUse,
+        },
+      });
     } catch (error: any) {
       console.error("Failed to start session:", error);
       setStartError(
@@ -491,7 +425,7 @@ const InterviewPage: React.FC = () => {
         localStreamRef.current.getTracks().forEach((track) => track.stop());
       }
 
-      // Navigate to the correct session with the specific question number
+      // Navigate to the correct demo session with the specific question number
       navigate(`/interview/demo-session/${demoTypeToUse}`, {
         state: {
           title: interview.title,

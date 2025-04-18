@@ -5,47 +5,54 @@
 }
 
 .container {
-    max-width: 1200px;
+    max-width: var(--container-max-width);
     margin: 0 auto;
-    padding: 160px 20px 220px;
+    padding: var(--space-5xl) var(--space-md) var(--space-5xl);
 }
 
 @media (max-width: 768px) {
     .container {
-        padding: 30px 20px 80px;
+        padding: var(--space-3xl) var(--space-md) var(--space-4xl);
     }
 }
 
 /* Added header styles copied from InterviewsPage.module.css */
 .header {
   text-align: center;
-  margin-bottom: 40px;
-  padding: 0px 20px;
+  margin-bottom: var(--space-4xl);
+  padding: 0 var(--space-md);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.header h1 {
-  font-size: 36px;
-  font-weight: 600;
-  margin-bottom: 16px;
-  color: #111827;
-  font-family: 'Inter', sans-serif;
+.title {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-md);
+  color: var(--text-color-primary);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  font-family: var(--font-primary);
 }
 
 .header p {
-  font-size: 18px;
-  color: #555;
-  max-width: 700px;
+  font-size: var(--font-size-md);
+  color: var(--text-color-secondary);
   margin: 0 auto;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-primary);
+  line-height: var(--line-height-normal);
 }
 
 @media (max-width: 768px) {
-    .header h1 {
-        font-size: 28px;
-        margin-bottom: 1rem;
+    .header {
+        margin-bottom: var(--space-3xl);
+    }
+    .title {
+        font-size: var(--font-size-3xl);
     }
     .header p {
-        font-size: 16px;
+        font-size: var(--font-size-base);
     }
 }
 
@@ -71,9 +78,9 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-top: 3rem;
-    gap: 4rem;
-    max-width: 1200px;
+    margin-top: var(--space-4xl);
+    gap: var(--space-4xl);
+    max-width: var(--container-max-width);
     margin-left: auto;
     margin-right: auto;
     align-items: flex-start;
@@ -83,29 +90,32 @@
     .pricingGrid {
         flex-direction: column;
         align-items: center;
-        gap: 2rem;
+        gap: var(--space-3xl);
+        margin-top: var(--space-3xl);
     }
 }
 
 .leftContent {
     flex: 0 1 45%;
-    padding: 6rem 0;
+    padding: 0;
 }
 
 .leftHeader {
-    font-size: 32px;
-    font-weight: 700;
-    color: var(--header-color);
-    margin-bottom: 1rem;
-    font-family: 'Inter', sans-serif;
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-color-primary);
+    margin-bottom: var(--space-md);
+    font-family: var(--font-primary);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-tight);
 }
 
 .leftSubheader {
-    font-size: 18px;
-    color: #555;
-    margin-bottom: 2rem;
-    line-height: 1.6;
-    font-family: 'Inter', sans-serif;
+    font-size: var(--font-size-md);
+    color: var(--text-color-secondary);
+    margin-bottom: var(--space-2xl);
+    line-height: var(--line-height-normal);
+    font-family: var(--font-primary);
 }
 
 .featureList {
@@ -115,14 +125,14 @@
 }
 
 .featureListItem {
-    margin-bottom: 1.5rem;
-    line-height: 1.6;
-    font-size: 16px;
-    color: #333;
+    margin-bottom: var(--space-xl);
+    line-height: var(--line-height-normal);
+    font-size: var(--font-size-base);
+    color: var(--text-color-primary);
     display: flex;
     align-items: flex-start;
-    gap: 1rem;
-    font-family: 'Inter', sans-serif;
+    gap: var(--space-md);
+    font-family: var(--font-primary);
 }
 
 .featureIcon {
@@ -130,159 +140,138 @@
     height: 24px;
     color: var(--blue-primary);
     flex-shrink: 0;
-    margin-top: 0.25rem;
+    margin-top: var(--space-2xs);
 }
 
 .featureTitle {
-    font-weight: 600;
+    font-weight: var(--font-weight-semibold);
     color: var(--blue-primary);
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-primary);
 }
 
 .rightContent {
     flex: 0 1 55%;
     display: flex;
     justify-content: flex-end;
-    padding: 6rem 0;
 }
 
 @media (max-width: 768px) {
     .leftContent {
         max-width: 100%;
-        padding: 1rem 0;
+        width: 100%;
     }
     
     .rightContent {
         max-width: 100%;
         justify-content: center;
         width: 100%;
-        padding: 1rem 0;
     }
     
     .leftHeader {
-        font-size: 28px;
+        font-size: var(--font-size-2xl);
     }
     
     .leftSubheader {
-        font-size: 16px;
+        font-size: var(--font-size-base);
     }
 }
 
 .pricingCard {
     background-color: var(--blue-primary);
     color: white;
-    padding: 2rem;
-    border-radius: 1rem;
+    padding: var(--space-2xl);
+    border-radius: var(--border-radius-md);
     text-align: left;
-    font-family: 'Inter', sans-serif;
-}
-
-/* First pricing card (smaller one) */
-.pricingCard:first-child {
-    flex: 0 1 450px;
+    font-family: var(--font-primary);
+    box-shadow: var(--shadow-md);
     max-width: 450px;
-}
-
-/* Second pricing card (larger one) */
-.pricingCard:last-child {
-    flex: 0 1 600px;
-    max-width: 600px;
-}
-
-@media (max-width: 768px) {
-    .pricingCard,
-    .pricingCard:first-child,
-    .pricingCard:last-child {
-        flex: 1 1 100%;
-        max-width: 100%;
-        width: 100%;
-        margin: 0;
-    }
+    width: 100%;
 }
 
 .pricingCard h2 {
-  font-size: 1.75rem;
-  font-weight: 600;
-  margin-bottom: 1.25rem;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-lg);
   color: white;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-primary);
 }
 
 .price {
-  font-size: 3rem;
-  font-weight: 700;
+  font-size: var(--font-size-5xl);
+  font-weight: var(--font-weight-bold);
   color: #E9C46A;
-  margin-bottom: 0.5rem;
-  line-height: 1.1;
-  font-family: 'Inter', sans-serif;
+  margin-bottom: var(--space-xs);
+  line-height: var(--line-height-tight);
+  font-family: var(--font-primary);
 }
 
 @media (max-width: 768px) {
     .price {
-        font-size: 2.25rem;
+        font-size: var(--font-size-4xl);
     }
 }
 
 .period {
   color: #E9C46A;
-  font-size: 1rem;
-  font-weight: 500;
-  margin-bottom: 1.25rem;
-  font-family: 'Inter', sans-serif;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-lg);
+  font-family: var(--font-primary);
 }
 
 .trialText {
-  font-size: 1rem;
-  line-height: 1.4;
-  margin-bottom: 2rem;
-  font-family: 'Inter', sans-serif;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  margin-bottom: var(--space-xl);
+  font-family: var(--font-primary);
+  opacity: 0.9;
 }
 
 .featuresList {
   list-style: none;
   padding: 0;
-  margin: 2rem 0;
+  margin: var(--space-xl) 0;
 }
 
 .featureItem {
-  margin-bottom: 1.25rem;
+  margin-bottom: var(--space-lg);
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-size: 1.05rem;
-  line-height: 1.4;
-  font-family: 'Inter', sans-serif;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  font-family: var(--font-primary);
 }
 
 .featureItem strong {
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
 }
 
 .featureItem svg {
   flex-shrink: 0;
+  margin-top: var(--space-2xs);
 }
 
 .memberButton {
   display: inline-block;
   background-color: #E9C46A;
-  color: #2B4B96;
-  padding: 1rem 2rem;
+  color: var(--blue-primary);
+  padding: var(--space-md) var(--space-xl);
   border-radius: var(--border-radius);
   text-decoration: none;
-  font-weight: bold;
+  font-weight: var(--font-weight-semibold);
   width: 100%;
   text-align: center;
-  transition: background-color 0.3s;
+  transition: background-color var(--transition-fast);
   border: none;
   cursor: pointer;
-  font-size: 1rem;
-  font-family: 'Inter', sans-serif;
+  font-size: var(--font-size-base);
+  font-family: var(--font-primary);
 }
 
 @media (max-width: 768px) {
     .memberButton {
-        padding: 0.875rem 1.5rem;
-        font-size: 0.95rem;
+        padding: var(--space-sm) var(--space-lg);
     }
 }
 
@@ -344,82 +333,87 @@
 }
 
 .testimonialsSection {
-  margin-top: 120px;
-  padding: 0 24px;
-  max-width: 1200px;
+  margin-top: var(--space-5xl);
+  padding: 0 var(--space-md);
+  max-width: var(--container-max-width);
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 200px;
+  margin-bottom: var(--space-5xl);
 }
 
 .testimonialsTitle {
-  font-size: 32px;
-  font-weight: 700;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
   text-align: center;
-  margin-bottom: 48px;
-  color: #1a1a1a;
-  font-family: 'Inter', sans-serif;
+  margin-bottom: var(--space-3xl);
+  color: var(--text-color-primary);
+  font-family: var(--font-primary);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: var(--line-height-snug);
 }
 
 .testimonialsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: var(--space-lg);
 }
 
 .testimonialCard {
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 32px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  font-family: 'Inter', sans-serif;
+  background-color: var(--background-primary);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+  font-family: var(--font-primary);
+  border: var(--border-width-thin) solid var(--border-color);
 }
 
 .testimonialCard:hover {
   transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
 }
 
 .testimonialStars {
   display: flex;
-  gap: 4px;
-  margin-bottom: 16px;
+  gap: var(--space-2xs);
+  margin-bottom: var(--space-md);
 }
 
 .starIcon {
   width: 20px;
   height: 20px;
-  color: #ffd700;
+  color: #FFD700;
 }
 
 .testimonialText {
-  font-size: 16px;
-  line-height: 1.6;
-  color: #4a4a4a;
-  margin-bottom: 24px;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--text-color-secondary);
+  margin-bottom: var(--space-lg);
   font-style: italic;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-primary);
 }
 
 .testimonialAuthor {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-sm);
 }
 
 .authorAvatar {
   width: 40px;
   height: 40px;
-  background-color: #3b82f6;
+  background-color: var(--blue-primary);
   color: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
-  font-size: 14px;
-  font-family: 'Inter', sans-serif;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-primary);
 }
 
 .authorInfo {
@@ -428,17 +422,17 @@
 }
 
 .authorName {
-  font-weight: 600;
-  color: #1a1a1a;
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-color-primary);
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-primary);
 }
 
 .authorTitle {
-  font-size: 14px;
-  color: #6b7280;
+  font-size: var(--font-size-sm);
+  color: var(--text-color-tertiary);
   margin: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-primary);
 }
 
 @media (max-width: 1024px) {
@@ -453,11 +447,43 @@
   }
   
   .testimonialsTitle {
-    font-size: 28px;
-    margin-bottom: 32px;
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--space-xl);
   }
   
   .testimonialCard {
-    padding: 24px;
+    padding: var(--space-lg);
+  }
+  
+  .testimonialsSection {
+    margin-top: var(--space-4xl);
+    margin-bottom: var(--space-4xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: var(--space-2xl) var(--space-md) var(--space-3xl);
+  }
+  
+  .title {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .header p {
+    font-size: var(--font-size-base);
+  }
+  
+  .leftHeader {
+    font-size: var(--font-size-xl);
+  }
+  
+  .featureListItem {
+    font-size: var(--font-size-sm);
+    gap: var(--space-sm);
+  }
+  
+  .testimonialText {
+    font-size: var(--font-size-sm);
   }
 } 

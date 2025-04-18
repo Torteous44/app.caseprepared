@@ -1,0 +1,107 @@
+@import "../../styles.css";
+
+.heroContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-5xl) var(--space-md) var(--space-3xl);
+  background-color: var(--background-primary);
+  position: relative;
+}
+
+.heroContent {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mainHeading {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-color-primary);
+  margin-bottom: var(--space-md);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.highlight {
+  color: #0647B3;
+  display: block;
+}
+
+.subHeading {
+  font-size: var(--font-size-md);
+  color: var(--text-color-secondary);
+  margin-bottom: var(--space-xl);
+  max-width: 600px;
+  line-height: var(--line-height-normal);
+}
+
+.ctaButton {
+  background-color: #0647B3;
+  color: white;
+  border: none;
+  padding: var(--space-sm) var(--space-xl);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: transform var(--transition-fast), background-color var(--transition-fast);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.ctaButton:hover {
+  color: white;
+  background-color: #0A3A8F;
+}
+
+.mapContainer {
+  margin-top: var(--space-3xl);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.worldMap {
+  width: 100%;
+  max-width: 700px;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .heroContainer {
+    padding: var(--space-3xl) var(--space-md) var(--space-2xl);
+  }
+  
+  .mainHeading {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .subHeading {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--space-lg);
+  }
+  
+  .mapContainer {
+    margin-top: var(--space-2xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .heroContainer {
+    padding: var(--space-2xl) var(--space-md) var(--space-xl);
+  }
+  
+  .mainHeading {
+    font-size: var(--font-size-xl);
+  }
+  
+  .ctaButton {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+  }
+} 

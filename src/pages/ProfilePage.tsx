@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import styles from "../styles/ProfilePage.module.css";
 import { Link } from "react-router-dom";
-
+import Footer from "../components/common/Footer";
 // API base URL
 const API_BASE_URL =
   process.env.REACT_APP_API_BASE_URL || "https://casepreparedcrud.onrender.com";
@@ -139,7 +139,7 @@ const ProfilePage: React.FC = () => {
 
   if (!user) {
     return (
-      <div className={styles.container}>
+      <div className={styles.contentContainer}>
         <div className={styles.card}>
           <h1 className={styles.title}>Profile not available</h1>
           <p>Please sign in to view your profile information.</p>
@@ -160,6 +160,16 @@ const ProfilePage: React.FC = () => {
   const formatSubscriptionDate = (timestamp?: string) => {
     if (!timestamp) return "N/A";
     return new Date(parseInt(timestamp) * 1000).toLocaleDateString();
+  };
+
+  const formatRenewalDate = (timestamp?: string) => {
+    if (!timestamp) return "soon";
+    const date = new Date(parseInt(timestamp) * 1000);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
   };
 
   // Helper to get subscription status details
@@ -214,7 +224,9 @@ const ProfilePage: React.FC = () => {
 
   // Helper to check if user has premium subscription
   const isPremiumMember = () => {
-    return subscription?.plan === "premium" && subscription?.status === "active";
+    return (
+      subscription?.plan === "premium" && subscription?.status === "active"
+    );
   };
 
   const { statusDisplay, statusClass, hasPlan } = getSubscriptionDetails();
@@ -222,38 +234,17 @@ const ProfilePage: React.FC = () => {
   return (
     <>
       <div className={styles.pageHeader}>
-        <h1>Profile</h1>
-        {isPremiumMember() && <span className={styles.premiumBadge}>Premium member</span>}
+        <h1>Welcome, {user.full_name || "User"}</h1>
+        {isPremiumMember() && (
+          <span className={styles.premiumBadge}>Premium member</span>
+        )}
       </div>
-      
-      <div className={styles.layoutContainer}>
-        <div className={styles.profileSidebar}>
-          <h2>Navigation</h2>
-          <nav className={styles.sidebarNav}>
-            <button className={`${styles.navButton} ${styles.active}`}>Profile</button>
-            <button className={styles.navButton}>Completed Interviews</button>
-          </nav>
-        </div>
-        
+
+      <div className={styles.contentContainer}>
         <div className={styles.content}>
           <div className={styles.card}>
-            <div className={styles.profileBox}>
-              <div className={styles.profileImageContainer}>
-                <div className={styles.profileImagePlaceholder}>
-                  <span>+</span>
-                </div>
-              </div>
-              <div className={styles.profileInfo}>
-                <h2 className={styles.profileName}>{user.full_name || "User"}</h2>
-                <p className={styles.profileMemberSince}>Member since {formatDate(user.created_at)}</p>
-              </div>
-              <div className={styles.profileStatus}>
-                {isPremiumMember() && <span className={styles.premiumLabel}>Premium</span>}
-              </div>
-            </div>
-            
             <div className={styles.header}>
-              <h1 className={styles.title}>Profile Details</h1>
+              <h2 className={styles.title}>Profile</h2>
               {!isEditing && (
                 <button
                   className={styles.editButton}
@@ -345,83 +336,48 @@ const ProfilePage: React.FC = () => {
                     {formatDate(user.created_at)}
                   </span>
                 </div>
-                
+
                 {formData.success && (
                   <div className={styles.successMessage}>
-                    Your profile has been updated successfully!
+                    Your profile has been updated successfully.
                   </div>
                 )}
               </div>
             )}
           </div>
 
-          {/* Subscription information card */}
-          <div className={styles.card}>
-            <div className={styles.header}>
-              <h1 className={styles.title}>Subscription</h1>
-            </div>
-
-            {subscriptionLoading ? (
+          {/* Redesigned Subscription Banner */}
+          {subscriptionLoading ? (
+            <div className={styles.card}>
               <div className={styles.subscriptionLoading}>
                 Loading subscription information...
               </div>
-            ) : subscription ? (
-              <div className={styles.subscriptionInfo}>
-                <div className={styles.infoRow}>
-                  <span className={styles.label}>Status</span>
-                  <span
-                    className={`${styles.value} ${styles.status} ${styles[statusClass]}`}
-                  >
-                    {statusDisplay}
-                  </span>
-                </div>
-
-                {subscription.plan && (
-                  <div className={styles.infoRow}>
-                    <span className={styles.label}>Plan</span>
-                    <span className={styles.value}>
-                      {subscription.plan === "premium"
-                        ? "Premium Plan"
-                        : subscription.plan}
-                    </span>
-                  </div>
-                )}
-
-                {subscription.current_period_end && (
-                  <div className={styles.infoRow}>
-                    <span className={styles.label}>Current Period Ends</span>
-                    <span className={styles.value}>
-                      {formatSubscriptionDate(subscription.current_period_end)}
-                    </span>
-                  </div>
-                )}
-
-                {subscription.status === "active" && (
-                  <div className={styles.infoRow}>
-                    <span className={styles.label}>Auto-Renewal</span>
-                    <span className={styles.value}>
-                      {subscription.cancel_at_period_end ? "Off" : "On"}
-                    </span>
-                  </div>
-                )}
-
-                <div className={styles.subscriptionActions}>
-                  <Link to="/subscription" className={styles.manageButton}>
-                    {hasPlan ? "Manage Subscription" : "Subscribe Now"}
-                  </Link>
-                </div>
+            </div>
+          ) : subscription && subscription.status === "active" ? (
+            <div className={styles.subscriptionBanner}>
+              <div className={styles.subscriptionBannerInfo}>
+                <div className={styles.premiumMemberLabel}>Premium Member</div>
               </div>
-            ) : (
+              <Link to="/subscription" className={styles.viewDetailsLink}>
+                View details
+              </Link>
+            </div>
+          ) : (
+            <div className={styles.card}>
+              <div className={styles.header}>
+                <h2 className={styles.title}>Subscription</h2>
+              </div>
               <div className={styles.noSubscription}>
                 <p>You don't have an active subscription.</p>
                 <Link to="/subscription" className={styles.subscribeButton}>
                   Subscribe Now
                 </Link>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
+      <Footer />
     </>
   );
 };

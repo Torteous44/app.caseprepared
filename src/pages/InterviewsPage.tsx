@@ -16,7 +16,7 @@ interface InterviewCard {
   code: string; // API code for looking up
 }
 
-const BASE_URL = "https://demobackend-p2e1.onrender.com";
+const BASE_URL = "https://casepreparedcrud.onrender.com";
 
 // Hardcoded interview cards with all display data
 const interviewCards: InterviewCard[] = [
@@ -68,24 +68,29 @@ const InterviewsPage: React.FC = () => {
     setError(null);
 
     try {
-      // Only fetch the ID from the API, to confirm it exists
-      const response = await fetch(`${BASE_URL}/interviews/code/${card.code}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      // Map the interview ID to the corresponding demo type
+      const demoTypeMap: Record<number, string> = {
+        1: "profitability", // McKinsey - Beautify
+        2: "market-entry", // BCG - Climate Case
+        3: "merger", // Bain - Coffee Shop
+      };
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Failed to load interview");
+      const demoType = demoTypeMap[card.id];
+
+      if (!demoType) {
+        throw new Error("Invalid interview type");
       }
 
-      // We don't need the response data since we're using hardcoded info
-      // Just navigate directly to the interview page with the card ID
-      navigate(`/interview/${card.id}`);
+      // Skip API call and directly navigate to the interview page with demo state
+      navigate(`/interview/${card.id}`, {
+        state: {
+          isDemo: true,
+          demoType: demoType,
+          card: card,
+        },
+      });
     } catch (err) {
-      console.error("Error fetching interview:", err);
+      console.error("Error handling interview:", err);
       setError(err instanceof Error ? err.message : "Failed to load interview");
     } finally {
       setLoading((prev) => ({ ...prev, [card.id]: false }));
@@ -103,7 +108,7 @@ const InterviewsPage: React.FC = () => {
 
       <div className={styles.interviewCards}>
         {interviewCards.map((card) => (
-          <InterviewCardPublic 
+          <InterviewCardPublic
             key={card.id}
             card={card}
             loading={loading}
@@ -112,48 +117,56 @@ const InterviewsPage: React.FC = () => {
         ))}
       </div>
 
-      <div className={styles.header} style={{ marginTop: '2rem' }}>
-        <h2>Access all interviews with <span style={{ color: 'var(--blue-primary)' }}>Premium</span></h2>
+      <div className={styles.header} style={{ marginTop: "2rem" }}>
+        <h2>
+          Access all interviews with{" "}
+          <span style={{ color: "var(--blue-primary)" }}>Premium</span>
+        </h2>
         <p>Upgrade today to unlock our complete case library.</p>
-        <button 
-          onClick={() => navigate('/pricing')}
-          className={styles.getPremiumButton} 
-          style={{ 
-            backgroundColor: 'var(--blue-primary)', 
-            color: 'white', 
-            border: 'none', 
-            borderRadius: 'var(--border-radius)', 
-            padding: '12px 36px',
-            margin: '20px 0',
-            fontWeight: 'bold',
-            cursor: 'pointer'
+        <button
+          onClick={() => navigate("/pricing")}
+          className={styles.getPremiumButton}
+          style={{
+            backgroundColor: "var(--blue-primary)",
+            color: "white",
+            border: "none",
+            borderRadius: "var(--border-radius)",
+            padding: "12px 36px",
+            margin: "20px 0",
+            fontWeight: "bold",
+            cursor: "pointer",
           }}
         >
           Get Premium
         </button>
       </div>
 
-      <div className={styles.interviewCards} style={{ position: 'relative' }}>
-        <div className={styles.gradientOverlay} style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'linear-gradient(to bottom, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,1) 100%)',
-          zIndex: 1,
-          pointerEvents: 'none'
-        }}></div>
+      <div className={styles.interviewCards} style={{ position: "relative" }}>
+        <div
+          className={styles.gradientOverlay}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background:
+              "linear-gradient(to bottom, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,1) 100%)",
+            zIndex: 1,
+            pointerEvents: "none",
+          }}
+        ></div>
         {[
           {
             id: 4,
-            company: "McKinsey", 
+            company: "McKinsey",
             logo: "/assets/interviewCards/Logos/Mckinsey.svg",
             title: "Tech Transformation - McKinsey Case",
             subtitle: "Premium",
-            description: "A major retail chain needs to modernize its IT infrastructure to support online growth. Develop a technology roadmap and identify key investment priorities.",
+            description:
+              "A major retail chain needs to modernize its IT infrastructure to support online growth. Develop a technology roadmap and identify key investment priorities.",
             thumbnail: "/assets/interviewCards/Deloitte.webp",
-            buttonText: "Premium Access"
+            buttonText: "Premium Access",
           },
           {
             id: 5,
@@ -161,9 +174,10 @@ const InterviewsPage: React.FC = () => {
             logo: "/assets/interviewCards/Logos/Accenture.svg",
             title: "Digital Banking - Accenture Case",
             subtitle: "Premium",
-            description: "A traditional bank is losing market share to fintech startups. Develop a digital strategy to help them compete in the evolving financial services landscape.",
+            description:
+              "A traditional bank is losing market share to fintech startups. Develop a digital strategy to help them compete in the evolving financial services landscape.",
             thumbnail: "/assets/interviewCards/Accenture.webp",
-            buttonText: "Premium Access"
+            buttonText: "Premium Access",
           },
           {
             id: 6,
@@ -171,9 +185,10 @@ const InterviewsPage: React.FC = () => {
             logo: "/assets/interviewCards/Logos/Bain.svg",
             title: "Healthcare Innovation - Bain & Company Case",
             subtitle: "Premium",
-            description: "A healthcare provider wants to leverage AI to improve patient outcomes. Identify key application areas and develop an implementation roadmap.",
+            description:
+              "A healthcare provider wants to leverage AI to improve patient outcomes. Identify key application areas and develop an implementation roadmap.",
             thumbnail: "/assets/interviewCards/BainHealthcare.webp",
-            buttonText: "Premium Access"
+            buttonText: "Premium Access",
           },
           {
             id: 7,
@@ -181,9 +196,10 @@ const InterviewsPage: React.FC = () => {
             logo: "/assets/interviewCards/Logos/Kearney.svg",
             title: "Retail Expansion - Kearney Case",
             subtitle: "Premium",
-            description: "A luxury retail brand wants to expand into emerging markets. Evaluate potential countries, entry strategies, and develop a five-year growth plan.",
+            description:
+              "A luxury retail brand wants to expand into emerging markets. Evaluate potential countries, entry strategies, and develop a five-year growth plan.",
             thumbnail: "/assets/interviewCards/KearneyLux.webp",
-            buttonText: "Premium Access"
+            buttonText: "Premium Access",
           },
           {
             id: 8,
@@ -191,9 +207,10 @@ const InterviewsPage: React.FC = () => {
             logo: "/assets/interviewCards/Logos/Mckinsey.svg",
             title: "Airline Profitability - McKinsey Case",
             subtitle: "Premium",
-            description: "A major airline is facing declining profits despite increasing passenger numbers. Identify cost-saving opportunities and revenue enhancement strategies.",
+            description:
+              "A major airline is facing declining profits despite increasing passenger numbers. Identify cost-saving opportunities and revenue enhancement strategies.",
             thumbnail: "/assets/interviewCards/airline.webp",
-            buttonText: "Premium Access"
+            buttonText: "Premium Access",
           },
           {
             id: 9,
@@ -201,16 +218,17 @@ const InterviewsPage: React.FC = () => {
             logo: "/assets/interviewCards/Logos/BCG.svg",
             title: "Pharmaceutical Launch - BCG Case",
             subtitle: "Premium",
-            description: "A pharmaceutical company is preparing to launch a new drug. Evaluate the market potential, pricing strategy, and marketing approach to maximize ROI.",
+            description:
+              "A pharmaceutical company is preparing to launch a new drug. Evaluate the market potential, pricing strategy, and marketing approach to maximize ROI.",
             thumbnail: "/assets/interviewCards/McKinseyPharma.webp",
-            buttonText: "Premium Access"
-          }
+            buttonText: "Premium Access",
+          },
         ].map((card) => (
           <div
             key={`premium-${card.id}`}
             className={`${styles.card} ${styles.demoCard}`}
-            style={{ position: 'relative', zIndex: 0 }}
-            onClick={() => navigate('/pricing')}
+            style={{ position: "relative", zIndex: 0 }}
+            onClick={() => navigate("/pricing")}
           >
             <div className={styles.cardHeader}>
               <img
@@ -230,12 +248,12 @@ const InterviewsPage: React.FC = () => {
               <p>{card.description}</p>
 
               <div className={styles.buttonWrapper}>
-                <button 
-                  disabled={true} 
+                <button
+                  disabled={true}
                   className={`${styles.mockButton} ${styles.disabledButton}`}
                   onClick={(e) => {
                     e.stopPropagation();
-                    navigate('/pricing');
+                    navigate("/pricing");
                   }}
                 >
                   {card.buttonText}

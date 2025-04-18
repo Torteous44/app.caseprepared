@@ -1,19 +1,21 @@
+@import "../../styles.css";
+
 .hero {
   display: flex;
   align-items: center; 
   justify-content: center;
-  padding: 150px 100px;
+  padding: var(--space-5xl) var(--space-5xl);
   margin: 0 auto;
-  padding-right: 0px;
+  padding-right: 0;
 }
 
 .content {
-  max-width: 1200px;
+  max-width: var(--container-max-width);
   width: 100%;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 120px;
+  gap: var(--space-5xl);
 }
 
 .leftColumn {
@@ -29,16 +31,16 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding-top: 40px;
+  padding-top: var(--space-xl);
 }
 
 .title {
-  font-size: 48px;
-  font-weight: var(--header-font-weight);
-  color: var(--text-color);
-  margin-bottom: 24px;
-  line-height: 1.2;
-  letter-spacing: -0.04em;
+  font-size: var(--font-size-5xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-color-primary);
+  margin-bottom: var(--space-lg);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
 }
 
 .highlight {
@@ -47,10 +49,10 @@
 }
 
 .description {
-  font-size: 18px;
-  color: #555;
-  margin-bottom: 40px;
-  line-height: 1.6;
+  font-size: var(--font-size-md);
+  color: var(--text-color-secondary);
+  margin-bottom: var(--space-xl);
+  line-height: var(--line-height-normal);
   max-width: 90%;
 }
 
@@ -58,19 +60,19 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 12px;
+  gap: var(--space-sm);
 }
 
 .ctaButton {
   background-color: var(--blue-primary);
   color: white;
   border: none;
-  padding: 14px 30px;
+  padding: var(--space-sm) var(--space-lg);
   border-radius: var(--border-radius);
-  font-size: 16px;
-  font-weight: 600;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: background-color var(--transition-fast);
 }
 
 .ctaButton:hover {
@@ -78,21 +80,21 @@
 }
 
 .ctaSubtext {
-  font-size: 14px;
-  color: #777;
+  font-size: var(--font-size-sm);
+  color: var(--text-color-quaternary);
 }
 
 .subtitle {
-  font-size: 18px;
-  color: #555;
-  margin-bottom: 34px;
-  font-weight: 500;
+  font-size: var(--font-size-md);
+  color: var(--text-color-secondary);
+  margin-bottom: var(--space-xl);
+  font-weight: var(--font-weight-medium);
 }
 
 .logoGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 40px;
+  gap: var(--space-xl);
   width: 100%;
   align-items: center;
 }
@@ -107,41 +109,41 @@
 /* Responsive adjustments */
 @media (max-width: 1200px) {
   .hero {
-    padding: 90px 40px;
+    padding: var(--space-4xl) var(--space-xl);
   }
   
   .content {
-    gap: 80px;
+    gap: var(--space-4xl);
   }
   
   .title {
-    font-size: 38px;
+    font-size: var(--font-size-4xl);
   }
 }
 
 @media (max-width: 1024px) {
   .hero {
-    padding: 80px 30px;
+    padding: var(--space-4xl) var(--space-lg);
   }
   
   .content {
-    gap: 60px;
+    gap: var(--space-3xl);
   }
   
   .title {
-    font-size: 36px;
+    font-size: var(--font-size-4xl);
   }
 }
 
 @media (max-width: 768px) {
   .hero {
-    padding: 120px 24px;
+    padding: var(--space-5xl) var(--space-lg);
   }
   
   .content {
     flex-direction: column;
     align-items: center;
-    gap: 50px;
+    gap: var(--space-2xl);
   }
 
   .leftColumn,
@@ -155,7 +157,7 @@
   
   .description {
     max-width: 100%;
-    font-size: 17px;
+    font-size: var(--font-size-base);
   }
   
   .ctaContainer {
@@ -180,30 +182,30 @@
 
 @media (max-width: 480px) {
   .hero {
-    padding: 50px 20px;
+    padding: var(--space-2xl) var(--space-md);
   }
   
   .title {
-    font-size: 30px;
-    margin-bottom: 16px;
+    font-size: var(--font-size-3xl);
+    margin-bottom: var(--space-md);
   }
   
   .description {
-    font-size: 16px;
-    margin-bottom: 30px;
+    font-size: var(--font-size-base);
+    margin-bottom: var(--space-lg);
   }
   
   .logoGrid {
-    gap: 20px;
+    gap: var(--space-md);
     grid-template-columns: 1fr 1fr;
   }
   
   .content {
-    gap: 40px;
+    gap: var(--space-xl);
   }
   
   .ctaButton {
     width: 100%;
-    padding: 12px 20px;
+    padding: var(--space-sm) var(--space-md);
   }
 } 

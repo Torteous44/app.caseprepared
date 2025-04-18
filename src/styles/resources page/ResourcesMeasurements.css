@@ -1,52 +1,54 @@
+@import "../../styles.css";
+
 .measurements-section {
-  padding: 40px 175px;
-  background-color: white;
+  padding: var(--space-xl) var(--space-5xl);
+  background-color: var(--background-primary);
 }
 
 .measurements-container {
-  max-width: 1200px;
+  max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 var(--space-lg);
 }
 
 .measurements-title {
-  font-size: 36px;
-  font-weight: 600;
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-semibold);
   text-align: center;
-  margin-bottom: 16px;
-  color: var(--text-color);
+  margin-bottom: var(--space-md);
+  color: var(--text-color-primary);
 }
 
 .measurements-subtitle {
-  font-size: 16px;
+  font-size: var(--font-size-base);
   text-align: center;
-  color: #555;
+  color: var(--text-color-secondary);
   max-width: 700px;
-  margin: 0 auto 60px;
+  margin: 0 auto var(--space-3xl);
 }
 
 .measurements-header {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: var(--space-md);
 }
 
 .measurements-header h3 {
-  font-size: 20px;
-  font-weight: 500;
-  color: #555;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-color-secondary);
 }
 
 .measurements-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
+  gap: var(--space-lg);
 }
 
 .measurement-card {
-  background-color: white;
-  border: 1px solid #d9d9d9;
+  background-color: var(--background-primary);
+  border: var(--border-width-thin) solid var(--border-color-dark);
   border-radius: var(--border-radius);
-  padding: 24px;
+  padding: var(--space-lg);
   display: flex;
   flex-direction: column;
 }
@@ -54,7 +56,7 @@
 .title-container {
   display: flex;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: var(--space-md);
 }
 
 .measurement-icon {
@@ -63,8 +65,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
-  margin-right: 12px;
+  border-radius: var(--border-radius);
+  margin-right: var(--space-sm);
   flex-shrink: 0;
 }
 
@@ -81,8 +83,8 @@
 }
 
 .measurement-card h4 {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
   margin: 0;
 }
 
@@ -91,25 +93,25 @@
 }
 
 .orange-title {
-  color: #ff9100;
+  color: var(--orange-primary);
 }
 
 .red-title {
-  color: #e91e63;
+  color: var(--red-primary);
 }
 
 .measurement-card ul {
   list-style: disc;
-  padding: 0 0 0 20px;
-  margin: 0 0 24px 0;
+  padding: 0 0 0 var(--space-md);
+  margin: 0 0 var(--space-lg) 0;
 }
 
 .measurement-card li {
-  margin-bottom: 16px;
-  font-size: 15px;
-  line-height: 1.5;
-  color: var(--text-color);
-  padding-left: 4px;
+  margin-bottom: var(--space-md);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  color: var(--text-color-primary);
+  padding-left: var(--space-2xs);
 }
 
 .measurement-card li:last-child {
@@ -117,48 +119,48 @@
 }
 
 .measurement-card strong {
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
 }
 
 .measurement-divider {
   height: 1px;
-  background-color: #eee;
-  margin: 0 0 16px 0;
+  background-color: var(--border-color);
+  margin: 0 0 var(--space-md) 0;
   width: 100%;
 }
 
 .measurement-card h5 {
-  font-size: 15px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  color: #555;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--space-sm);
+  color: var(--text-color-secondary);
 }
 
 .measurement-card p {
-  font-size: 15px;
-  line-height: 1.5;
-  color: #555;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  color: var(--text-color-secondary);
   margin: 0;
 }
 
 /* Responsive adjustments */
 @media (max-width: 1024px) {
   .measurements-section {
-    padding: 40px 60px;
+    padding: var(--space-xl) var(--space-3xl);
   }
   
   .measurements-grid {
-    gap: 20px;
+    gap: var(--space-md);
   }
   
   .measurement-card {
-    padding: 20px;
+    padding: var(--space-md);
   }
 }
 
 @media (max-width: 768px) {
   .measurements-section {
-    padding: 60px 30px;
+    padding: var(--space-3xl) var(--space-lg);
   }
   
   .measurements-grid {
@@ -168,33 +170,33 @@
   }
   
   .measurements-subtitle {
-    margin-bottom: 40px;
+    margin-bottom: var(--space-xl);
   }
 }
 
 @media (max-width: 480px) {
   .measurements-section {
-    padding: 40px 20px;
+    padding: var(--space-xl) var(--space-md);
   }
   
   .measurements-title {
-    font-size: 28px;
+    font-size: var(--font-size-2xl);
   }
   
   .measurements-subtitle {
-    font-size: 15px;
+    font-size: var(--font-size-sm);
   }
   
   .measurement-card {
-    padding: 16px;
+    padding: var(--space-md);
   }
   
   .measurement-card li {
-    font-size: 14px;
-    margin-bottom: 12px;
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--space-sm);
   }
   
   .measurement-card p {
-    font-size: 14px;
+    font-size: var(--font-size-sm);
   }
 } 

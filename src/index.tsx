@@ -9,7 +9,6 @@ import reportWebVitals from "./reportWebVitals";
 const loadCss = () => {
   const link = document.createElement("link");
   link.rel = "stylesheet";
-  link.href = "/styles/global.css";
   document.head.appendChild(link);
 };
 

@@ -1,10 +1,24 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
-import styles from "../styles/InterviewPage.module.css";
+import styles from "../styles/AuthenticatedInterviewPage.module.css";
 import { useAuth } from "../contexts/AuthContext";
 
 // API base URL defined in AuthContext
 const API_BASE_URL = "https://casepreparedcrud.onrender.com";
+
+// Dictionary of case type descriptions
+const CASE_TYPE_DESCRIPTIONS: Record<string, string> = {
+  Profitability: "Analyze the profitability of a business or product",
+  "Revenue Growth": "Identify strategies to grow revenue for a company",
+  "Market Entry": "Evaluate opportunities to enter a new market",
+  "Market Sizing": "Quantify opportunity in a target market",
+  Comparison: "Compare options and recommend the best solution",
+  // Add more case types and descriptions as needed
+};
+
+// Default description if case type is not found in dictionary
+const DEFAULT_CASE_DESCRIPTION =
+  "Analyze business problem and recommend solution";
 
 interface Interview {
   id: string;
@@ -256,21 +270,10 @@ const AuthenticatedInterviewPage: React.FC = () => {
     );
   }
 
-  // Extract case title from prompt
-  const promptLines = template.prompt ? template.prompt.split("\n") : [];
-  const promptLine = promptLines.find((line) =>
-    line.includes("The pandemic-induced collapse")
-  );
-  const caseTitle = promptLine ? template.title : template.title;
-
-  // Extract case description from prompt
-  const caseDescription =
-    promptLine || template.description_long || template.description_short;
-
   return (
     <div className={styles.container}>
       <div className={styles.breadcrumbs}>
-        <Link to="/interviews"> Interviews</Link>
+        <Link to="/interviews">Mock Interviews</Link>
         <span className={styles.separator}>&gt;</span>
         <span>{template.title}</span>
       </div>
@@ -318,13 +321,6 @@ const AuthenticatedInterviewPage: React.FC = () => {
                 playsInline
                 muted
                 className={styles.videoFeed}
-                style={{
-                  transform: "scaleX(-1)",
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  backgroundColor: "#333",
-                }}
               />
             )}
           </div>
@@ -360,10 +356,13 @@ const AuthenticatedInterviewPage: React.FC = () => {
 
       <div className={styles.aboutSection}>
         <h3>About this interview</h3>
-        <p>{template.description_short}</p>
-        <p className={styles.officialLink}>
-          Official mock interview from {template.company}
+        <p>
+          {template.description_short ||
+            "Evaluating whether a global beauty products company should be training in-store beauty consultants in the effective use of virtual channels to connect with customers."}
         </p>
+        <a href="#" className={styles.officialLink}>
+          Official mock interview from {template.company || "McKinsey"}
+        </a>
       </div>
 
       <div className={styles.interviewDetails}>
@@ -372,39 +371,46 @@ const AuthenticatedInterviewPage: React.FC = () => {
         <div className={styles.casePreview}>
           <div className={styles.caseImageContainer}>
             <img
-              src={template.image_url}
+              src={template.image_url || "/assets/case-preview.jpg"}
               alt={template.title}
               className={styles.caseImage}
             />
+            <div className={styles.caseImageFooter}>
+              <h5>{template.case_type || "Market Sizing"}</h5>
+              <p>
+                {CASE_TYPE_DESCRIPTIONS[template.case_type || ""] ||
+                  CASE_TYPE_DESCRIPTIONS["Market Sizing"] ||
+                  DEFAULT_CASE_DESCRIPTION}
+              </p>
+            </div>
           </div>
           <div className={styles.caseContent}>
             <div className={styles.caseHeader}>
               <div className={styles.caseHeaderLeft}>
                 <h4>
-                  {template.company} - {template.case_type}
+                  {template.company || "McKinsey"} -{" "}
+                  {template.case_type || "Case Title"}
                 </h4>
                 <div className={styles.caseMeta}>
-                  <span>{formatDuration(template.duration)}</span>
-                  <span>{template.difficulty}</span>
+                  <span>{formatDuration(template.duration || 20)}</span>
+                  <span>{template.difficulty || "Easy"}</span>
                 </div>
               </div>
               <div className={styles.caseStatus}>
-                <span className={styles.statusBadge}>
-                  {interview.status === "in-progress"
-                    ? "Incomplete"
-                    : "Complete"}
+                <span
+                  className={`${styles.statusBadge} ${
+                    interview.status === "completed" ? styles.completed : ""
+                  }`}
+                >
+                  {interview.status === "completed" ? "Complete" : "Incomplete"}
                 </span>
               </div>
             </div>
 
             <p className={styles.caseDescription}>
-              {template.description_long}
+              {template.description_long ||
+                "Description about the case, more in detail, just general yap about what it is. Vorem Impusm dolerus dolar impus murne Vorem Impusm dolerus dolar impus murne Vorem Impusm dolerus dolar impus murne"}
             </p>
-
-            <div className={styles.caseSubtitle}>
-              <h5>{template.case_type}</h5>
-              <p>Quantify opportunity in a target market</p>
-            </div>
 
             <div className={styles.startInterviewBtnContainer}>
               <button
@@ -438,8 +444,10 @@ const AuthenticatedInterviewPage: React.FC = () => {
 
                 // Extract question text from prompt
                 const promptText = value.prompt;
-                const matches = promptText.match(/"([^"]+)"/);
-                const questionTitle = matches ? matches[1] : "";
+
+                // Look for content between <title> tags
+                const titleMatch = promptText.match(/<title>(.*?)<\/title>/);
+                const questionTitle = titleMatch ? titleMatch[1].trim() : "";
 
                 return (
                   <div key={index} className={styles.questionCard}>
@@ -459,6 +467,7 @@ const AuthenticatedInterviewPage: React.FC = () => {
                         : "Incomplete"}
                     </div>
                     <h4>Question #{questionNum}</h4>
+                    <h5>{questionTitle}</h5>
                     <button
                       className={styles.startQuestion}
                       onClick={() => {

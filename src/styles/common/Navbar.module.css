@@ -98,12 +98,13 @@
   color: #333;
   text-decoration: none;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 550;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   padding: 6px 12px;
   position: relative;
   border-radius: var(--border-radius);
   display: block;
+  font-family: var(--font-primary);
 }
 
 .navLink:hover {
@@ -113,7 +114,7 @@
 }
 
 .navLink:active {
-  transform: translateY(0);
+  transform: translateY(0); 
 }
 
 .navCta {
@@ -149,7 +150,8 @@
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   border-radius: var(--border-radius);
-  letter-spacing: 0.01em;
+  letter-spacing: -0.01em;
+  font-family: var(--font-primary);
 }
 
 .loginButton:hover {
@@ -174,7 +176,8 @@
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
-  letter-spacing: 0.01em;
+  letter-spacing: -0.01em;
+  font-family: var(--font-primary);
 }
 
 .signupButton::before {

@@ -1,0 +1,83 @@
+@import "../../styles.css";
+
+.ctaContainer {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin: var(--space-5xl) auto var(--space-3xl);
+  padding: var(--space-4xl) var(--space-md);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ctaHeading {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-color-primary);
+  margin-bottom: var(--space-md);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  max-width: 800px;
+}
+
+.ctaText {
+  font-size: var(--font-size-md);
+  color: var(--text-color-secondary);
+  margin-bottom: var(--space-xl);
+  line-height: var(--line-height-normal);
+  max-width: 600px;
+}
+
+.ctaButton {
+  background-color: var(--blue-primary);
+  color: white;
+  border: none;
+  padding: var(--space-md) var(--space-2xl);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  text-decoration: none;
+  display: inline-block;
+  min-width: 160px;
+}
+
+.ctaButton:hover {
+  color: white;
+  background-color: var(--blue-secondary);
+}
+
+@media (max-width: 768px) {
+  .ctaContainer {
+    margin: var(--space-3xl) auto var(--space-2xl);
+    padding: var(--space-3xl) var(--space-md);
+  }
+  
+  .ctaHeading {
+    font-size: var(--font-size-2xl);
+    margin-bottom: var(--space-sm);
+  }
+  
+  .ctaText {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--space-lg);
+  }
+}
+
+@media (max-width: 480px) {
+  .ctaContainer {
+    margin: var(--space-2xl) auto var(--space-xl);
+    padding: var(--space-2xl) var(--space-md);
+  }
+  
+  .ctaHeading {
+    font-size: var(--font-size-xl);
+  }
+  
+  .ctaButton {
+    width: 100%;
+    max-width: 300px;
+  }
+} 

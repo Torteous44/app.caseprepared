@@ -1,0 +1,197 @@
+@import "../../styles.css";
+
+.missionContainer {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin: var(--space-5xl) auto;
+  padding: var(--space-2xl) var(--space-md);
+  text-align: center;
+}
+
+.sectionHeading {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-color-primary);
+  margin-bottom: var(--space-md);
+  line-height: var(--line-height-tight);
+  text-align: center;
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.missionContent {
+  max-width: 800px;
+  margin: 0 auto var(--space-xl);
+  text-align: center;
+}
+
+.missionText {
+  font-size: var(--font-size-md);
+  color: var(--text-color-primary);
+  line-height: var(--line-height-normal);
+  font-weight: var(--font-weight-medium);
+}
+
+.platformText {
+  font-weight: var(--font-weight-regular);
+  color: var(--text-color-secondary);
+}
+
+.benefits {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: center;
+  grid-gap: var(--space-md);
+  max-width: 800px;
+  margin: var(--space-xl) auto 0;
+}
+
+.benefitItem {
+  width: fit-content;
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  background-color: var(--background-primary);
+  box-shadow: var(--shadow-sm);
+  white-space: nowrap;
+}
+
+/* Left column benefits (odd numbered items) */
+.benefitItem:nth-child(2n-1) {
+  justify-self: end;
+}
+
+/* Right column benefits (even numbered items) */
+.benefitItem:nth-child(2n) {
+  justify-self: start;
+}
+
+.benefitItem:nth-child(1) .benefitIcon {
+  color: var(--blue-primary);
+}
+
+.benefitItem:nth-child(1) .benefitTitle {
+  color: var(--blue-primary);
+}
+
+.benefitItem:nth-child(2) .benefitIcon {
+  color: var(--orange-primary);
+}
+
+.benefitItem:nth-child(2) .benefitTitle {
+  color: var(--orange-primary);
+}
+
+.benefitItem:nth-child(3) .benefitIcon {
+  color: var(--red-primary);
+}
+
+.benefitItem:nth-child(3) .benefitTitle {
+  color: var(--red-primary);
+}
+
+.benefitItem:nth-child(4) .benefitIcon {
+  color: var(--green-primary);
+}
+
+.benefitItem:nth-child(4) .benefitTitle {
+  color: var(--green-primary);
+}
+
+.benefitIcon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.benefitContent {
+  flex: 0 0 auto;
+  text-align: left;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: baseline;
+}
+
+.benefitTitle {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: 0;
+  line-height: var(--line-height-tight);
+  display: inline;
+}
+
+.benefitText {
+  font-size: var(--font-size-base);
+  color: var(--text-color-secondary);
+  line-height: var(--line-height-normal);
+  margin-bottom: 0;
+  margin-left: var(--space-2xs);
+  display: inline;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .missionContainer {
+    margin: var(--space-3xl) auto;
+    padding: var(--space-xl) var(--space-md);
+  }
+  
+  .sectionHeading {
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--space-md);
+  }
+  
+  .missionText {
+    font-size: var(--font-size-base);
+  }
+  
+  .benefits {
+    grid-template-columns: auto;
+    gap: var(--space-sm);
+  }
+  
+  .benefitItem {
+    width: fit-content;
+    max-width: none;
+  }
+  
+  /* Reset alignment for mobile view */
+  .benefitItem:nth-child(2n-1),
+  .benefitItem:nth-child(2n) {
+    justify-self: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .missionContainer {
+    margin: var(--space-2xl) auto;
+    padding: var(--space-lg) var(--space-md);
+  }
+  
+  .sectionHeading {
+    font-size: var(--font-size-lg);
+  }
+  
+  .missionContent {
+    margin-bottom: var(--space-lg);
+  }
+  
+  .benefitItem {
+    padding: var(--space-2xs) var(--space-sm);
+    gap: var(--space-xs);
+  }
+  
+  .benefitIcon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .benefitTitle, .benefitText {
+    font-size: var(--font-size-sm);
+  }
+} 

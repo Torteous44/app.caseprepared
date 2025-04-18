@@ -73,9 +73,7 @@ interface EnhancedDemoInterview extends DemoInterview {
 }
 
 // API base URLs
-const API_BASE_URL = "https://casepreparedcrud.onrender.com"; // Matches AuthContext
-const DEMO_API_BASE_URL = "https://casepreparedcrud.onrender.com/api/v1/demo"; // Demo endpoint
-
+const API_BASE_URL = "https://casepreparedcrud.onrender.com";
 // Define demo interview templates
 const demoInterviews: DemoInterview[] = [
   {
@@ -309,14 +307,36 @@ const AuthenticatedInterviewsPage: React.FC = () => {
 
   // Helper function to get company logo based on company name
   const getCompanyLogo = (company: string): string => {
+    // Normalize the company name for case-insensitive matching
+    const normalizedCompany = company.toLowerCase();
+
     const companyLogos: Record<string, string> = {
-      "McKinsey & Company": "/assets/interviewCards/Logos/Mckinsey.svg",
-      BCG: "/assets/interviewCards/Logos/BCG.svg",
-      "Bain & Company": "/assets/interviewCards/Logos/Bain.svg",
-      Bain: "/assets/interviewCards/Logos/Bain.svg",
+      // Original mappings
+      "mckinsey & company": "/assets/interviewCards/Logos/Mckinsey.svg",
+      mckinsey: "/assets/interviewCards/Logos/Mckinsey.svg",
+      bcg: "/assets/interviewCards/Logos/BCG.svg",
+      "boston consulting group": "/assets/interviewCards/Logos/BCG.svg",
+      "bain & company": "/assets/interviewCards/Logos/Bain.svg",
+      bain: "/assets/interviewCards/Logos/Bain.svg",
+
+      // Additional mappings based on available logos
+      accenture: "/assets/interviewCards/Logos/Accenture.svg",
+      deloitte: "/assets/interviewCards/Logos/Deloitte.svg",
+      ey: "/assets/interviewCards/Logos/EY.svg",
+      "ernst & young": "/assets/interviewCards/Logos/EY.svg",
+      kearney: "/assets/interviewCards/Logos/Kearney.svg",
+      "a.t. kearney": "/assets/interviewCards/Logos/Kearney.svg",
+      pwc: "/assets/interviewCards/Logos/PWC.svg",
+      pricewaterhousecoopers: "/assets/interviewCards/Logos/PWC.svg",
+      "oliver wyman": "/assets/interviewCards/Logos/Wyman.svg",
+      wyman: "/assets/interviewCards/Logos/Wyman.svg",
     };
 
-    return companyLogos[company] || "/assets/interviewCards/Logos/default.svg";
+    // Check if normalized company name exists in our mapping
+    return (
+      companyLogos[normalizedCompany] ||
+      "/assets/interviewCards/Logos/default.svg"
+    );
   };
 
   const handleStartInterview = async (
@@ -411,7 +431,7 @@ const AuthenticatedInterviewsPage: React.FC = () => {
         throw new Error("Invalid demo interview type");
       }
 
-      // Navigate to the interview page with the ID
+      // Navigate to the interview page with the ID using the same flow as public page
       navigate(`/interview/${interviewId}`, {
         state: {
           isDemo: true,
