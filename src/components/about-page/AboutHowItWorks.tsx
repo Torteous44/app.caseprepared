@@ -79,10 +79,7 @@ const AboutHowItWorks: React.FC = () => {
                 determine what initiatives to undertake to achieve it.
               </p>
               <div className={styles.buttonWrapper}>
-                <Link
-                  to="/interviews/climate-case"
-                  className={styles.mockButton}
-                >
+                <Link to="/interviews" className={styles.mockButton}>
                   Mock Interview <span className={styles.arrowIcon}>→</span>
                 </Link>
               </div>

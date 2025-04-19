@@ -1,0 +1,49 @@
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.dot-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: rgba(23, 78, 166, 0.25);
+  transform: translateY(0);
+}
+
+.dot1 {
+  animation: floatPulse 1.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.dot2 {
+  animation: floatPulse 1.6s cubic-bezier(0.45, 0, 0.55, 1) 0.3s infinite;
+}
+
+.dot3 {
+  animation: floatPulse 1.6s cubic-bezier(0.45, 0, 0.55, 1) 0.6s infinite;
+}
+
+@keyframes floatPulse {
+  0%, 100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+    background-color: #174EA6;
+  }
+} 

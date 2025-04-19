@@ -926,227 +926,193 @@ const AuthenticatedRealtimeConnect: React.FC = () => {
     []
   );
 
+  // Clean up all resources and connections
+  const cleanupResources = useCallback(() => {
+    console.log("Cleaning up resources");
+
+    // Close peer connection
+    if (peerConnectionRef.current) {
+      peerConnectionRef.current.close();
+      peerConnectionRef.current = null;
+    }
+
+    // Close data channel if open
+    if (dataChannelRef.current) {
+      dataChannelRef.current.close();
+      dataChannelRef.current = null;
+    }
+
+    // Stop local media tracks
+    if (localStreamRef.current) {
+      localStreamRef.current.getTracks().forEach((track) => {
+        track.stop();
+      });
+      localStreamRef.current = null;
+    }
+
+    // Close audio context
+    if (audioContextRef.current) {
+      audioContextRef.current.close().catch(console.error);
+      audioContextRef.current = null;
+    }
+
+    // Cancel animation frame if active
+    if (animationFrameRef.current) {
+      cancelAnimationFrame(animationFrameRef.current);
+      animationFrameRef.current = null;
+    }
+
+    // Clear timer
+    if (durationIntervalRef.current) {
+      clearInterval(durationIntervalRef.current);
+      durationIntervalRef.current = null;
+    }
+
+    setConnectionState("closed");
+    setCallActive(false);
+  }, []);
+
   // Handle ending the question and going to the post-question screen
-  const handleEndQuestion = useCallback(async () => {
+  const handleEndQuestion = useCallback(() => {
     if (isEnding) return;
     setIsEnding(true);
 
     // Show notification
     showNotification("Ending question...", "info");
 
-    let analysisData: TranscriptAnalysis | null = null;
-    let nextQuestionNumber = (locationState.questionNumber || 1) + 1;
+    // Set default values for post-question screen
+    const currentQuestionNumber = locationState.questionNumber || 1;
+    const nextQuestionNumber = currentQuestionNumber + 1;
+    const totalQuestions = 4;
     let isAllCompleted = false;
-    let completedQuestions: number[] = [];
+    let completedQuestions: number[] = [currentQuestionNumber];
 
-    try {
-      // Add debug logging
-      console.log("Trying to close transcription service...");
-      console.log("transcriptionRef exists:", !!transcriptionRef.current);
-      console.log("Transcription refs:", {
-        transcriptionRef: transcriptionRef.current,
-        closeMethod: transcriptionRef.current?.closeTranscription,
-      });
-
-      // Close transcription service and get analysis data
-      if (transcriptionRef.current) {
-        try {
-          analysisData = await transcriptionRef.current.closeTranscription();
-          console.log("Transcription analysis received:", !!analysisData);
-          console.log(
-            "Analysis data keys:",
-            analysisData ? Object.keys(analysisData) : "none"
-          );
-        } catch (transcriptionError) {
-          console.error("Error closing transcription:", transcriptionError);
-        }
+    // Background function to handle transcript analysis
+    const sendTranscriptAnalysis = () => {
+      // Skip if no transcriptionRef
+      if (!transcriptionRef.current) {
+        console.log("No transcription reference available");
+        return;
       }
 
-      // Call the API to mark the question as complete
-      const questionNumber = locationState.questionNumber || 1;
-      const token = localStorage.getItem("access_token");
+      try {
+        // Get the auth token
+        const token = localStorage.getItem("access_token");
+        if (!token) {
+          console.warn("No authentication token found for transcript analysis");
+          return;
+        }
 
-      if (!token) {
-        console.warn("No authentication token found");
-        // Continue even without a token - we'll use default values
-      } else {
-        try {
-          console.log(
-            `Calling API to complete question ${questionNumber} for interview ${sessionId}`
-          );
+        // Format the transcript (if available from transcripts state)
+        if (transcripts.length > 0) {
+          const formattedTranscript = transcripts
+            .map((t) => `[${t.speaker}]: ${t.text}`)
+            .join("\n");
 
-          // Make API call to complete the question
-          const completeResponse = await fetch(
-            `${API_BASE_URL}/api/v1/interviews/${sessionId}/questions/${questionNumber}/complete`,
-            {
+          // Use sendBeacon to send the transcript for analysis in the background
+          const beaconData = JSON.stringify({
+            transcript: formattedTranscript,
+            interview_id: sessionId,
+            question_number: currentQuestionNumber,
+          });
+
+          // Create the request URL
+          const url = `${API_BASE_URL}/api/v1/transcript-analysis/`;
+
+          // Create the blob with the correct type
+          const blob = new Blob([beaconData], { type: "application/json" });
+
+          // Send the data using beacon
+          const success = navigator.sendBeacon(url, blob);
+
+          if (success) {
+            console.log("Transcript analysis request sent via beacon");
+          } else {
+            console.warn(
+              "Failed to send transcript analysis via beacon, falling back to fetch"
+            );
+
+            // Fallback to fetch with keepalive
+            fetch(url, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,
               },
-            }
-          );
-
-          console.log("API response status:", completeResponse.status);
-
-          if (!completeResponse.ok) {
-            const errorText = await completeResponse.text();
-            console.error("Error response:", errorText);
-
-            let errorData;
-            try {
-              errorData = JSON.parse(errorText);
-            } catch (e) {
-              console.error("Failed to parse error JSON:", e);
-            }
-
-            console.warn(
-              `Failed to mark question as complete (Status: ${
-                completeResponse.status
-              }): ${errorData?.detail || "Unknown error"}`
-            );
-            // Continue with default values - not stopping the flow
-          } else {
-            const updatedInterview = await completeResponse.json();
-            console.log(
-              "Question marked as complete. Updated interview data:",
-              updatedInterview
-            );
-
-            // Get the next question number from the API response
-            nextQuestionNumber =
-              updatedInterview.progress_data?.current_question ||
-              questionNumber + 1;
-            isAllCompleted = updatedInterview.status === "completed";
-            completedQuestions =
-              updatedInterview.progress_data?.questions_completed || [];
-
-            console.log("Next question will be:", nextQuestionNumber);
-            console.log("Completed questions:", completedQuestions);
-            console.log(
-              "Interview completion status:",
-              updatedInterview.status
-            );
+              body: beaconData,
+              keepalive: true,
+            }).catch((error) => {
+              console.error("Error sending transcript analysis:", error);
+            });
           }
-        } catch (apiError) {
-          console.error("API error:", apiError);
-          // Continue with default values - not stopping the flow
+        } else {
+          console.log("No transcripts available to send for analysis");
         }
+      } catch (error) {
+        console.error("Error preparing transcript analysis:", error);
       }
+    };
 
-      // Clean up connection
-      if (peerConnectionRef.current) {
-        // Close peer connection
-        peerConnectionRef.current.close();
-        peerConnectionRef.current = null;
+    // Background function to mark question as complete
+    const markQuestionComplete = () => {
+      try {
+        const token = localStorage.getItem("access_token");
+        if (!token) {
+          console.warn(
+            "No authentication token found for marking question complete"
+          );
+          return;
+        }
+
+        // Create the request URL
+        const url = `${API_BASE_URL}/api/v1/interviews/${sessionId}/questions/${currentQuestionNumber}/complete`;
+
+        // Use fetch with keepalive to ensure the request completes even after navigation
+        fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          keepalive: true,
+        })
+          .then((response) => {
+            if (response.ok) {
+              console.log("Question marked as complete in the background");
+            } else {
+              console.warn(
+                `Failed to mark question as complete: ${response.status}`
+              );
+            }
+          })
+          .catch((error) => {
+            console.error("Error marking question as complete:", error);
+          });
+      } catch (error) {
+        console.error("Error preparing question complete request:", error);
       }
+    };
 
-      // Close data channel if open
-      if (dataChannelRef.current) {
-        dataChannelRef.current.close();
-        dataChannelRef.current = null;
-      }
+    // Start the background tasks
+    sendTranscriptAnalysis();
+    markQuestionComplete();
 
-      // Stop local media tracks
-      if (localStreamRef.current) {
-        localStreamRef.current.getTracks().forEach((track) => {
-          track.stop();
-        });
-        localStreamRef.current = null;
-      }
+    // Immediately clean up resources
+    cleanupResources();
 
-      // Close audio context
-      if (audioContextRef.current) {
-        audioContextRef.current.close().catch(console.error);
-        audioContextRef.current = null;
-      }
-
-      // Cancel animation frame if active
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current);
-        animationFrameRef.current = null;
-      }
-
-      // Clear timer
-      if (durationIntervalRef.current) {
-        clearInterval(durationIntervalRef.current);
-        durationIntervalRef.current = null;
-      }
-
-      setConnectionState("closed");
-      setCallActive(false);
-
-      // Set default values for post-question screen if they weren't set from the API
-      // If question number is not available, default to 1
-      const currentQuestionNumber = locationState.questionNumber || 1;
-      // Add current question to completed questions if not already there
-      if (!completedQuestions.includes(currentQuestionNumber)) {
-        completedQuestions.push(currentQuestionNumber);
-      }
-      // Default total questions
-      const totalQuestions = 4;
-
-      // Navigate to post-question screen with the necessary data
-      console.log("Navigating to post-question screen");
-      console.log("Navigation data:", {
-        path: `/interview/post-question/${sessionId}`,
+    // Navigate to post-question screen without waiting
+    console.log("Navigating to post-question screen");
+    navigate(`/interview/post-question/${sessionId}`, {
+      state: {
         title: interviewTitle,
         questionNumber: currentQuestionNumber,
         nextQuestionNumber,
         totalQuestions,
         isAllCompleted,
-        completedQuestions: completedQuestions.length,
-        hasTranscriptAnalysis: !!analysisData || !!transcriptAnalysis,
-      });
-
-      try {
-        // Use the exact path from App.tsx route definition
-        const postQuestionPath = `/interview/post-question/${sessionId}`;
-        console.log(`Navigating to: ${postQuestionPath}`);
-
-        navigate(postQuestionPath, {
-          state: {
-            title: interviewTitle,
-            questionNumber: currentQuestionNumber,
-            nextQuestionNumber,
-            totalQuestions,
-            isAllCompleted,
-            completedQuestions,
-            transcriptAnalysis: analysisData || transcriptAnalysis, // Include analysis data
-          },
-        });
-        console.log("Navigation called successfully");
-      } catch (navError) {
-        console.error("Navigation error:", navError);
-      }
-    } catch (error) {
-      console.error("Error during question ending process:", error);
-
-      // Even in case of errors, try to navigate to the post-question screen
-      // with whatever data we have
-      try {
-        navigate(`/interview/post-question/${sessionId}`, {
-          state: {
-            title: interviewTitle,
-            questionNumber: locationState.questionNumber || 1,
-            nextQuestionNumber: (locationState.questionNumber || 1) + 1,
-            totalQuestions: 4,
-            isAllCompleted: false,
-            completedQuestions: [],
-            transcriptAnalysis: analysisData || transcriptAnalysis,
-          },
-        });
-        console.log("Fallback navigation executed");
-      } catch (navError) {
-        console.error("Fallback navigation error:", navError);
-        showNotification(
-          "Failed to navigate to results. Please try again or return to the interviews page.",
-          "error"
-        );
-      }
-
-      setIsEnding(false);
-    }
+        completedQuestions,
+        transcriptAnalysis: transcriptAnalysis, // Use current analysis data
+      },
+    });
   }, [
     navigate,
     sessionId,
@@ -1155,6 +1121,8 @@ const AuthenticatedRealtimeConnect: React.FC = () => {
     isEnding,
     showNotification,
     transcriptAnalysis,
+    transcripts,
+    cleanupResources,
   ]);
 
   // Format call duration for display

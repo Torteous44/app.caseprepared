@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import styles from "../styles/AuthenticatedInterviewPage.module.css";
 import { useAuth } from "../contexts/AuthContext";
+import LoadingSpinner from "../components/common/LoadingSpinner";
 
 // API base URL defined in AuthContext
 const API_BASE_URL = "https://casepreparedcrud.onrender.com";
@@ -254,7 +255,11 @@ const AuthenticatedInterviewPage: React.FC = () => {
   };
 
   if (isLoading) {
-    return <div className={styles.container}>Loading interview data...</div>;
+    return (
+      <div className={styles.container}>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (error || !interview || !template) {
@@ -321,6 +326,7 @@ const AuthenticatedInterviewPage: React.FC = () => {
                 playsInline
                 muted
                 className={styles.videoFeed}
+                style={{ transform: "scaleX(-1)" }}
               />
             )}
           </div>

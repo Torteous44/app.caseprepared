@@ -1,15 +1,44 @@
 @import "../styles.css";
 
+/* Add this to the top to ensure all elements use border-box sizing */
+* {
+  box-sizing: border-box;
+}
+
+/* Adjust container sizing for better fit */
+.container {
+  width: 100%;
+  max-width: 660px;
+  margin: 0 auto;
+  margin-top: 40px;
+  padding: 80px 20px 60px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Add this media query for very small screens */
+@media (max-width: 360px) {
+  .container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  
+  .infoDisplay {
+    padding-left: 8px;
+    padding-right: 8px;
+    font-size: 14px;
+  }
+}
+
 /* Page header styles */
 .pageHeader {
   max-width: 900px;
   margin: 0 auto;
-  padding: var(--space-5xl) var(--space-md) var(--space-lg);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   border-bottom: var(--border-width-thin) solid var(--border-color);
   margin-bottom: var(--space-2xl);
+  margin-top: 20px;
 }
 
 .pageHeader h1 {
@@ -149,190 +178,196 @@
   gap: var(--space-2xl);
 }
 
-.container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 40px 24px 60px;
-  --container-padding: 24px;
+.profileHeader {
   display: flex;
-  flex-direction: column;
-  gap: 30px;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
 }
 
-.card {
-  background-color: var(--background-primary);
-  border-radius: var(--border-radius-md);
-  border: var(--border-width-thin) solid var(--border-color);
-  padding: var(--space-2xl);
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--transition-normal);
+.profileHeader h1 {
+  font-size: 18px;
+  font-weight: 500;
+  color: #000;
+  margin: 0 0 4px 0;
 }
 
-.card:hover {
-  box-shadow: var(--shadow-md);
+.memberSince {
+  font-size: 14px;
+  color: #6B7280;
+  margin: 0;
 }
 
-.header {
+.premiumBadge {
+  color: #174EA6;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.profileInfo {
+  margin-bottom: 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.infoField {
+  margin-bottom: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.infoField label {
+  display: block;
+  font-size: 14px;
+  font-weight: normal;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.infoInput {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #E5E7EB;
+  border-radius: 6px;
+  font-size: 16px;
+  background-color: #fff;
+  color: #111827;
+}
+
+.infoDisplay {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #E5E7EB;
+  border-radius: 6px;
+  font-size: 16px;
+  background-color: #fff;
+  color: #111827;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.premiumMemberCard {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--space-xl);
-  padding-bottom: var(--space-md);
-  border-bottom: var(--border-width-thin) solid var(--border-color);
+  background: linear-gradient(to right, #00205F, #003087);
+  color: #fff;
+  padding: 16px 20px;
+  border-radius: 6px;
+  margin-bottom: 24px;
 }
 
-.title {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-color-primary);
-  margin: 0;
-  letter-spacing: var(--letter-spacing-tight);
-}
-
-/* Card content styles */
-.profileInfoCard {
+.subscribeCard {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 6px;
+  margin-bottom: 24px;
+  text-align: center;
+  border: 1px solid #E5E7EB;
 }
 
-.infoRow {
-  display: flex;
-  padding: var(--space-md) 0;
-  border-bottom: var(--border-width-thin) solid var(--border-color);
+.subscribeCard p {
+  margin: 0 0 16px 0;
+  color: #374151;
+  font-size: 14px;
 }
 
-.infoRow:last-child {
-  border-bottom: none;
+.subscribeButton {
+  background-color: #003087;
+  color: white;
+  padding: 8px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  transition: background-color 0.2s;
 }
 
-.label {
-  font-weight: var(--font-weight-medium);
-  color: var(--text-color-tertiary);
-  width: 160px;
-  flex-shrink: 0;
-  letter-spacing: var(--letter-spacing-normal);
+.subscribeButton:hover {
+  background-color: #002066;
 }
 
-.value {
-  color: var(--text-color-primary);
-  flex-grow: 1;
-  letter-spacing: var(--letter-spacing-normal);
+.premiumMemberText {
+  color: #FFC700;
+  font-weight: 500;
 }
 
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xl);
+.nextPaymentDate {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 12px;
+  margin-top: 4px;
 }
 
-.formGroup {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
+.viewDetails {
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  position: relative;
+  padding-bottom: 2px;
+  transition: all 0.2s ease;
 }
 
-.input {
-  padding: var(--space-sm) var(--space-md);
-  background: var(--background-secondary);
-  border: var(--border-width-thin) solid var(--border-color);
-  border-radius: var(--border-radius);
-  font-size: var(--font-size-base);
-  transition: all var(--transition-fast);
-  width: 100%;
-  font-family: var(--font-primary);
+.viewDetails:hover {
+  color: #FFC700;
 }
 
-.input:focus {
-  border-color: var(--blue-primary);
-  outline: none;
-  background: var(--background-primary);
-  box-shadow: 0 0 0 3px rgba(23, 78, 166, 0.1);
-}
 
-.disabled {
-  background-color: var(--background-light);
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-.helperText {
-  font-size: var(--font-size-sm);
-  color: var(--text-color-quaternary);
-  margin: 0;
-}
-
-.buttonGroup {
+.actionButtons {
   display: flex;
   justify-content: flex-end;
-  gap: var(--space-md);
-  margin-top: var(--space-lg);
+  gap: 16px;
+  margin-top: 32px;
 }
 
-.editButton, .cancelButton, .saveButton {
-  border-radius: var(--border-radius);
-  padding: var(--space-sm) var(--space-lg);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-medium);
+.interviewsButton, .signOutButton {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all var(--transition-fast);
-  font-family: var(--font-primary);
+  text-align: center;
+  transition: background-color 0.2s;
 }
 
-.editButton {
-  background: transparent;
-  color: var(--blue-primary);
-  border: var(--border-width-thin) solid var(--blue-primary);
+.interviewsButton {
+  background-color: #003087;
+  color: #fff;
+  border: none;
+  text-decoration: none;
 }
 
-.editButton:hover {
-  background-color: rgba(23, 78, 166, 0.05);
+.interviewsButton:hover {
+  color: #fff;
+  background-color: #002066;
 }
 
-.cancelButton {
-  background: transparent;
-  color: var(--text-color-tertiary);
-  border: var(--border-width-thin) solid var(--border-color);
-}
-
-.cancelButton:hover {
-  color: var(--text-color-primary);
-  border-color: var(--border-color-dark);
-  background-color: var(--background-secondary);
-}
-
-.saveButton {
-  background: var(--blue-primary);
-  color: white;
+.signOutButton {
+  background-color: transparent;
+  color: #374151;
   border: none;
 }
 
-.saveButton:hover {
-  background: var(--blue-secondary);
+.signOutButton:hover {
+  text-decoration: underline;
 }
 
-.saveButton:disabled {
-  background: var(--text-color-quaternary);
-  cursor: not-allowed;
+.profileCard {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
-.errorMessage {
-  color: var(--red-primary);
-  font-size: var(--font-size-sm);
-  padding: var(--space-sm) var(--space-md);
-  background-color: var(--red-bg);
-  border-radius: var(--border-radius);
-  border-left: 3px solid var(--red-primary);
-  margin-bottom: var(--space-md);
-}
-
-.successMessage {
-  color: var(--green-primary);
-  font-size: var(--font-size-sm);
-  padding: var(--space-sm) var(--space-md);
-  background-color: var(--green-bg);
-  border-radius: var(--border-radius);
-  border-left: 3px solid var(--green-primary);
-  margin-top: var(--space-lg);
+.profileCard h1 {
+  font-size: 20px;
+  margin-bottom: 12px;
 }
 
 /* Subscription styles */
@@ -465,7 +500,7 @@
 }
 
 .premiumMemberLabel {
-  color: #ffd700;
+  color: #E8C72D;
   font-weight: var(--font-weight-normal);
   font-size: var(--font-size-lg);
   font-family: var(--font-primary);
@@ -485,6 +520,7 @@
   color: white;
 }
 
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .pageHeader {
     padding: var(--space-3xl) var(--space-md) var(--space-md);
@@ -665,5 +701,24 @@
   
   .viewDetailsLink {
     align-self: flex-end;
+  }
+  
+  .container {
+    padding: 24px 16px;
+  }
+  
+  .actionButtons {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 40px 16px 60px;
+  }
+  
+  .infoDisplay {
+    max-width: 100%;
+    box-sizing: border-box;
   }
 } 

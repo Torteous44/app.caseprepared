@@ -1,28 +1,338 @@
+/* Design Variables */
+:root {
+  --case-blue: #174EA6; /* Corporate blue from logo */
+  --case-blue-light: rgba(0, 68, 148, 0.1);
+  --case-green: #149462;
+  --case-red: #d64545;
+  --case-bg: #ffffff;
+  
+  --text-color-primary: #111827;
+  --text-color-secondary: #374151;
+  --text-color-tertiary: #6B7280;
+  
+  --border-color: #E5E7EB;
+  --card-bg: #ffffff;
+  
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  
+  --border-radius: 6px;
+  --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --transition: 200ms ease-out;
+}
+
+body {
+  margin: 0;
+  background-color: var(--case-bg);
+}
+
 .container {
-  max-width: 480px;
-  margin: 80px auto;
-  padding: 0 20px;
-  font-family: var(--font-primary);
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 50px 20px;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
 }
 
-.subscriptionCard {
-  background-color: var(--background-primary);
-  border-radius: var(--border-radius-md);
-  padding: 32px;
-  letter-spacing: var(--letter-spacing-normal);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  transition: box-shadow var(--transition-normal);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  position: relative;
+.title {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--case-blue);
+  text-align: left;
+  margin-bottom: 16px;
 }
 
-.subscriptionCard h1 {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-semibold);
-  margin-bottom: var(--space-lg);
+.subtitle {
+  font-size: 18px;
+  color: var(--text-color-secondary);
+  text-align: left;
+  margin-bottom: 48px;
+  max-width: 600px;
+}
+
+.subscriptionGrid {
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
+}
+
+.leftColumn {
+  flex: 1;
+}
+
+.rightColumn {
+  flex: 1;
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-xl);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border-color);
+}
+
+/* Plan details */
+.planDetails {
+  margin-bottom: 32px;
+}
+
+.planTitle {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: var(--case-blue);
+}
+
+.priceContainer {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 20px;
+}
+
+.currency {
+  font-size: 24px;
+  font-weight: 700;
   color: var(--text-color-primary);
-  letter-spacing: var(--letter-spacing-tight);
+  margin-right: 2px;
+}
+
+.amount {
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--case-blue);
+  line-height: 1;
+}
+
+.period {
+  font-size: 16px;
+  color: var(--text-color-tertiary);
+  margin-left: 4px;
+}
+
+.features {
+  list-style-type: none;
+  padding: 0;
+  margin: 32px 0 0;
+}
+
+.features li {
+  padding: 8px 0;
+  margin-bottom: 16px;
+  color: var(--text-color-secondary);
+  font-size: 16px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.featureIcon {
+  margin-right: 12px;
+  color: var(--case-blue);
+  flex-shrink: 0;
+}
+
+/* Arrow CTA - mimicking the arrow style from ads */
+.ctaArrow {
+  display: inline-block;
+  margin-right: 8px;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--case-blue);
+}
+
+/* Subscription status */
+.subscriptionStatus {
+  padding: 24px 0;
+}
+
+.statusIndicator {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+  padding: 6px 12px;
+  background-color: rgba(20, 148, 98, 0.1);
+  border-radius: 20px;
+}
+
+.activeIcon {
+  width: 8px;
+  height: 8px;
+  background-color: var(--case-green);
+  border-radius: 50%;
+  margin-right: var(--spacing-xs);
+}
+
+.statusIndicator span {
+  font-weight: 600;
+  color: var(--case-green);
+  font-size: 14px;
+}
+
+.renewalInfo {
+  font-size: 14px;
+  color: var(--text-color-tertiary);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Buttons */
+.subscribeButton, .cancelButton {
+  display: flex;
+  width: 100%;
+  padding: 14px 24px;
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
   text-align: center;
+  font-size: 16px;
+  position: relative;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+}
+
+.subscribeButton {
+  background-color: var(--case-blue);
+  color: white;
+  box-shadow: 0 2px 6px rgba(0, 68, 148, 0.2);
+}
+
+.subscribeButton:hover:not(:disabled) {
+  background-color: #003a7e;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 68, 148, 0.25);
+}
+
+.subscribeButton:disabled {
+  background-color: #a0a8bd;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.cancelButton {
+  background-color: transparent;
+  color: var(--case-red);
+  border: 1px solid currentColor;
+}
+
+.cancelButton:hover:not(:disabled) {
+  background-color: rgba(214, 69, 69, 0.05);
+}
+
+.cancelButton:disabled {
+  color: var(--text-color-tertiary);
+  border-color: var(--text-color-tertiary);
+  cursor: not-allowed;
+}
+
+.guarenteeText {
+  text-align: center;
+  color: var(--text-color-tertiary);
+  font-size: 14px;
+  margin-top: var(--spacing-sm);
+}
+
+/* Messages */
+.message, .errorMessage, .successMessage {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  text-align: center;
+}
+
+.errorMessage {
+  background-color: rgba(214, 69, 69, 0.1);
+  color: var(--case-red);
+  border: 1px solid rgba(214, 69, 69, 0.12);
+}
+
+.successMessage {
+  background-color: rgba(20, 148, 98, 0.1);
+  color: var(--case-green);
+  padding: var(--spacing-md);
+  border: 1px solid rgba(20, 148, 98, 0.12);
+}
+
+.successMessage h3 {
+  margin-top: 0;
+  margin-bottom: var(--spacing-xs);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Stripe elements */
+.checkoutForm {
+  padding: var(--spacing-md) 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.formRow {
+  margin-bottom: var(--spacing-md);
+}
+
+.cardLabel {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  font-size: 14px;
+  color: var(--text-color-secondary);
+  font-weight: 500;
+}
+
+.cardElement {
+  padding: 14px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: white;
+  transition: all var(--transition);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.cardElement:hover {
+  border-color: var(--case-blue);
+}
+
+/* Payment footer with security elements */
+.paymentFooter {
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-lg);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.securityInfo {
+  display: flex;
+  align-items: center;
+  color: var(--text-color-tertiary);
+  font-size: 13px;
+}
+
+.securityIcon {
+  margin-right: 6px;
+  color: var(--text-color-tertiary);
+}
+
+.stripeBadge {
+  width: 140px;
+}
+
+.stripeBadge img {
+  width: 100%;
+}
+
+.testimonialPlaceholder {
+  margin-top: var(--spacing-xl);
+  padding: var(--spacing-md);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  text-align: center;
+  color: var(--text-color-tertiary);
+  font-size: 14px;
 }
 
 /* Loading state */
@@ -31,17 +341,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: var(--space-xl) 0;
+  padding: var(--spacing-xl) 0;
 }
 
 .spinner {
   width: 28px;
   height: 28px;
   border: 2px solid rgba(0, 0, 0, 0.03);
-  border-top-color: var(--blue-primary);
+  border-top-color: var(--case-blue);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--spacing-md);
 }
 
 @keyframes spin {
@@ -52,306 +362,74 @@
 
 .loadingState p {
   color: var(--text-color-tertiary);
-  font-size: var(--font-size-base);
+  font-size: 16px;
 }
 
 /* Auth required message */
 .authRequired {
   text-align: center;
-  padding: var(--space-xl) 0;
+  padding: var(--spacing-xl) 0;
 }
 
 .authRequired h1 {
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--spacing-md);
+  color: var(--case-blue);
 }
 
 .authRequired p {
   color: var(--text-color-tertiary);
 }
 
-/* Plan details */
-.planDetails {
-  margin-bottom: var(--space-lg);
-  padding-bottom: var(--space-md);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.priceContainer {
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  margin-bottom: var(--space-md);
-}
-
-.currency {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-medium);
-  color: var(--text-color-primary);
-  margin-right: 2px;
-}
-
-.amount {
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--blue-primary);
-  line-height: 1;
-}
-
-.period {
-  font-size: var(--font-size-base);
-  color: var(--text-color-tertiary);
-  margin-left: 4px;
-}
-
-.features {
-  list-style-type: none;
-  padding: 0;
-  margin: var(--space-md) auto 0;
-  max-width: 320px;
-}
-
-.features li {
-  padding: var(--space-xs) 0;
-  position: relative;
-  padding-left: var(--space-lg);
-  margin-bottom: var(--space-xs);
-  color: var(--text-color-secondary);
-  font-size: var(--font-size-base);
-  display: flex;
-  align-items: center;
-}
-
-.features li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  width: 18px;
-  height: 18px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Ccircle cx='10' cy='10' r='10' fill='%23E8F3FF'/%3E%3Cpath d='M6 10.5L8.5 13L14 7.5' stroke='%23174EA6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-}
-
-/* Remove the after pseudo element since we're using SVG background */
-.features li::after {
-  content: none;
-}
-
-/* Subscription status */
-.subscriptionStatus {
-  padding: var(--space-md) 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.statusIndicator {
-  display: flex;
-  align-items: center;
-  margin-bottom: var(--space-md);
-  padding: 6px 12px;
-  background-color: var(--green-bg);
-  border-radius: 20px;
-}
-
-.activeIcon {
-  width: 8px;
-  height: 8px;
-  background-color: var(--green-primary);
-  border-radius: 50%;
-  margin-right: var(--space-xs);
-}
-
-.statusIndicator span {
-  font-weight: var(--font-weight-medium);
-  color: var(--green-primary);
-  font-size: var(--font-size-sm);
-}
-
-.renewalInfo {
-  font-size: var(--font-size-sm);
-  color: var(--text-color-tertiary);
-  margin-bottom: var(--space-lg);
-}
-
-/* Buttons */
-.subscribeButton, .cancelButton {
-  display: block;
-  width: 100%;
-  padding: 14px 24px;
-  border: none;
-  border-radius: 6px;
-  font-weight: var(--font-weight-medium);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  text-align: center;
-  margin-top: var(--space-md);
-  font-size: var(--font-size-base);
-  position: relative;
-  overflow: hidden;
-}
-
-.subscribeButton {
-  background-color: var(--blue-primary);
-  color: white;
-  box-shadow: 0 2px 6px rgba(23, 78, 166, 0.15);
-}
-
-.subscribeButton:hover:not(:disabled) {
-  background-color: var(--blue-secondary);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(23, 78, 166, 0.20);
-}
-
-.subscribeButton:disabled {
-  background-color: var(--text-color-light);
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-.cancelButton {
-  background-color: transparent;
-  color: var(--red-primary);
-  border: 1px solid currentColor;
-}
-
-.cancelButton:hover:not(:disabled) {
-  background-color: var(--red-bg);
-}
-
-.cancelButton:disabled {
-  color: var(--text-color-light);
-  border-color: var(--text-color-light);
-  cursor: not-allowed;
-}
-
-/* Messages */
-.message, .errorMessage, .successMessage {
-  margin-top: var(--space-md);
-  padding: var(--space-sm);
-  border-radius: var(--border-radius-md);
-  font-size: var(--font-size-sm);
-  text-align: center;
-}
-
-.errorMessage {
-  background-color: var(--red-bg);
-  color: var(--red-primary);
-  border: 1px solid rgba(192, 16, 72, 0.12);
-}
-
-.successMessage {
-  background-color: var(--green-bg);
-  color: var(--green-primary);
-  padding: var(--space-md);
-  border: 1px solid rgba(2, 122, 72, 0.12);
-}
-
-.successMessage h3 {
-  margin-top: 0;
-  margin-bottom: var(--space-xs);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
-}
-
-/* Stripe elements */
-.checkoutForm {
-  padding: var(--space-md) 0 0;
-}
-
-.formRow {
-  margin-bottom: var(--space-md);
-}
-
-.cardLabel {
-  display: block;
-  margin-bottom: var(--space-xs);
-  font-size: var(--font-size-sm);
-  color: var(--text-color-secondary);
-  font-weight: var(--font-weight-medium);
-}
-
-.cardElement {
-  padding: 14px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: var(--border-radius-md);
-  background-color: white;
-  transition: all var(--transition-fast);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
-}
-
-.cardElement:hover {
-  border-color: var(--blue-primary);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-}
-
-/* Payment footer with security elements */
-.paymentFooter {
-  margin-top: var(--space-md);
-  padding-top: var(--space-md);
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.securityInfo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-color-tertiary);
-  font-size: var(--font-size-xs);
-}
-
-.securityIcon {
-  margin-right: 6px;
-  opacity: 0.7;
-}
-
-.stripeBadge {
-  margin-top: var(--space-sm);
-  margin-bottom: 0;
-}
-
-.stripeBadge img {
-  height: 100px;
-}
-
 /* Responsive styles */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .container {
-    margin: 60px auto;
+    margin: 40px auto;
   }
   
-  .subscriptionCard {
-    padding: 24px 20px;
-  }
-  
-  .subscriptionCard h1 {
-    font-size: var(--font-size-lg);
+  .planTitle {
+    font-size: a4px;
   }
   
   .amount {
-    font-size: var(--font-size-2xl);
+    font-size: 36px;
+  }
+}
+
+@media (max-width: 768px) {
+  .subscriptionGrid {
+    flex-direction: column;
+  }
+  
+  .leftColumn, .rightColumn {
+    width: 100%;
+  }
+  
+  .rightColumn {
+    margin-top: 32px;
+  }
+  
+  .title {
+    font-size: 28px;
+  }
+  
+  .subtitle {
+    font-size: 16px;
+    margin-bottom: 32px;
   }
 }
 
 @media (max-width: 480px) {
   .container {
-    margin: 40px auto;
     padding: 0 16px;
+    margin: 20px auto;
   }
   
-  .subscriptionCard {
-    padding: 20px 16px;
+  .paymentFooter {
+    flex-direction: column;
+    gap: var(--spacing-md);
   }
   
-  .features {
-    max-width: 100%;
-  }
-  
-  .stripeBadge img {
-    height: 20px;
+  .securityInfo {
+    justify-content: center;
   }
 } 

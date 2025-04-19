@@ -4,6 +4,7 @@ import styles from "../styles/InterviewsPage.module.css";
 import { useAuth } from "../contexts/AuthContext";
 import Footer from "../components/common/Footer";
 import { StripeContext } from "../contexts/StripeContext";
+import LoadingSpinner from "../components/common/LoadingSpinner";
 
 // Define an interface for templates with progress data
 interface TemplateWithProgress {
@@ -480,7 +481,7 @@ const AuthenticatedInterviewsPage: React.FC = () => {
           <h1>Welcome back, {user?.full_name?.split(" ")[0] || "User"}!</h1>
           <p>Loading available interview case studies...</p>
         </div>
-        <div className={styles.loading}>Loading...</div>
+        <LoadingSpinner />
       </div>
     );
   }

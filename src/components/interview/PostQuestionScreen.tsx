@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import styles from "../../styles/PostQuestion.module.css";
 
+// API base URL
+const API_BASE_URL = "https://casepreparedcrud.onrender.com";
+
 interface LocationState {
   title?: string;
   questionNumber?: number;
@@ -74,6 +77,10 @@ const PostQuestionScreen: React.FC = () => {
   const locationState = (location.state || {}) as LocationState;
 
   const [isLoading, setIsLoading] = useState(false);
+  const [loadedAnalysis, setLoadedAnalysis] =
+    useState<TranscriptAnalysis | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [pollingAttempts, setPollingAttempts] = useState(0);
 
   // Debug logging
   useEffect(() => {
@@ -94,6 +101,127 @@ const PostQuestionScreen: React.FC = () => {
     completedQuestions = [],
     transcriptAnalysis = null,
   } = locationState;
+
+  // If transcriptAnalysis is not provided in location state, fetch it
+  useEffect(() => {
+    // Skip if we already have analysis data from navigation state
+    if (transcriptAnalysis || loadedAnalysis) {
+      console.log("Analysis already available, skipping fetch");
+      return;
+    }
+
+    // Max polling attempts (10 attempts × 2 seconds = 20 seconds max)
+    const MAX_POLLING_ATTEMPTS = 10;
+
+    if (pollingAttempts >= MAX_POLLING_ATTEMPTS) {
+      console.log("Max polling attempts reached, giving up");
+      setIsLoading(false);
+      return;
+    }
+
+    const fetchAnalysisData = async () => {
+      try {
+        if (!interviewId || !questionNumber) {
+          console.warn(
+            "Missing interviewId or questionNumber, can't fetch analysis"
+          );
+          return;
+        }
+
+        setIsLoading(true);
+        setLoadError(null);
+
+        // Get the auth token
+        const token = localStorage.getItem("access_token");
+        if (!token) {
+          setLoadError("Authentication required");
+          setIsLoading(false);
+          return;
+        }
+
+        // Fetch the latest analysis from the API
+        // This endpoint only accepts POST requests, not GET
+        const response = await fetch(
+          `${API_BASE_URL}/api/v1/transcript-analysis/`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              // Send empty transcript to just retrieve the existing analysis
+              transcript: "",
+              interview_id: interviewId,
+              question_number: questionNumber,
+              retrieve_only: true, // Adding a flag to indicate we only want to retrieve
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          // If 404 (not found), we'll retry
+          if (response.status === 404) {
+            console.log(
+              `Analysis not found yet, will retry (attempt ${
+                pollingAttempts + 1
+              })`
+            );
+            setPollingAttempts((prev) => prev + 1);
+            return;
+          }
+
+          // Other errors we'll display
+          throw new Error(`Failed to fetch analysis: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("Successfully loaded transcript analysis", data);
+
+        if (data && Object.keys(data).length > 0) {
+          setLoadedAnalysis(data);
+          setPollingAttempts(0); // Reset polling attempts
+        } else {
+          // If we got empty data, we'll retry
+          console.log("Received empty analysis data, will retry");
+          setPollingAttempts((prev) => prev + 1);
+        }
+      } catch (error) {
+        console.error("Error fetching transcript analysis:", error);
+        setLoadError(
+          `Failed to load analysis data: ${
+            error instanceof Error ? error.message : String(error)
+          }`
+        );
+      } finally {
+        // Only set loading to false if we're done polling or have data
+        if (pollingAttempts >= MAX_POLLING_ATTEMPTS || loadedAnalysis) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    // Start polling
+    fetchAnalysisData();
+
+    // Set up polling interval if we need to retry
+    const pollingInterval = setTimeout(() => {
+      if (!loadedAnalysis && pollingAttempts < MAX_POLLING_ATTEMPTS) {
+        console.log(
+          `Polling for analysis data (attempt ${pollingAttempts + 1})`
+        );
+        setPollingAttempts((prev) => prev + 1);
+      }
+    }, 2000); // Poll every 2 seconds
+
+    return () => clearTimeout(pollingInterval);
+  }, [
+    interviewId,
+    questionNumber,
+    transcriptAnalysis,
+    loadedAnalysis,
+    pollingAttempts,
+  ]);
 
   // Parse title to get the case name
   const titleParts = title.split(" - ");
@@ -118,6 +246,9 @@ const PostQuestionScreen: React.FC = () => {
       });
     }
   };
+
+  // Use loaded analysis if available, otherwise fall back to the one from location state
+  const analysisToDisplay = loadedAnalysis || transcriptAnalysis;
 
   // Format section title to be more readable
   const formatSectionTitle = (key: string): string => {
@@ -163,15 +294,6 @@ const PostQuestionScreen: React.FC = () => {
     }
   };
 
-  // Get action button text
-  const getActionButtonText = () => {
-    if (isAllCompleted || questionNumber >= totalQuestions) {
-      return "Back to Interviews";
-    } else {
-      return "Start Interview";
-    }
-  };
-
   return (
     <div className={styles.container}>
       {/* Breadcrumb */}
@@ -205,9 +327,17 @@ const PostQuestionScreen: React.FC = () => {
               <div className={styles.spinner}></div>
               <p>Analyzing your performance...</p>
             </div>
-          ) : transcriptAnalysis ? (
+          ) : loadError ? (
+            <div className={styles.noAnalysisContainer}>
+              <p>Error loading analysis: {loadError}</p>
+              <p>
+                Please try refreshing the page or contact support if the problem
+                persists.
+              </p>
+            </div>
+          ) : analysisToDisplay ? (
             <div className={styles.competencies}>
-              {Object.entries(transcriptAnalysis)
+              {Object.entries(analysisToDisplay)
                 .filter(
                   ([key]) =>
                     key !== "id" && key !== "created_at" && key !== "updated_at"
@@ -272,8 +402,14 @@ const PostQuestionScreen: React.FC = () => {
                 ? "All questions completed!"
                 : `Ready to start Question #${nextQuestionNumber}?`}
             </h3>
-            <button className={styles.actionButton} onClick={handleContinue}>
-              {isAllCompleted || questionNumber >= totalQuestions
+            <button
+              className={styles.actionButton}
+              onClick={handleContinue}
+              disabled={isLoading} // Disable the button while loading
+            >
+              {isLoading
+                ? "Loading Analysis..."
+                : isAllCompleted || questionNumber >= totalQuestions
                 ? "Back to Interviews"
                 : "Start Interview"}
             </button>
