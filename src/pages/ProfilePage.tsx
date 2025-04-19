@@ -6,7 +6,7 @@ import Footer from "../components/common/Footer";
 import axios from "axios";
 
 // API base URL
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = "https://casepreparedcrud.onrender.com";
 // Lock Icon SVG as component
 const LockIcon = () => (
   <svg

@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import styles from "../styles/CheckoutPage.module.css";
 import "../styles.css";
 
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = "https://casepreparedcrud.onrender.com";
 
 // CheckCircle Icon for success page
 const CheckCircleIcon = () => (

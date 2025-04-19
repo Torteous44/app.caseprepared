@@ -5,7 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 
 // API base URL defined in AuthContext
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = "https://casepreparedcrud.onrender.com";
 
 // Dictionary of case type descriptions
 const CASE_TYPE_DESCRIPTIONS: Record<string, string> = {

@@ -74,7 +74,7 @@ interface EnhancedDemoInterview extends DemoInterview {
 }
 
 // API base URLs
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = "https://casepreparedcrud.onrender.com";
 // Define demo interview templates
 const demoInterviews: DemoInterview[] = [
   {
