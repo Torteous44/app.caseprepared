@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import styles from "../../styles/PostQuestion.module.css";
+import Footer from "../../components/common/Footer";
 
 // API base URL
 const API_BASE_URL = "https://casepreparedcrud.onrender.com";
@@ -181,6 +182,7 @@ const PostQuestionScreen: React.FC = () => {
         if (data && Object.keys(data).length > 0) {
           setLoadedAnalysis(data);
           setPollingAttempts(0); // Reset polling attempts
+          setIsLoading(false); // Set loading to false immediately after successful data fetch
         } else {
           // If we got empty data, we'll retry
           console.log("Received empty analysis data, will retry");
@@ -193,9 +195,10 @@ const PostQuestionScreen: React.FC = () => {
             error instanceof Error ? error.message : String(error)
           }`
         );
+        setIsLoading(false); // Set loading to false on error
       } finally {
-        // Only set loading to false if we're done polling or have data
-        if (pollingAttempts >= MAX_POLLING_ATTEMPTS || loadedAnalysis) {
+        // Only set loading to false if we're done polling without data
+        if (pollingAttempts >= MAX_POLLING_ATTEMPTS) {
           setIsLoading(false);
         }
       }
@@ -443,6 +446,14 @@ const PostQuestionScreen: React.FC = () => {
             : `${completedQuestions.length} of ${totalQuestions} questions completed`}
         </div>
       </div>
+
+      {/* Add Footer */}
+      <Footer
+        tagline="Get expert-level feedback on your case interviews"
+        showSections={true}
+        showResources={true}
+        showOther={true}
+      />
     </div>
   );
 };

@@ -6,10 +6,10 @@ import AuthModal from "../components/auth/AuthModal";
 const AuthenticatedLayout = () => {
   const location = useLocation();
 
-  // Hide navbar for interview sessions
-  const isInterviewSession =
-    location.pathname.includes("/interview/authenticated-session/") ||
-    location.pathname.includes("/interview/post-question/");
+  // Hide navbar only for active interview sessions, not post-question screens
+  const isInterviewSession = location.pathname.includes(
+    "/interview/authenticated-session/"
+  );
 
   return (
     <>

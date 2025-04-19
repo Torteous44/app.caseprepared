@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "../../styles/common/Navbar.module.css";
 import { useAuth } from "../../contexts/AuthContext";
 import { useModal } from "../../contexts/ModalContext";
@@ -8,6 +8,7 @@ const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const { user, logout, isAuthenticated } = useAuth();
   const { openModal } = useModal();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,6 +26,11 @@ const Navbar: React.FC = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ""}`}>
@@ -73,7 +79,7 @@ const Navbar: React.FC = () => {
               <Link to="/profile" className={styles.navButton}>
                 Profile
               </Link>
-              <button className={styles.navButton} onClick={logout}>
+              <button className={styles.navButton} onClick={handleLogout}>
                 Sign out
               </button>
             </>
