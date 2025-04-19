@@ -249,281 +249,470 @@
   max-width: 100%;
 }
 
+/* Subscription Section */
+.subscriptionSection {
+  margin-top: 32px;
+  margin-bottom: 32px;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  padding: 24px;
+  width: 100%;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin-top: 0;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
 .premiumMemberCard {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(to right, #00205F, #003087);
-  color: #fff;
-  padding: 16px 20px;
-  border-radius: 6px;
-  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 16px;
 }
 
 .subscribeCard {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #f8f9fa;
-  padding: 20px;
-  border-radius: 6px;
-  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 16px;
   text-align: center;
-  border: 1px solid #E5E7EB;
 }
 
 .subscribeCard p {
-  margin: 0 0 16px 0;
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 16px;
   color: #374151;
-  font-size: 14px;
 }
 
 .subscribeButton {
-  background-color: #003087;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  background-color: #004494;
   color: white;
-  padding: 8px 20px;
-  border-radius: 6px;
-  text-decoration: none;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
   font-weight: 500;
-  font-size: 14px;
+  cursor: pointer;
   transition: background-color 0.2s;
+  text-decoration: none;
 }
 
 .subscribeButton:hover {
-  background-color: #002066;
+  background-color: #003371;
 }
 
 .premiumMemberText {
-  color: #FFC700;
-  font-weight: 500;
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
 }
 
 .nextPaymentDate {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 12px;
+  font-size: 14px;
+  color: #6B7280;
   margin-top: 4px;
 }
 
 .viewDetails {
-  color: #fff;
-  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  background-color: transparent;
+  color: #004494;
+  border: 1px solid #004494;
+  border-radius: 4px;
   font-size: 14px;
-  position: relative;
-  padding-bottom: 2px;
-  transition: all 0.2s ease;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
 }
 
 .viewDetails:hover {
-  color: #FFC700;
+  background-color: rgba(0, 68, 148, 0.05);
 }
-
 
 .actionButtons {
   display: flex;
-  justify-content: flex-end;
-  gap: 16px;
-  margin-top: 32px;
+  gap: 12px;
+  margin-top: 24px;
 }
 
 .interviewsButton, .signOutButton {
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 500;
+  flex: 1;
+  padding: 10px 16px;
   border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
   text-align: center;
-  transition: background-color 0.2s;
-}
-
-.interviewsButton {
-  background-color: #003087;
-  color: #fff;
-  border: none;
   text-decoration: none;
 }
 
+.interviewsButton {
+  background-color: #004494;
+  color: white;
+  border: none;
+}
+
 .interviewsButton:hover {
-  color: #fff;
-  background-color: #002066;
+  background-color: #003371;
 }
 
 .signOutButton {
   background-color: transparent;
-  color: #374151;
-  border: none;
+  color: #6B7280;
+  border: 1px solid #E5E7EB;
 }
 
 .signOutButton:hover {
-  text-decoration: underline;
+  background-color: #F9FAFB;
 }
 
 .profileCard {
-  background-color: #fff;
+  background-color: white;
   border-radius: 8px;
-  padding: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #E5E7EB;
+  padding: 32px;
   text-align: center;
 }
 
 .profileCard h1 {
-  font-size: 20px;
-  margin-bottom: 12px;
+  font-size: 24px;
+  margin-bottom: 16px;
 }
 
-/* Subscription styles */
 .subscriptionInfo {
-  display: flex;
-  flex-direction: column;
+  margin-top: 32px;
+  text-align: left;
 }
 
 .subscriptionLoading {
-  padding: var(--space-lg) 0;
-  color: var(--text-color-tertiary);
-  text-align: center;
-  font-style: italic;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #6B7280;
+  margin-bottom: 16px;
 }
 
 .status {
-  font-weight: var(--font-weight-medium);
-  padding: var(--space-2xs) var(--space-sm);
-  border-radius: var(--border-radius-sm);
   display: inline-block;
+  padding: 4px 8px;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .active {
-  background-color: var(--green-bg);
-  color: var(--green-primary);
+  background-color: #D1FAE5;
+  color: #065F46;
 }
 
 .canceled {
-  background-color: var(--background-secondary);
-  color: var(--text-color-tertiary);
+  background-color: #FEE2E2;
+  color: #991B1B;
 }
 
 .incomplete {
-  background-color: var(--orange-bg);
-  color: var(--orange-primary);
+  background-color: #FEF3C7;
+  color: #92400E;
 }
 
 .pastDue {
-  background-color: var(--red-bg);
-  color: var(--red-primary);
+  background-color: #FEF3C7;
+  color: #92400E;
 }
 
 .unpaid {
-  background-color: var(--red-bg);
-  color: var(--red-primary);
+  background-color: #FEE2E2;
+  color: #991B1B;
 }
 
 .inactive {
-  background-color: var(--background-secondary);
-  color: var(--text-color-tertiary);
+  background-color: #F3F4F6;
+  color: #374151;
 }
 
 .unknown {
-  background-color: var(--blue-bg);
-  color: var(--blue-primary);
+  background-color: #F3F4F6;
+  color: #374151;
 }
 
 .subscriptionActions {
-  margin-top: var(--space-xl);
   display: flex;
-  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
 }
 
-.manageButton, .subscribeButton {
-  padding: var(--space-sm) var(--space-lg);
-  border-radius: var(--border-radius);
-  text-decoration: none;
-  font-weight: var(--font-weight-medium);
-  text-align: center;
-  transition: all var(--transition-fast);
+.manageButton, .cancelButton {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .manageButton {
-  background-color: transparent;
-  border: var(--border-width-thin) solid var(--blue-primary);
-  color: var(--blue-primary);
-}
-
-.manageButton:hover {
-  background-color: rgba(23, 78, 166, 0.05);
-}
-
-.subscribeButton {
-  background-color: var(--blue-primary);
+  background-color: #004494;
   color: white;
   border: none;
 }
 
-.subscribeButton:hover {
-  color: white;
-  background-color: var(--blue-secondary);
+.manageButton:hover {
+  background-color: #003371;
+}
+
+.cancelButton {
+  background-color: white;
+  color: #ef4444;
+  border: 1px solid #ef4444;
+  margin-left: auto;
+}
+
+.cancelButton:hover {
+  background-color: #fef2f2;
 }
 
 .noSubscription {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: var(--space-xl) 0;
-  gap: var(--space-lg);
+  padding: 24px;
+  background-color: #F9FAFB;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+  text-align: center;
 }
 
 .noSubscription p {
-  color: var(--text-color-tertiary);
-  text-align: center;
-  font-size: var(--font-size-base);
+  margin-bottom: 20px;
+  color: #374151;
+  font-size: 16px;
 }
 
-/* New subscription banner styles */
 .subscriptionBanner {
-  background: linear-gradient(to right, #0d47a1, #1976d2);
-  border-radius: var(--border-radius-md);
-  padding: var(--space-lg) var(--space-lg);
-  margin-bottom: var(--space-xl);
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  color: white;
-  box-shadow: var(--shadow-md);
+  justify-content: space-between;
+  padding: 16px 24px;
+  background-color: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  margin-bottom: 24px;
 }
 
 .subscriptionBannerInfo {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 4px;
 }
 
 .renewalText {
-  font-size: var(--font-size-sm);
-  opacity: 0.9;
+  font-size: 14px;
+  color: #6B7280;
 }
 
 .premiumMemberLabel {
-  color: #E8C72D;
-  font-weight: var(--font-weight-normal);
-  font-size: var(--font-size-lg);
-  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 600;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .viewDetailsLink {
-  color: white;
+  padding: 6px 12px;
+  background-color: transparent;
+  color: #004494;
+  border: 1px solid #004494;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
   text-decoration: none;
-  font-size: var(--font-size-sm);
-  opacity: 0.9;
-  transition: opacity var(--transition-fast);
 }
 
 .viewDetailsLink:hover {
-  opacity: 1;
-  text-decoration: underline;
-  color: white;
+  background-color: rgba(0, 68, 148, 0.05);
 }
 
-/* Responsive adjustments */
+/* New styles for integrated subscription section */
+.planDetails {
+  padding: 16px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 16px;
+}
+
+.planTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.priceContainer {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 20px;
+}
+
+.currency {
+  font-size: 20px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.amount {
+  font-size: 36px;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1;
+  margin: 0 4px;
+}
+
+.period {
+  font-size: 16px;
+  color: #4B5563;
+}
+
+.features {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.features li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #111827;
+  line-height: 1.5;
+}
+
+.featureIcon {
+  margin-right: 12px;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.checkoutContainer {
+  margin-top: 24px;
+}
+
+.ctaArrow {
+  margin-right: 6px;
+}
+
+.guaranteeText {
+  font-size: 14px;
+  color: #6B7280;
+  margin-top: 12px;
+  text-align: center;
+}
+
+.securityIcon {
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+.statusIndicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #10B981;
+}
+
+.activeIcon {
+  width: 8px;
+  height: 8px;
+  background-color: #10B981;
+  border-radius: 50%;
+}
+
+.cancelInfo {
+  margin-top: 12px;
+  padding: 12px;
+  background-color: #FEFBEA;
+  border: 1px solid #FEF3C7;
+  border-radius: 6px;
+}
+
+.cancelInfo p {
+  margin: 0;
+  font-size: 14px;
+  color: #92400E;
+}
+
+.errorMessage {
+  margin-top: 12px;
+  padding: 12px;
+  background-color: #FEF2F2;
+  border: 1px solid #FEE2E2;
+  border-radius: 6px;
+  color: #B91C1C;
+  font-size: 14px;
+}
+
+.message {
+  margin-top: 12px;
+  padding: 12px;
+  background-color: #F0F9FF;
+  border: 1px solid #E0F2FE;
+  border-radius: 6px;
+  color: #0369A1;
+  font-size: 14px;
+}
+
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  text-align: center;
+}
+
+.spinner {
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 3px solid #004494;
+  width: 24px;
+  height: 24px;
+  margin-bottom: 12px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 @media (max-width: 768px) {
   .pageHeader {
-    padding: var(--space-3xl) var(--space-md) var(--space-md);
+    margin-bottom: var(--space-xl);
   }
   
   .pageHeader h1 {
@@ -533,11 +722,11 @@
   .premiumBadge {
     font-size: var(--font-size-sm);
   }
-
+  
   .contentContainer {
     padding: 0 var(--space-md) var(--space-2xl);
   }
-
+  
   .card {
     padding: var(--space-lg);
   }
@@ -546,83 +735,79 @@
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-md);
+    padding-bottom: var(--space-lg);
     margin-bottom: var(--space-lg);
-    padding-bottom: var(--space-sm);
   }
   
   .title {
-    font-size: var(--font-size-lg);
+    font-size: var(--font-size-xl);
   }
   
   .infoRow {
     flex-direction: column;
-    gap: var(--space-2xs);
-    padding: var(--space-sm) 0;
+    align-items: flex-start;
+    gap: var(--space-xs);
   }
   
   .label {
     width: 100%;
-    margin-bottom: var(--space-2xs);
   }
   
   .buttonGroup {
-    justify-content: space-between;
+    flex-direction: column;
+    width: 100%;
   }
   
   .editButton, .cancelButton, .saveButton {
-    padding: var(--space-xs) var(--space-md);
-    font-size: var(--font-size-sm);
+    width: 100%;
   }
   
   .subscriptionActions {
-    justify-content: center;
+    flex-direction: column;
   }
   
-  .manageButton, .subscribeButton {
+  .manageButton, .cancelButton {
     width: 100%;
-    padding: var(--space-xs) var(--space-md);
   }
   
   .layoutContainer {
     flex-direction: column;
-    padding: 0 20px 40px;
+    padding: 0 16px 40px;
   }
   
   .profileSidebar {
-    flex: none;
-    width: 100%;
+    flex: 1;
+    margin-bottom: 30px;
   }
   
   .sidebarNav {
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 10px;
   }
   
   .navButton {
-    text-align: center;
-    white-space: nowrap;
+    flex: 1;
+    min-width: 100px;
   }
   
   .profileBox {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding-bottom: 25px;
   }
   
   .profileImageContainer {
     margin-right: 0;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
   }
   
   .profileImagePlaceholder {
-    width: 90px;
-    height: 90px;
+    width: 80px;
+    height: 80px;
   }
   
   .profileInfo {
-    margin-bottom: 16px;
+    text-align: center;
   }
   
   .profileName {
@@ -631,35 +816,37 @@
   
   .profileStatus {
     margin-left: 0;
+    margin-top: 16px;
   }
   
   .subscriptionBanner {
-    padding: var(--space-sm) var(--space-md);
-    margin-bottom: var(--space-lg);
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
   }
   
   .premiumMemberLabel {
-    font-size: var(--font-size-md);
+    font-size: 14px;
   }
 }
 
 @media (max-width: 480px) {
   .pageHeader {
-    padding: var(--space-2xl) var(--space-md) var(--space-md);
+    margin-bottom: var(--space-lg);
   }
   
   .pageHeader h1 {
     font-size: var(--font-size-xl);
   }
-
+  
   .contentContainer {
-    padding: 0 var(--space-md) var(--space-xl);
+    padding: 0 var(--space-sm) var(--space-xl);
   }
   
   .buttonGroup {
     flex-direction: column;
     width: 100%;
-    gap: var(--space-sm);
+    gap: var(--space-xs);
   }
   
   .editButton, .cancelButton, .saveButton {
@@ -667,7 +854,7 @@
   }
   
   .layoutContainer {
-    padding: 0 16px 32px;
+    padding: 0 12px 30px;
   }
   
   .profileSidebar {
@@ -675,13 +862,13 @@
   }
   
   .profileBox {
-    padding: 16px;
+    margin-bottom: 20px;
   }
   
   .profileImagePlaceholder {
-    width: 80px;
-    height: 80px;
-    font-size: 24px;
+    width: 70px;
+    height: 70px;
+    font-size: 22px;
   }
   
   .profileName {
@@ -694,31 +881,32 @@
   
   .subscriptionBanner {
     flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-md);
-    padding: var(--space-md);
+    align-items: center;
+    gap: 16px;
+    text-align: center;
   }
   
   .viewDetailsLink {
-    align-self: flex-end;
+    width: 100%;
+    text-align: center;
   }
   
   .container {
-    padding: 24px 16px;
+    padding-top: 60px;
   }
   
   .actionButtons {
-    justify-content: center;
+    flex-direction: column;
   }
 }
 
 @media (max-width: 640px) {
   .container {
-    padding: 40px 16px 60px;
+    padding-left: 16px;
+    padding-right: 16px;
   }
   
   .infoDisplay {
-    max-width: 100%;
-    box-sizing: border-box;
+    font-size: 14px;
   }
 } 

@@ -31,7 +31,7 @@ interface LocationState {
 
 // Demo API base URL
 // Ensure backend URL is correct for the environment
-const DEMO_API_BASE_URL = "https://casepreparedcrud.onrender.com/api/v1/demo";
+const DEMO_API_BASE_URL = "http://localhost:8000/api/v1/demo";
 
 const DemoRealtimeConnect: React.FC = () => {
   const { demoTypeId, sessionId } = useParams<{

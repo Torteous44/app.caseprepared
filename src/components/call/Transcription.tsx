@@ -8,7 +8,7 @@ import React, {
 } from "react";
 
 // API base URL
-const API_BASE_URL = "https://casepreparedcrud.onrender.com";
+const API_BASE_URL = "http://localhost:8000";
 
 interface TranscriptionProps {
   remoteMediaStream: MediaStream | null;

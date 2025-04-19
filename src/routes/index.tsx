@@ -37,6 +37,10 @@ const DemoSession = lazy(
   () => import("../components/call/DemoRealtimeConnect")
 );
 
+// Checkout pages
+const CheckoutSuccess = lazy(() => import("../pages/CheckoutSuccess"));
+const CheckoutCancel = lazy(() => import("../pages/CheckoutCancel"));
+
 const AppRoutes = () => {
   const { isAuthenticated, loading } = useAuth();
 
@@ -63,6 +67,8 @@ const AppRoutes = () => {
             />
             <Route path="/profile" element={<Profile />} />
             <Route path="/subscription" element={<Subscription />} />
+            <Route path="/checkout/success" element={<CheckoutSuccess />} />
+            <Route path="/checkout/cancel" element={<CheckoutCancel />} />
 
             {/* Public pages still accessible to authenticated users */}
             <Route path="/blogs" element={<Blogs />} />
@@ -91,6 +97,8 @@ const AppRoutes = () => {
             <Route path="/resources" element={<Resources />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
+            <Route path="/checkout/success" element={<CheckoutSuccess />} />
+            <Route path="/checkout/cancel" element={<CheckoutCancel />} />
           </Route>
         )}
 
