@@ -48,30 +48,28 @@ const Navbar: React.FC = () => {
           </Link>
         </div>
 
-        {!isAuthenticated && (
-          <ul className={styles.navLinks}>
-            <li className={styles.navItem}>
-              <Link to="/interviews" className={styles.navLink}>
-                Interviews
-              </Link>
-            </li>
-            <li className={styles.navItem}>
-              <Link to="/resources" className={styles.navLink}>
-                Resources
-              </Link>
-            </li>
-            <li className={styles.navItem}>
-              <Link to="/pricing" className={styles.navLink}>
-                Pricing
-              </Link>
-            </li>
-            <li className={styles.navItem}>
-              <Link to="/about" className={styles.navLink}>
-                About
-              </Link>
-            </li>
-          </ul>
-        )}
+        <ul className={styles.navLinks}>
+          <li className={styles.navItem}>
+            <Link to="/interviews" className={styles.navLink}>
+              Interviews
+            </Link>
+          </li>
+          <li className={styles.navItem}>
+            <Link to="/resources" className={styles.navLink}>
+              Resources
+            </Link>
+          </li>
+          <li className={styles.navItem}>
+            <Link to="/pricing" className={styles.navLink}>
+              Pricing
+            </Link>
+          </li>
+          <li className={styles.navItem}>
+            <Link to="/about" className={styles.navLink}>
+              About
+            </Link>
+          </li>
+        </ul>
 
         <div className={styles.navCta}>
           {isAuthenticated ? (

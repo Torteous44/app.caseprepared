@@ -1,5 +1,7 @@
 @import "../../styles.css";
-
+* {
+  font-family: var(--font-primary);
+}
 .measurements-section {
   padding: var(--space-xl) var(--space-5xl);
   background-color: var(--background-primary);

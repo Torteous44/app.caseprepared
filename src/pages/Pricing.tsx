@@ -1,44 +1,16 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "../styles/Pricing.module.css";
-import { useModal } from "../contexts/ModalContext";
 import { useAuth } from "../contexts/AuthContext";
-import PricingCard from "../components/Pricing/PricingCard";
+import PricingCards from "../components/Pricing/PricingCards";
 import { BookOpen, BarChart2, Compass, Star } from "lucide-react";
 import Footer from "../components/common/Footer";
 
-const CheckIcon = () => (
-  <svg
-    width="12"
-    height="12"
-    viewBox="0 0 12 12"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path
-      d="M2.25 6.375L5.25 9.375L9.75 2.625"
-      stroke="#E9C46A"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
 const Pricing: React.FC = () => {
-  const { openModal } = useModal();
-  const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
+  const { isAuthenticated, user } = useAuth();
 
-  const handleSubscribe = () => {
-    if (isAuthenticated) {
-      // If authenticated, navigate to subscription page
-      navigate("/subscription");
-    } else {
-      // If not authenticated, open registration modal
-      openModal("register");
-    }
-  };
+  // Check if user has an active subscription using the subscription data
+  const hasSubscription = user?.subscription?.is_active || false;
 
   return (
     <div className={styles.container}>
@@ -94,7 +66,7 @@ const Pricing: React.FC = () => {
         </div>
 
         <div className={styles.rightContent}>
-          <PricingCard />
+          <PricingCards hasSubscription={hasSubscription} />
         </div>
       </div>
 

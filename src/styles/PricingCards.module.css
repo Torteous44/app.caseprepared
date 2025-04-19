@@ -1,0 +1,223 @@
+* {
+  font-family: var(--font-primary);
+}
+
+.pricingCardsContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.cardHeader {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 16px;
+  font-weight: 550;
+  font-family: var(--font-primary);
+}
+
+.blueText {
+  color: #174EA6;
+}
+
+.pricingCard {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-width: 220px;
+  border: 1px solid #e6e6e6;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* Premium card styling */
+.premiumCard {
+  background-color: #E8EDF6;
+  border: none;
+}
+
+.enterpriseCard {
+  background-color: rgba(78, 156, 199, 0.20);
+  border: none;
+}
+
+.badgePill {
+  display: inline-block;
+  padding: 2px 12px;
+  border-radius: 24px;
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 12px;
+  width: fit-content;
+  align-self: flex-start;
+}
+
+.freeBadge {
+  background-color: white;
+  color: #111;
+  border: 1px solid #ffffff;
+  padding-left: 0;
+}
+
+.premiumBadge {
+  background-color: #FFE25C;
+  color: #174EA6;
+}
+
+.enterpriseBadge {
+  background-color: #174EA6;
+  color: white;
+}
+
+.cardTitle {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 20px;
+}
+
+.cardFeatures {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+}
+
+.cardFeatures li {
+  display: flex;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 13px;
+  color: #333;
+}
+
+.cardFeatures li svg {
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.divider {
+  height: 1px;
+  background-color: #E4E7EC;
+  width: 100%;
+  margin: 20px 0;
+  margin-top: auto;
+}
+
+.cardPrice {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start;
+}
+
+.currency {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111;
+  margin-right: 5px;
+}
+
+.premiumPrice {
+  color: #174EA6;
+}
+
+.period {
+  font-size: 14px;
+  color: #174EA6;
+}
+
+.billingPeriod {
+  font-size: 14px;
+  color: #174EA6;
+  margin-top: 4px;
+}
+
+.contactUs {
+  font-size: 22px;
+  font-weight: 700;
+  color: #174EA6;
+}
+
+.customQuote {
+  font-size: 14px;
+  color: #174EA6;
+  margin-top: 4px;
+}
+
+.cardButton {
+  background: white;
+  color: #111;
+  font-weight: 600;
+  border: 1px solid #E4E7EC;
+  border-radius: 4px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  width: 100%;
+}
+
+.cardButton:hover {
+  background: #f8f8f8;
+}
+
+.currentPlanButton {
+  background: white;
+  color: #666;
+  cursor: default;
+}
+
+.currentPlanButton:hover {
+  background: white;
+}
+
+.premiumButton {
+  background: #174EA6;
+  color: white;
+  border: none;
+}
+
+.premiumButton:hover {
+  background: #0F3A85;
+}
+
+.enterpriseButton {
+  background: #174EA6;
+  color: white;
+  border: none;
+}
+
+.enterpriseButton:hover {
+  background: #0F3A85;
+}
+
+.errorMessage {
+  color: #e63946;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .pricingCardsContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .pricingCard {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+  }
+} 

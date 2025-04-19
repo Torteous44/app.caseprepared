@@ -22,6 +22,60 @@ const CheckCircleIcon = () => (
   </svg>
 );
 
+// Icons for feature cards
+const InterviewsIcon = () => (
+  <svg
+    width="32"
+    height="32"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#0066CC"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 8v4l3 3" />
+  </svg>
+);
+
+const AnalysisIcon = () => (
+  <svg
+    width="32"
+    height="32"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#0066CC"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+    <polyline points="7.5 4.21 12 6.81 16.5 4.21" />
+    <polyline points="7.5 19.79 7.5 14.6 3 12" />
+    <polyline points="21 12 16.5 14.6 16.5 19.79" />
+    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+    <line x1="12" y1="22.08" x2="12" y2="12" />
+  </svg>
+);
+
+const SupportIcon = () => (
+  <svg
+    width="32"
+    height="32"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#0066CC"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <rect x="2" y="4" width="20" height="16" rx="2" />
+    <path d="M9 12h6" />
+    <path d="M12 9v6" />
+  </svg>
+);
+
 const CheckoutSuccess: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -109,28 +163,95 @@ const CheckoutSuccess: React.FC = () => {
     <div className="container">
       <div className={styles.successContainer}>
         <CheckCircleIcon />
-        <h1>Payment Successful!</h1>
-        <p>
-          Thank you for your subscription. Your account has been upgraded to
-          premium.
-        </p>
-        <p className={styles.detailText}>
-          You now have full access to all features including AI case interviews,
-          personalized feedback, and detailed analytics.
-        </p>
+        <h1>
+          <span className={styles.welcomeTextBlue}>You're in.</span> Welcome to
+          CasePrepared.
+        </h1>
+        <p>Your premium access is live. Let's start prepping.</p>
+
         <div className={styles.actionButtonGroup}>
           <Link
-            to="/profile"
+            to="/interviews"
             className={`btn btn-primary ${styles.actionButton}`}
           >
-            Go to Profile
+            Access interviews
           </Link>
-          <Link
-            to="/interviews"
-            className={`btn btn-secondary ${styles.actionButton}`}
+          <Link to="/profile" className={styles.profileLink}>
+            Profile
+          </Link>
+        </div>
+
+        <div className={styles.thankYouSection}>
+          <h2>A Big Thank You</h2>
+          <p>
+            We've emailed your receipt and account details to the address you
+            provided. You now have full access to CasePrepared — including
+            interactive mock interviews, real-time feedback, and expert-level
+            frameworks.
+          </p>
+          <p>
+            You can get started right away by{" "}
+            <Link to="/interviews">going to the interviews page</Link>.
+          </p>
+          <p>Let's get to work — MBB isn't ready for you.</p>
+        </div>
+
+        <div className={styles.featuresGrid}>
+          <div
+            className={`${styles.featureCard} ${styles.featureCardInterviews}`}
           >
-            Start Practice Interviews
-          </Link>
+            <InterviewsIcon />
+            <h3>
+              Access <span className={styles.highlight}>premium</span>
+              <br />
+              <span className={styles.highlight}>interviews</span>
+            </h3>
+            <p>
+              Unlock our library of expert-designed mock interviews modeled on
+              real MBB and tech strategy cases.
+            </p>
+          </div>
+
+          <div
+            className={`${styles.featureCard} ${styles.featureCardAnalysis}`}
+          >
+            <AnalysisIcon />
+            <h3>
+              Detailed <span className={styles.highlight}>performance</span>
+              <br />
+              <span className={styles.highlight}>analysis</span>
+            </h3>
+            <p>
+              See how you stack up. After each case, get a breakdown of your
+              strengths, growth areas, and pacing.
+            </p>
+          </div>
+
+          <div className={`${styles.featureCard} ${styles.featureCardSupport}`}>
+            <SupportIcon />
+            <h3>
+              Full Resource Access
+              <br />+ <span className={styles.highlight}>Direct Support</span>
+            </h3>
+            <p>
+              Need help? Our team is just a message away — we're here to support
+              your prep every step of the way.
+            </p>
+          </div>
+        </div>
+
+        <div className={styles.helpSection}>
+          <h2>Need Help?</h2>
+          <p>
+            You can contact us anytime and we'll get back to you in &lt;24
+            hours.
+          </p>
+          <a
+            href="mailto:contact@caseprepared.com"
+            className={`btn btn-outline ${styles.contactButton}`}
+          >
+            Contact us
+          </a>
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@
 /* Add this to the top to ensure all elements use border-box sizing */
 * {
   box-sizing: border-box;
+  font-family: var(--font-primary);
 }
 
 /* Adjust container sizing for better fit */
@@ -249,15 +250,16 @@
   max-width: 100%;
 }
 
-/* Subscription Section */
+/* Updated Subscription Section */
 .subscriptionSection {
   margin-top: 32px;
   margin-bottom: 32px;
-  background-color: #fff;
-  border-radius: 8px;
+  width: 100%;
+  background-color: white;
+  border-radius: 12px;
   border: 1px solid #e5e7eb;
   padding: 24px;
-  width: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .sectionTitle {
@@ -270,444 +272,174 @@
   border-bottom: 1px solid #e5e7eb;
 }
 
-.premiumMemberCard {
+/* New Subscription Card Design */
+.subscriptionCard {
   display: flex;
-  justify-content: space-between;
+  position: relative;
+  background-color: #E8EDF6;
+  border-radius: 16px;
+  padding: 24px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.subscriptionContent {
+  flex: 1;
+  z-index: 1;
+}
+
+.subscriptionHeader {
+  display: flex;
   align-items: center;
-  padding: 16px;
-  background-color: #f9fafb;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  gap: 8px;
   margin-bottom: 16px;
 }
 
-.subscribeCard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 16px;
-  background-color: #f9fafb;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-  margin-bottom: 16px;
-  text-align: center;
+.brandName {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1B4FA2;
 }
 
-.subscribeCard p {
-  margin-top: 0;
-  margin-bottom: 16px;
+.premiumTag {
+  background-color: #E8C72D;
+  color: #000;
+  padding: 4px 10px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 12px;
+}
+
+.pricingContainer {
+  margin-bottom: 8px;
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+}
+
+.dollarSign {
+  font-size: 24px;
+  font-weight: 500;
+  color: #1B4FA2;
+}
+
+.priceAmount {
+  font-size: 40px;
+  font-weight: 700;
+  color: #1B4FA2;
+  margin: 0 2px;
+}
+
+.currency {
+  font-size: 18px;
+  color: #1B4FA2;
+}
+
+.pricePeriod {
+  font-size: 14px;
+  color: #4B5563;
+  margin-top: 4px;
+}
+
+/* Fix the decorative image positioning */
+.decorativeImage {
+  position: absolute;
+  right: -20px;
+  top: 0;
+  height: 110%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Align to right side */
+  overflow: hidden;
+  padding-left: 10px; /* Add padding to avoid cutoff on left */
+}
+
+.decorativeImage img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: right center; /* Align image to right */
+}
+
+/* Button container for actions underneath card */
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end; /* Align buttons to right */
+  margin-top: 16px;
+}
+
+/* Updated subscription actions to be on right side */
+.subscriptionActions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px; /* Space between buttons */
+  margin-bottom: 20px;
+}
+
+.seeMoreButton {
+  color: #1B4FA2;
   font-size: 16px;
-  color: #374151;
+  text-decoration: none;
+  padding: 10px 20px;
+  display: inline-block;
 }
 
-.subscribeButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px 20px;
-  background-color: #004494;
+.joinButton {
+  background-color: #1B4FA2;
   color: white;
   border: none;
   border-radius: 4px;
+  padding: 10px 20px;
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s;
-  text-decoration: none;
-}
-
-.subscribeButton:hover {
-  background-color: #003371;
-}
-
-.premiumMemberText {
-  font-size: 16px;
-  font-weight: 600;
-  color: #111827;
-}
-
-.nextPaymentDate {
-  font-size: 14px;
-  color: #6B7280;
-  margin-top: 4px;
-}
-
-.viewDetails {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 12px;
-  background-color: transparent;
-  color: #004494;
-  border: 1px solid #004494;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.viewDetails:hover {
-  background-color: rgba(0, 68, 148, 0.05);
-}
-
-.actionButtons {
-  display: flex;
-  gap: 12px;
-  margin-top: 24px;
-}
-
-.interviewsButton, .signOutButton {
-  flex: 1;
-  padding: 10px 16px;
-  border-radius: 6px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
-  text-align: center;
-  text-decoration: none;
-}
-
-.interviewsButton {
-  background-color: #004494;
-  color: white;
-  border: none;
-}
-
-.interviewsButton:hover {
-  background-color: #003371;
-}
-
-.signOutButton {
-  background-color: transparent;
-  color: #6B7280;
-  border: 1px solid #E5E7EB;
-}
-
-.signOutButton:hover {
-  background-color: #F9FAFB;
-}
-
-.profileCard {
-  background-color: white;
-  border-radius: 8px;
-  border: 1px solid #E5E7EB;
-  padding: 32px;
+  min-width: 120px;
   text-align: center;
 }
 
-.profileCard h1 {
-  font-size: 24px;
-  margin-bottom: 16px;
+.joinButton:hover {
+  background-color: #134293;
 }
 
-.subscriptionInfo {
-  margin-top: 32px;
-  text-align: left;
-}
-
-.subscriptionLoading {
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  color: #6B7280;
-  margin-bottom: 16px;
-}
-
-.status {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 9999px;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.active {
-  background-color: #D1FAE5;
-  color: #065F46;
-}
-
-.canceled {
-  background-color: #FEE2E2;
-  color: #991B1B;
-}
-
-.incomplete {
-  background-color: #FEF3C7;
-  color: #92400E;
-}
-
-.pastDue {
-  background-color: #FEF3C7;
-  color: #92400E;
-}
-
-.unpaid {
-  background-color: #FEE2E2;
-  color: #991B1B;
-}
-
-.inactive {
-  background-color: #F3F4F6;
-  color: #374151;
-}
-
-.unknown {
-  background-color: #F3F4F6;
-  color: #374151;
-}
-
-.subscriptionActions {
-  display: flex;
-  gap: 12px;
-  margin-top: 24px;
-}
-
-.manageButton, .cancelButton {
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
-}
-
-.manageButton {
-  background-color: #004494;
-  color: white;
-  border: none;
-}
-
-.manageButton:hover {
-  background-color: #003371;
-}
-
-.cancelButton {
-  background-color: white;
-  color: #ef4444;
-  border: 1px solid #ef4444;
-  margin-left: auto;
-}
-
-.cancelButton:hover {
-  background-color: #fef2f2;
-}
-
-.noSubscription {
-  padding: 24px;
-  background-color: #F9FAFB;
-  border-radius: 8px;
-  border: 1px solid #E5E7EB;
-  text-align: center;
-}
-
-.noSubscription p {
-  margin-bottom: 20px;
-  color: #374151;
-  font-size: 16px;
-}
-
-.subscriptionBanner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 24px;
-  background-color: #F9FAFB;
-  border: 1px solid #E5E7EB;
-  border-radius: 8px;
-  margin-bottom: 24px;
-}
-
-.subscriptionBannerInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.renewalText {
-  font-size: 14px;
-  color: #6B7280;
-}
-
-.premiumMemberLabel {
-  font-size: 16px;
-  font-weight: 600;
-  color: #111827;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.viewDetailsLink {
-  padding: 6px 12px;
-  background-color: transparent;
-  color: #004494;
-  border: 1px solid #004494;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  text-decoration: none;
-}
-
-.viewDetailsLink:hover {
-  background-color: rgba(0, 68, 148, 0.05);
-}
-
-/* New styles for integrated subscription section */
-.planDetails {
-  padding: 16px;
-  background-color: #f9fafb;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-  margin-bottom: 16px;
-}
-
-.planTitle {
-  font-size: 18px;
-  font-weight: 600;
-  color: #111827;
-  margin-top: 0;
-  margin-bottom: 16px;
-}
-
-.priceContainer {
-  display: flex;
-  align-items: baseline;
-  margin-bottom: 20px;
-}
-
-.currency {
-  font-size: 20px;
-  font-weight: 500;
-  color: #111827;
-}
-
-.amount {
-  font-size: 36px;
-  font-weight: 700;
-  color: #111827;
-  line-height: 1;
-  margin: 0 4px;
-}
-
-.period {
-  font-size: 16px;
-  color: #4B5563;
-}
-
-.features {
-  list-style: none;
-  padding: 0;
-  margin: 20px 0;
-}
-
-.features li {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 12px;
-  font-size: 14px;
-  color: #111827;
-  line-height: 1.5;
-}
-
-.featureIcon {
-  margin-right: 12px;
-  flex-shrink: 0;
-  margin-top: 3px;
-}
-
-.checkoutContainer {
-  margin-top: 24px;
-}
-
-.ctaArrow {
-  margin-right: 6px;
-}
-
-.guaranteeText {
-  font-size: 14px;
-  color: #6B7280;
-  margin-top: 12px;
-  text-align: center;
-}
-
-.securityIcon {
-  vertical-align: middle;
-  margin-right: 6px;
-}
-
-.statusIndicator {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #10B981;
-}
-
-.activeIcon {
-  width: 8px;
-  height: 8px;
-  background-color: #10B981;
-  border-radius: 50%;
-}
-
-.cancelInfo {
-  margin-top: 12px;
-  padding: 12px;
-  background-color: #FEFBEA;
-  border: 1px solid #FEF3C7;
-  border-radius: 6px;
-}
-
-.cancelInfo p {
-  margin: 0;
-  font-size: 14px;
-  color: #92400E;
-}
-
-.errorMessage {
-  margin-top: 12px;
-  padding: 12px;
-  background-color: #FEF2F2;
-  border: 1px solid #FEE2E2;
-  border-radius: 6px;
-  color: #B91C1C;
-  font-size: 14px;
-}
-
-.message {
-  margin-top: 12px;
-  padding: 12px;
-  background-color: #F0F9FF;
-  border: 1px solid #E0F2FE;
-  border-radius: 6px;
-  color: #0369A1;
-  font-size: 14px;
-}
-
-.loadingState {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 24px;
-  text-align: center;
-}
-
-.spinner {
-  border: 3px solid rgba(0, 0, 0, 0.1);
-  border-radius: 50%;
-  border-top: 3px solid #004494;
-  width: 24px;
-  height: 24px;
-  margin-bottom: 12px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+/* Media queries for responsive design */
+@media (max-width: 640px) {
+  .subscriptionCard {
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .decorativeImage {
+    position: relative;
+    width: 100%;
+    height: 120px;
+    margin-top: 16px;
+  }
+  
+  .decorativeImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  
+  .subscriptionActions {
+    flex-direction: row; /* Keep buttons side by side on mobile */
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .seeMoreButton, .joinButton {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .buttonContainer {
+    justify-content: center;
+  }
 }
 
 @media (max-width: 768px) {
@@ -760,10 +492,6 @@
   
   .editButton, .cancelButton, .saveButton {
     width: 100%;
-  }
-  
-  .subscriptionActions {
-    flex-direction: column;
   }
   
   .manageButton, .cancelButton {
@@ -909,4 +637,124 @@
   .infoDisplay {
     font-size: 14px;
   }
+}
+
+/* Cancel subscription button */
+.cancelButton {
+  background-color: white;
+  color: #ef4444;
+  border: 1px solid #ef4444;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: block;
+  margin: 20px 0;
+  width: 100%;
+  max-width: 250px;
+}
+
+.cancelButton:hover {
+  background-color: #fef2f2;
+}
+
+/* Cancel info box */
+.cancelInfo {
+  margin-top: 12px;
+  padding: 12px;
+  background-color: #FEFBEA;
+  border: 1px solid #FEF3C7;
+  border-radius: 6px;
+}
+
+.cancelInfo p {
+  margin: 0;
+  font-size: 14px;
+  color: #92400E;
+}
+
+/* Message and error styles */
+.errorMessage {
+  margin-top: 12px;
+  padding: 12px;
+  background-color: #FEF2F2;
+  border: 1px solid #FEE2E2;
+  border-radius: 6px;
+  color: #B91C1C;
+  font-size: 14px;
+}
+
+.message {
+  margin-top: 12px;
+  padding: 12px;
+  background-color: #F0F9FF;
+  border: 1px solid #E0F2FE;
+  border-radius: 6px;
+  color: #0369A1;
+  font-size: 14px;
+}
+
+/* Loading state */
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  text-align: center;
+}
+
+.spinner {
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 3px solid #1B4FA2;
+  width: 24px;
+  height: 24px;
+  margin-bottom: 12px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Action buttons */
+.actionButtons {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.interviewsButton, .signOutButton {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  text-align: center;
+  text-decoration: none;
+}
+
+.interviewsButton {
+  background-color: #1B4FA2;
+  color: white;
+  border: none;
+}
+
+.interviewsButton:hover {
+  background-color: #134293;
+}
+
+.signOutButton {
+  background-color: transparent;
+  color: #6B7280;
+  border: 1px solid #E5E7EB;
+}
+
+.signOutButton:hover {
+  background-color: #F9FAFB;
 } 

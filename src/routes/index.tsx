@@ -54,7 +54,10 @@ const AppRoutes = () => {
         {/* Authenticated Routes */}
         {isAuthenticated ? (
           <Route element={<AuthenticatedLayout />}>
+            {/* Redirect from landing page to interviews */}
             <Route path="/" element={<Navigate to="/interviews" replace />} />
+
+            {/* Authenticated-specific routes */}
             <Route path="/interviews" element={<Interviews />} />
             <Route path="/my-interview/:id" element={<InterviewDetail />} />
             <Route
@@ -67,14 +70,17 @@ const AppRoutes = () => {
             />
             <Route path="/profile" element={<Profile />} />
             <Route path="/subscription" element={<Subscription />} />
-            <Route path="/checkout/success" element={<CheckoutSuccess />} />
-            <Route path="/checkout/cancel" element={<CheckoutCancel />} />
 
-            {/* Public pages still accessible to authenticated users */}
+            {/* Public pages accessible to authenticated users */}
+            <Route path="/about" element={<About />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/resources" element={<Resources />} />
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/blog/:id" element={<BlogPost />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
+            <Route path="/checkout/success" element={<CheckoutSuccess />} />
+            <Route path="/checkout/cancel" element={<CheckoutCancel />} />
           </Route>
         ) : (
           /* Public Routes */

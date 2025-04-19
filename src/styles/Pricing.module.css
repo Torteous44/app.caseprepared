@@ -111,7 +111,7 @@
 }
 
 .leftSubheader {
-    font-size: var(--font-size-md);
+    font-size: var(--font-size-base);
     color: var(--text-color-secondary);
     margin-bottom: var(--space-2xl);
     line-height: var(--line-height-normal);
@@ -127,7 +127,7 @@
 .featureListItem {
     margin-bottom: var(--space-xl);
     line-height: var(--line-height-normal);
-    font-size: var(--font-size-base);
+    font-size: var(--font-size-sm);
     color: var(--text-color-primary);
     display: flex;
     align-items: flex-start;

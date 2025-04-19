@@ -1,5 +1,7 @@
 @import "../../styles.css";
-
+* {
+  font-family: var(--font-primary);
+}
 .resources-blog-section {
   padding: var(--space-4xl) var(--space-5xl);
   background-color: var(--background-primary);

@@ -135,16 +135,37 @@ const CheckoutButton = ({
         disabled={loading}
         className={className || styles.subscribeButton}
       >
-        {loading ? (
-          "Processing..."
-        ) : (
-          <>
-            <ArrowIcon /> Subscribe Now
-          </>
-        )}
+        {loading ? "Processing..." : "Join today"}
       </button>
 
       {error && <div className={styles.errorMessage}>{error}</div>}
+    </div>
+  );
+};
+
+// Update the SubscriptionCard component to remove the buttons from inside the card
+const SubscriptionCard = () => {
+  return (
+    <div className={styles.subscriptionCard}>
+      <div className={styles.subscriptionContent}>
+        <div className={styles.subscriptionHeader}>
+          <div className={styles.brandName}>CasePrepared</div>
+          <div className={styles.premiumTag}>Premium</div>
+        </div>
+
+        <div className={styles.pricingContainer}>
+          <div className={styles.price}>
+            <span className={styles.dollarSign}>$</span>
+            <span className={styles.priceAmount}>39.99</span>
+            <span className={styles.currency}>USD</span>
+          </div>
+          <div className={styles.pricePeriod}>Price per month</div>
+        </div>
+      </div>
+
+      <div className={styles.decorativeImage}>
+        <img src="/assets/image 11.svg" alt="Decorative pattern" />
+      </div>
     </div>
   );
 };
@@ -364,7 +385,7 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
 
-        {/* Subscription Section */}
+        {/* New Subscription Section */}
         <div className={styles.subscriptionSection}>
           <h2 className={styles.sectionTitle}>Subscription</h2>
 
@@ -373,107 +394,50 @@ const ProfilePage: React.FC = () => {
               <div className={styles.spinner}></div>
               <p>Loading subscription details...</p>
             </div>
-          ) : isPremiumMember() ? (
+          ) : (
             <>
-              <div className={styles.premiumMemberCard}>
-                <div>
-                  <div className={styles.premiumMemberText}>Premium Member</div>
-                  {getNextPaymentDate() && (
-                    <div className={styles.nextPaymentDate}>
-                      Next payment: {formatDate(getNextPaymentDate()!)}
-                    </div>
-                  )}
-                </div>
+              <SubscriptionCard />
 
-                <div className={styles.subscriptionStatus}>
-                  <div className={styles.statusIndicator}>
-                    <div className={styles.activeIcon}></div>
-                    <span>Active Subscription</span>
-                  </div>
+              <div className={styles.buttonContainer}>
+                <div className={styles.subscriptionActions}>
+                  <Link to="/pricing" className={styles.seeMoreButton}>
+                    See more
+                  </Link>
+                  {!isPremiumMember() && (
+                    <CheckoutButton
+                      priceId="price_1RClmJIhI9uxpDni996tXg6s"
+                      className={styles.joinButton}
+                    />
+                  )}
                 </div>
               </div>
 
-              {subscription?.cancel_at_period_end ? (
-                <div className={styles.cancelInfo}>
-                  <p>
-                    Your subscription will end on{" "}
-                    {formatDate(subscription.current_period_end)}. You will not
-                    be charged again.
-                  </p>
-                </div>
-              ) : (
-                <button
-                  onClick={handleCancel}
-                  className={styles.cancelButton}
-                  disabled={cancelLoading}
-                >
-                  {cancelLoading ? "Processing..." : "Cancel subscription"}
-                </button>
+              {isPremiumMember() && (
+                <>
+                  {subscription?.cancel_at_period_end ? (
+                    <div className={styles.cancelInfo}>
+                      <p>
+                        Your subscription will end on{" "}
+                        {formatDate(subscription.current_period_end)}. You will
+                        not be charged again.
+                      </p>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={handleCancel}
+                      className={styles.cancelButton}
+                      disabled={cancelLoading}
+                    >
+                      {cancelLoading ? "Processing..." : "Cancel subscription"}
+                    </button>
+                  )}
+                </>
               )}
 
               {message && <div className={styles.message}>{message}</div>}
-            </>
-          ) : (
-            <>
-              <div className={styles.planDetails}>
-                <h3 className={styles.planTitle}>Premium Plan Features</h3>
-                <div className={styles.priceContainer}>
-                  <span className={styles.currency}>$</span>
-                  <span className={styles.amount}>39.99</span>
-                  <span className={styles.period}>/month</span>
-                </div>
-
-                <ul className={styles.features}>
-                  <li>
-                    <CheckCircle size={22} />{" "}
-                    <span>
-                      <strong>100+ mock interviews</strong> trained on official
-                      MBB data
-                    </span>
-                  </li>
-                  <li>
-                    <CheckCircle size={22} />{" "}
-                    <span>
-                      <strong>Realtime personalized AI feedback</strong> that
-                      adapts to your strengths and weaknesses
-                    </span>
-                  </li>
-                  <li>
-                    <CheckCircle size={22} />{" "}
-                    <span>
-                      <strong>Case partner</strong> that never gets tired and is
-                      completely informed
-                    </span>
-                  </li>
-                  <li>
-                    <CheckCircle size={22} />{" "}
-                    <span>
-                      <strong>Detailed analysis</strong> giving you the best
-                      practice for your next interview
-                    </span>
-                  </li>
-                  <li>
-                    <CheckCircle size={22} />{" "}
-                    <span>
-                      <strong>24/7 access</strong> to practice at your own pace
-                    </span>
-                  </li>
-                </ul>
-
-                <div className={styles.checkoutContainer}>
-                  <CheckoutButton
-                    priceId="price_1RClmJIhI9uxpDni996tXg6s"
-                    className={styles.subscribeButton}
-                  />
-                  <p className={styles.guaranteeText}>
-                    30-day money-back guarantee • Cancel anytime
-                  </p>
-                </div>
-              </div>
+              {error && <div className={styles.errorMessage}>{error}</div>}
             </>
           )}
-
-          {error && <div className={styles.errorMessage}>{error}</div>}
         </div>
 
         <div className={styles.actionButtons}>

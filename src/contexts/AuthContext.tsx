@@ -12,14 +12,29 @@ import React, {
 
 const API_BASE_URL = "https://casepreparedcrud.onrender.com";
 
+interface SubscriptionDetails {
+  id: string;
+  plan: string;
+  status: string;
+  created_at: string;
+  stripe_subscription_id: string;
+}
+
+interface Subscription {
+  is_active: boolean;
+  details: SubscriptionDetails;
+}
+
 interface User {
   id: string;
   email: string;
   full_name?: string;
   organization_name?: string;
   is_active?: boolean;
+  is_admin?: boolean;
   created_at: string;
   updated_at?: string;
+  subscription?: Subscription;
 }
 
 interface AuthContextType {

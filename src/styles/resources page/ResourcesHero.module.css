@@ -1,11 +1,13 @@
 @import "../../styles.css";
-
+* {
+  font-family: var(--font-primary);
+}
 .hero {
   display: flex;
   align-items: center; 
   justify-content: center;
   padding: var(--space-5xl) var(--space-5xl);
-  margin: 0 auto;
+  margin: 100px auto;
   padding-right: 0;
 }
 
@@ -35,7 +37,7 @@
 }
 
 .title {
-  font-size: var(--font-size-5xl);
+  font-size: var(--font-size-4xl);
   font-weight: var(--font-weight-semibold);
   color: var(--text-color-primary);
   margin-bottom: var(--space-lg);
