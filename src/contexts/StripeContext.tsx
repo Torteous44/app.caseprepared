@@ -5,7 +5,7 @@ import { Appearance, StripeElementsOptions } from "@stripe/stripe-js";
 
 // Use test key for development
 const STRIPE_PUBLISHABLE_KEY =
-  "pk_test_51RCljTIhI9uxpDniw1nrCg741oii1w2qMPyJQ2HWkpBuceTOjmPpFmgQaZXRrb8LbdtXbuHjdrCeMEHpAkSIUuYk00mLWxDdRP";
+  "pk_live_51RCljOIzbD323IQGdPHzEwuFDd4cgk7o3vXmUQCFvtZRlGVIWyxLlODdiEbVykwatPYkNsVsT15QvofKM87fhzWi003bx0CZPa";
 // Initialize Stripe
 const stripePromise = loadStripe(STRIPE_PUBLISHABLE_KEY);
 

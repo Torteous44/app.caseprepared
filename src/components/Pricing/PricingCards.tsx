@@ -98,7 +98,7 @@ const PricingCards: React.FC<PricingCardsProps> = ({
         navigate("/profile");
       } else {
         // If authenticated without subscription, open Stripe checkout directly
-        handleStripeCheckout("price_1RClmJIhI9uxpDni996tXg6s");
+        handleStripeCheckout("price_1RFeEdIzbD323IQGvtSOXEsy");
       }
     } else {
       // If not authenticated, open registration modal

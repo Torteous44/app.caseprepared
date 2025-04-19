@@ -335,7 +335,7 @@ const ProfilePage: React.FC = () => {
     // Or check the subscription state directly
     return (
       subscription?.status === "active" &&
-      subscription?.plan === "price_1RClmJIhI9uxpDni996tXg6s"
+      subscription?.plan === "price_1RFeEdIzbD323IQGvtSOXEsy"
     );
   };
 
@@ -405,7 +405,7 @@ const ProfilePage: React.FC = () => {
                   </Link>
                   {!isPremiumMember() ? (
                     <CheckoutButton
-                      priceId="price_1RClmJIhI9uxpDni996tXg6s"
+                      priceId="price_1RFeEdIzbD323IQGvtSOXEsy"
                       className={styles.joinButton}
                     />
                   ) : !subscription?.cancel_at_period_end ? (
