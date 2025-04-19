@@ -51,6 +51,9 @@ function Transcription(
     timestamp: "",
   });
   const [fullTranscript, setFullTranscript] = useState<TranscriptData[]>([]);
+  const [isUserSpeaking, setIsUserSpeaking] = useState(false);
+  const lastActivityTime = useRef(Date.now());
+  const silenceThreshold = 500; // ms to consider silence after activity
 
   // Helper function for audio conversion
   function convertFloat32ToInt16(buffer: Float32Array): ArrayBuffer {
@@ -71,16 +74,47 @@ function Transcription(
   // Combine the audio streams into one
   const combineStreams = (): MediaStream | null => {
     if (!remoteMediaStream || !localStream) {
-      logWithTime("Streams not available for combining.");
       return null;
     }
 
-    const combinedStream = new MediaStream();
-    // Add both user and AI audio tracks to the combined stream
-    combinedStream.addTrack(remoteMediaStream.getAudioTracks()[0]);
-    combinedStream.addTrack(localStream.getAudioTracks()[0]);
+    try {
+      // Create a new combined stream
+      const combinedStream = new MediaStream();
 
-    return combinedStream;
+      // Add the local stream (user's voice) first - this is the most important
+      const localAudioTrack = localStream.getAudioTracks()[0];
+      if (localAudioTrack) {
+        logWithTime("Adding local audio track to combined stream");
+        combinedStream.addTrack(localAudioTrack);
+      } else {
+        logWithTime("WARNING: No local audio track found");
+      }
+
+      // Then add the remote stream (AI voice) if available
+      const remoteAudioTrack = remoteMediaStream.getAudioTracks()[0];
+      if (remoteAudioTrack) {
+        logWithTime("Adding remote audio track to combined stream");
+        combinedStream.addTrack(remoteAudioTrack);
+      } else {
+        logWithTime("WARNING: No remote audio track found");
+      }
+
+      // Verify combined stream has tracks
+      if (combinedStream.getAudioTracks().length === 0) {
+        logWithTime("ERROR: Combined stream has no audio tracks");
+        return null;
+      }
+
+      logWithTime(
+        `Combined stream created with ${
+          combinedStream.getAudioTracks().length
+        } audio tracks`
+      );
+      return combinedStream;
+    } catch (error) {
+      logWithTime(`Error combining streams: ${error}`);
+      return null;
+    }
   };
 
   // Function to get authentication token
@@ -174,6 +208,62 @@ function Transcription(
         }
       };
 
+      // Helper to detect likely speaker based on simple heuristics
+      const determineSpeaker = (text: string): string => {
+        // If the user was recently detected as speaking (via audio activity)
+        // or if there was a long pause since last transcript
+        const timeSinceLastActivity = Date.now() - lastActivityTime.current;
+
+        // Update the last activity time
+        lastActivityTime.current = Date.now();
+
+        // Simple heuristic: if the message starts with a question mark or common AI phrases,
+        // it's more likely to be the AI
+        const aiPhrases = [
+          "hello",
+          "hi there",
+          "welcome",
+          "let's",
+          "i'm",
+          "to begin",
+          "now,",
+          "first,",
+          "could you",
+          "tell me about",
+          "what would",
+          "let me",
+          "thank you",
+          "that's",
+          "interesting",
+        ];
+
+        const lowerText = text.toLowerCase();
+        const hasAiPhrase = aiPhrases.some((phrase) =>
+          lowerText.includes(phrase)
+        );
+
+        // If it contains common AI interview phrases and no question marks, likely AI
+        if (hasAiPhrase && !lowerText.includes("?") && lowerText.length > 15) {
+          logWithTime(
+            `Identified likely AI speech: "${text.substring(0, 30)}..."`
+          );
+          return "AI";
+        }
+
+        // If there's been significant silence, likely a speaker change
+        if (timeSinceLastActivity > silenceThreshold) {
+          // Toggle between speakers when there's a pause
+          setIsUserSpeaking((prev) => !prev);
+        }
+
+        // Use the current speaking state
+        const speaker = isUserSpeaking ? "User" : "AI";
+        logWithTime(
+          `Identified likely ${speaker} speech: "${text.substring(0, 30)}..."`
+        );
+        return speaker;
+      };
+
       ws.onmessage = (event: MessageEvent) => {
         try {
           const message = JSON.parse(event.data);
@@ -190,9 +280,12 @@ function Transcription(
               return;
             }
 
+            // Use improved speaker detection
+            const speaker = message.speaker || determineSpeaker(message.text);
+
             const newTranscript = {
               text: message.text,
-              speaker: message.speaker || "AI",
+              speaker: speaker,
               timestamp: new Date().toISOString(),
             };
 
@@ -238,15 +331,48 @@ function Transcription(
         return null;
       }
 
+      // Check if analysis was already sent for this session/question
+      const analysisKey = `transcript_analysis_sent_${sessionId}_${questionNumber}`;
+      if (localStorage.getItem(analysisKey) === "true") {
+        logWithTime(
+          "Analysis already sent for this session/question. Skipping."
+        );
+        return null;
+      }
+
       const jwtToken = getAuthToken();
       if (!jwtToken) {
         return null;
       }
 
-      // Format the transcript as a single string
+      // Get transcript statistics
+      const userSegments = fullTranscript.filter(
+        (t) => t.speaker === "User"
+      ).length;
+      const aiSegments = fullTranscript.filter(
+        (t) => t.speaker === "AI"
+      ).length;
+      logWithTime(
+        `Transcript contains ${userSegments} user segments and ${aiSegments} AI segments`
+      );
+
+      // Format the transcript as a single string with clear speaker labels
       const formattedTranscript = fullTranscript
         .map((t) => `[${t.speaker}]: ${t.text}`)
-        .join("\n");
+        .join("\n\n"); // Add extra line break for better separation
+
+      // Log a preview of the transcript
+      logWithTime(
+        `Transcript preview (first 200 chars): ${formattedTranscript.substring(
+          0,
+          200
+        )}...`
+      );
+
+      // Mark as sent in localStorage BEFORE sending the request
+      // This ensures the PostQuestionScreen can detect that a send was attempted
+      localStorage.setItem(analysisKey, "true");
+      logWithTime("Set localStorage flag to indicate analysis was sent");
 
       // Send to backend
       const response = await fetch(
@@ -318,6 +444,80 @@ function Transcription(
     return await sendTranscriptForAnalysis();
   };
 
+  // Initialize audio analyzer for user voice detection
+  useEffect(() => {
+    if (!isCallActive || !localStream) return;
+
+    try {
+      // Create audio context
+      const audioContext = new (window.AudioContext ||
+        (window as any).webkitAudioContext)();
+
+      // Create analyzer
+      const analyzer = audioContext.createAnalyser();
+      analyzer.fftSize = 256;
+
+      // Create source from user's microphone
+      const source = audioContext.createMediaStreamSource(localStream);
+      source.connect(analyzer);
+
+      // Buffer for analysis
+      const dataArray = new Uint8Array(analyzer.frequencyBinCount);
+
+      // Create audio level detection loop
+      const detectSpeech = () => {
+        if (!isCallActive) return;
+
+        analyzer.getByteFrequencyData(dataArray);
+
+        // Calculate average level
+        let sum = 0;
+        for (let i = 0; i < dataArray.length; i++) {
+          sum += dataArray[i];
+        }
+        const average = sum / dataArray.length;
+
+        // If average is above threshold, user is likely speaking
+        const SPEECH_THRESHOLD = 30; // Adjust based on testing
+        const isSpeaking = average > SPEECH_THRESHOLD;
+
+        if (isSpeaking) {
+          // Update last activity time when user is speaking
+          lastActivityTime.current = Date.now();
+
+          // Only log state changes to avoid console spam
+          if (!isUserSpeaking) {
+            logWithTime("User voice activity detected");
+            setIsUserSpeaking(true);
+          }
+        } else if (
+          isUserSpeaking &&
+          Date.now() - lastActivityTime.current > silenceThreshold
+        ) {
+          // Only change state after silence threshold
+          logWithTime("User voice activity stopped");
+          setIsUserSpeaking(false);
+        }
+
+        // Continue loop
+        requestAnimationFrame(detectSpeech);
+      };
+
+      // Start detection loop
+      detectSpeech();
+
+      // Cleanup
+      return () => {
+        audioContext.close().catch((err) => {
+          logWithTime(`Error closing audio context: ${err}`);
+        });
+      };
+    } catch (error) {
+      logWithTime(`Error setting up voice activity detection: ${error}`);
+    }
+  }, [isCallActive, localStream, isUserSpeaking, silenceThreshold]);
+
+  // Initialize the transcription service when active
   useEffect(() => {
     logWithTime(
       `Transcription useEffect triggered - isCallActive: ${isCallActive}, remoteStream: ${!!remoteMediaStream}, localStream: ${!!localStream}`

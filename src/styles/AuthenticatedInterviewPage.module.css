@@ -263,6 +263,7 @@
   background-color: var(--background-secondary);
   border-right: var(--border-width-thin) solid var(--border-color);
   height: 100%;
+  position: relative;
 }
 
 .caseImage {
@@ -273,22 +274,31 @@
 }
 
 .caseImageFooter {
-  padding: var(--space-md);
+  padding: var(--space-lg) var(--space-md);
+  background-color: rgba(255, 255, 255, 0.9);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   border-top: var(--border-width-thin) solid var(--border-color);
-  background-color: var(--background-secondary);
 }
 
 .caseImageFooter h5 {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
   color: var(--blue-primary);
-  margin: 0 0 2px 0;
+  margin: 0 0 8px 0;
 }
 
 .caseImageFooter p {
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   color: var(--text-color-tertiary);
   margin: 0;
+  line-height: 1.4;
 }
 
 .caseContent {

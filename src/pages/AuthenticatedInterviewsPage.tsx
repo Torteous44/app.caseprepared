@@ -38,7 +38,7 @@ interface TemplateWithProgress {
   logo?: string;
   description?: string;
   thumbnail?: string;
-  completionStatus?: "Completed" | "Incomplete" | null;
+  completionStatus?: string | null;
 }
 
 // Define demo interview cards
@@ -70,7 +70,7 @@ interface EnhancedDemoInterview extends DemoInterview {
   total_questions: number;
   image_url?: string;
   description_short?: string;
-  completionStatus?: "Completed" | "Incomplete" | null;
+  completionStatus?: string | null;
 }
 
 // API base URLs
@@ -278,11 +278,11 @@ const AuthenticatedInterviewsPage: React.FC = () => {
   // Helper function to determine completion status
   const getCompletionStatus = (
     template: TemplateWithProgress
-  ): "Completed" | "Incomplete" | null => {
+  ): string | null => {
     if (!template.progress_status) return null;
 
     if (template.progress_status === "completed") {
-      return "Completed";
+      return template.case_type;
     } else if (
       template.questions_completed &&
       template.questions_completed > 0
@@ -558,6 +558,19 @@ const AuthenticatedInterviewsPage: React.FC = () => {
                 src={interview.image_url || interview.thumbnail}
                 alt={interview.title}
               />
+              {interview.progress_status && (
+                <span
+                  className={`${styles.statusPill} ${
+                    interview.progress_status === "completed"
+                      ? styles.completed
+                      : styles.incomplete
+                  }`}
+                >
+                  {interview.progress_status === "completed"
+                    ? "Completed"
+                    : "In Progress"}
+                </span>
+              )}
             </div>
 
             <div className={styles.cardContent}>

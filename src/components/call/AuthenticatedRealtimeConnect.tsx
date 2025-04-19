@@ -748,10 +748,6 @@ const AuthenticatedRealtimeConnect: React.FC = () => {
         );
         console.log("SDP length:", currentSdp.length);
 
-        // SECURITY WARNING: Using API keys directly in the frontend is a security risk
-        // The backend should be generating proper ephemeral tokens as per documentation
-        console.log(`Using model: ${model}`);
-
         const headers = {
           Authorization: `Bearer ${ephemeralToken}`,
           "Content-Type": "application/sdp",
@@ -822,7 +818,6 @@ const AuthenticatedRealtimeConnect: React.FC = () => {
             "DEBUG - Response data:",
             JSON.stringify(error.response.data, null, 2)
           );
-          console.log("DEBUG - Response headers:", error.response.headers);
 
           errorMessage = `API returned status ${error.response.status}: ${
             error.response.data?.error?.message || error.response.statusText
@@ -1003,48 +998,76 @@ const AuthenticatedRealtimeConnect: React.FC = () => {
           return;
         }
 
+        // Get the current question number
+        const currentQuestionNumber = locationState.questionNumber || 1;
+
+        // Check if analysis was already sent for this session/question
+        const analysisKey = `transcript_analysis_sent_${sessionId}_${currentQuestionNumber}`;
+        if (localStorage.getItem(analysisKey) === "true") {
+          console.log(
+            "Analysis already sent for this session/question. Skipping."
+          );
+          return;
+        }
+
         // Format the transcript (if available from transcripts state)
         if (transcripts.length > 0) {
+          console.log(
+            `Sending transcript with ${transcripts.length} segments for analysis`
+          );
+
+          // Set local storage flag BEFORE sending to ensure PostQuestionScreen knows we attempted it
+          localStorage.setItem(analysisKey, "true");
+
           const formattedTranscript = transcripts
             .map((t) => `[${t.speaker}]: ${t.text}`)
             .join("\n");
 
-          // Use sendBeacon to send the transcript for analysis in the background
-          const beaconData = JSON.stringify({
-            transcript: formattedTranscript,
-            interview_id: sessionId,
-            question_number: currentQuestionNumber,
-          });
+          // Log transcript for debugging
+          console.log(
+            "Transcript content:",
+            formattedTranscript.substring(0, 100) + "..."
+          );
 
           // Create the request URL
           const url = `${API_BASE_URL}/api/v1/transcript-analysis/`;
 
-          // Create the blob with the correct type
-          const blob = new Blob([beaconData], { type: "application/json" });
-
-          // Send the data using beacon
-          const success = navigator.sendBeacon(url, blob);
-
-          if (success) {
-            console.log("Transcript analysis request sent via beacon");
-          } else {
-            console.warn(
-              "Failed to send transcript analysis via beacon, falling back to fetch"
-            );
-
-            // Fallback to fetch with keepalive
-            fetch(url, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: beaconData,
-              keepalive: true,
-            }).catch((error) => {
+          // Use fetch with keepalive instead of sendBeacon
+          fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              transcript: formattedTranscript,
+              interview_id: sessionId,
+              question_number: currentQuestionNumber,
+            }),
+            keepalive: true,
+          })
+            .then((response) => {
+              if (response.ok) {
+                console.log("Transcript analysis request sent successfully");
+                // We've already set the localStorage flag above
+              } else {
+                console.warn(
+                  `Failed to send transcript analysis: ${response.status}`
+                );
+                // Log more details for debugging
+                response
+                  .text()
+                  .then((text) => {
+                    console.error("Error response:", text);
+                  })
+                  .catch((err) => {
+                    console.error("Error reading response:", err);
+                  });
+              }
+            })
+            .catch((error) => {
               console.error("Error sending transcript analysis:", error);
             });
-          }
         } else {
           console.log("No transcripts available to send for analysis");
         }

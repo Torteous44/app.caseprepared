@@ -89,6 +89,28 @@
   box-sizing: border-box;
 }
 
+.statusPill {
+  position: absolute;
+  bottom: 10px;
+  left: 28px;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  z-index: 2;
+  box-shadow: var(--shadow-sm);
+}
+
+.statusPill.completed {
+  background-color: var(--green-primary);
+  color: white;
+}
+
+.statusPill.incomplete {
+  background-color: var(--orange-primary);
+  color: white;
+}
+
 .cardContent {
   padding: var(--space-md);
   flex-grow: 1;

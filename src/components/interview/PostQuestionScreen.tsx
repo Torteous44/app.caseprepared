@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import styles from "../../styles/PostQuestion.module.css";
 import Footer from "../../components/common/Footer";
@@ -82,6 +82,8 @@ const PostQuestionScreen: React.FC = () => {
     useState<TranscriptAnalysis | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [pollingAttempts, setPollingAttempts] = useState(0);
+  const [hasReceivedData, setHasReceivedData] = useState(false);
+  const pollingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Debug logging
   useEffect(() => {
@@ -105,126 +107,171 @@ const PostQuestionScreen: React.FC = () => {
 
   // If transcriptAnalysis is not provided in location state, fetch it
   useEffect(() => {
+    // Generate unique keys to track state
+    const analysisStorageKey = `analysis_retrieved_${interviewId}_${questionNumber}`;
+    const alreadySentKey = `transcript_analysis_sent_${interviewId}_${questionNumber}`;
+
+    // For debugging - clear any previous localStorage state if needed
+    // This helps when we're having issues with stale localStorage data
+    // Uncomment the following line if you're having issues with analysis not showing
+    localStorage.removeItem(analysisStorageKey);
+
     // Skip if we already have analysis data from navigation state
     if (transcriptAnalysis || loadedAnalysis) {
-      console.log("Analysis already available, skipping fetch");
+      console.log("Analysis already available from props, skipping fetch");
       return;
     }
 
-    // Max polling attempts (10 attempts × 2 seconds = 20 seconds max)
+    // Check if analysis was sent previously
+    const analysisSent = localStorage.getItem(alreadySentKey) === "true";
+
+    // Max polling attempts and interval
     const MAX_POLLING_ATTEMPTS = 10;
+    const POLLING_INTERVAL = 2000; // 2 seconds
 
-    if (pollingAttempts >= MAX_POLLING_ATTEMPTS) {
-      console.log("Max polling attempts reached, giving up");
-      setIsLoading(false);
-      return;
-    }
+    // Always start loading regardless of whether analysis was sent
+    setIsLoading(true);
+    console.log(
+      analysisSent
+        ? "Analysis was previously sent, starting to poll for it"
+        : "Analysis may not have been sent yet, but will start polling anyway"
+    );
 
-    const fetchAnalysisData = async () => {
-      try {
-        if (!interviewId || !questionNumber) {
-          console.warn(
-            "Missing interviewId or questionNumber, can't fetch analysis"
-          );
-          return;
-        }
+    // For cleanup
+    let isMounted = true;
+    let currentAttempt = 0;
+    let pollingTimeout: NodeJS.Timeout | null = null;
 
-        setIsLoading(true);
-        setLoadError(null);
-
-        // Get the auth token
-        const token = localStorage.getItem("access_token");
-        if (!token) {
-          setLoadError("Authentication required");
-          setIsLoading(false);
-          return;
-        }
-
-        // Fetch the latest analysis from the API
-        // This endpoint only accepts POST requests, not GET
-        const response = await fetch(
-          `${API_BASE_URL}/api/v1/transcript-analysis/`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-              // Send empty transcript to just retrieve the existing analysis
-              transcript: "",
-              interview_id: interviewId,
-              question_number: questionNumber,
-              retrieve_only: true, // Adding a flag to indicate we only want to retrieve
-            }),
+    // Add a small initial delay to ensure backend has time to process any recently sent analysis
+    setTimeout(() => {
+      const fetchAnalysisData = async () => {
+        // Don't try to fetch if unmounted or max attempts reached
+        if (!isMounted || currentAttempt >= MAX_POLLING_ATTEMPTS) {
+          if (isMounted && currentAttempt >= MAX_POLLING_ATTEMPTS) {
+            console.log("Max polling attempts reached, giving up");
+            setIsLoading(false);
           }
-        );
+          return;
+        }
 
-        if (!response.ok) {
-          // If 404 (not found), we'll retry
-          if (response.status === 404) {
-            console.log(
-              `Analysis not found yet, will retry (attempt ${
-                pollingAttempts + 1
-              })`
+        try {
+          if (!interviewId || !questionNumber) {
+            console.warn(
+              "Missing interviewId or questionNumber, can't fetch analysis"
             );
-            setPollingAttempts((prev) => prev + 1);
             return;
           }
 
-          // Other errors we'll display
-          throw new Error(`Failed to fetch analysis: ${response.status}`);
-        }
+          // DON'T skip fetching based on localStorage - we want to always check the API
+          // This fixes issues where localStorage might be out of sync with the server state
 
-        const data = await response.json();
-        console.log("Successfully loaded transcript analysis", data);
+          // Get the auth token
+          const token = localStorage.getItem("access_token");
+          if (!token) {
+            setLoadError("Authentication required");
+            setIsLoading(false);
+            return;
+          }
 
-        if (data && Object.keys(data).length > 0) {
-          setLoadedAnalysis(data);
-          setPollingAttempts(0); // Reset polling attempts
-          setIsLoading(false); // Set loading to false immediately after successful data fetch
-        } else {
-          // If we got empty data, we'll retry
-          console.log("Received empty analysis data, will retry");
-          setPollingAttempts((prev) => prev + 1);
+          console.log(
+            `Attempting to fetch analysis (attempt ${
+              currentAttempt + 1
+            }/${MAX_POLLING_ATTEMPTS})`
+          );
+
+          // Fetch the latest analysis from the API
+          const response = await fetch(
+            `${API_BASE_URL}/api/v1/transcript-analysis/`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                transcript: "",
+                interview_id: interviewId,
+                question_number: questionNumber,
+                retrieve_only: true,
+              }),
+            }
+          );
+
+          if (!response.ok) {
+            // If 404 (not found), we'll retry
+            if (response.status === 404) {
+              console.log(
+                `Analysis not found yet, will retry (attempt ${
+                  currentAttempt + 1
+                }/${MAX_POLLING_ATTEMPTS})`
+              );
+              currentAttempt++;
+
+              // Schedule next attempt if not at max
+              if (currentAttempt < MAX_POLLING_ATTEMPTS && isMounted) {
+                pollingTimeout = setTimeout(
+                  fetchAnalysisData,
+                  POLLING_INTERVAL
+                );
+              } else if (isMounted) {
+                setIsLoading(false);
+              }
+              return;
+            }
+
+            throw new Error(`Failed to fetch analysis: ${response.status}`);
+          }
+
+          const data = await response.json();
+          console.log("Successfully loaded transcript analysis", data);
+
+          if (data && Object.keys(data).length > 0 && isMounted) {
+            setLoadedAnalysis(data);
+            setIsLoading(false);
+
+            // Mark as retrieved in localStorage to prevent future fetches
+            localStorage.setItem(analysisStorageKey, "true");
+
+            // Also mark as sent since we now know it was successfully sent
+            localStorage.setItem(alreadySentKey, "true");
+
+            // No need to schedule more polling
+          } else if (isMounted) {
+            console.log("Received empty analysis data, will retry");
+            currentAttempt++;
+
+            // Schedule next attempt if not at max
+            if (currentAttempt < MAX_POLLING_ATTEMPTS) {
+              pollingTimeout = setTimeout(fetchAnalysisData, POLLING_INTERVAL);
+            } else {
+              setIsLoading(false);
+            }
+          }
+        } catch (error) {
+          if (isMounted) {
+            console.error("Error fetching transcript analysis:", error);
+            setLoadError(
+              `Failed to load analysis data: ${
+                error instanceof Error ? error.message : String(error)
+              }`
+            );
+            setIsLoading(false);
+          }
         }
-      } catch (error) {
-        console.error("Error fetching transcript analysis:", error);
-        setLoadError(
-          `Failed to load analysis data: ${
-            error instanceof Error ? error.message : String(error)
-          }`
-        );
-        setIsLoading(false); // Set loading to false on error
-      } finally {
-        // Only set loading to false if we're done polling without data
-        if (pollingAttempts >= MAX_POLLING_ATTEMPTS) {
-          setIsLoading(false);
-        }
+      };
+
+      // Start first polling attempt
+      fetchAnalysisData();
+    }, 1000); // 1 second initial delay
+
+    // Cleanup on unmount
+    return () => {
+      isMounted = false;
+      if (pollingTimeout) {
+        clearTimeout(pollingTimeout);
       }
     };
-
-    // Start polling
-    fetchAnalysisData();
-
-    // Set up polling interval if we need to retry
-    const pollingInterval = setTimeout(() => {
-      if (!loadedAnalysis && pollingAttempts < MAX_POLLING_ATTEMPTS) {
-        console.log(
-          `Polling for analysis data (attempt ${pollingAttempts + 1})`
-        );
-        setPollingAttempts((prev) => prev + 1);
-      }
-    }, 2000); // Poll every 2 seconds
-
-    return () => clearTimeout(pollingInterval);
-  }, [
-    interviewId,
-    questionNumber,
-    transcriptAnalysis,
-    loadedAnalysis,
-    pollingAttempts,
-  ]);
+  }, [interviewId, questionNumber, transcriptAnalysis, loadedAnalysis]);
 
   // Parse title to get the case name
   const titleParts = title.split(" - ");
