@@ -107,7 +107,7 @@ const PricingCards: React.FC<PricingCardsProps> = ({
   };
 
   const handleEnterprise = () => {
-    navigate("/contact");
+    window.location.href = "mailto:contact@caseprepared.com";
   };
 
   return (
