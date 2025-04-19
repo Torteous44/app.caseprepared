@@ -190,7 +190,7 @@ const PricingCards: React.FC<PricingCardsProps> = ({
             {loading
               ? "Processing..."
               : isAuthenticated && hasSubscription
-              ? "Profile"
+              ? "Current Plan"
               : "Join today"}
           </button>
           {error && <div className={styles.errorMessage}>{error}</div>}

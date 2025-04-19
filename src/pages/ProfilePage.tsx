@@ -403,26 +403,12 @@ const ProfilePage: React.FC = () => {
                   <Link to="/pricing" className={styles.seeMoreButton}>
                     See more
                   </Link>
-                  {!isPremiumMember() && (
+                  {!isPremiumMember() ? (
                     <CheckoutButton
                       priceId="price_1RClmJIhI9uxpDni996tXg6s"
                       className={styles.joinButton}
                     />
-                  )}
-                </div>
-              </div>
-
-              {isPremiumMember() && (
-                <>
-                  {subscription?.cancel_at_period_end ? (
-                    <div className={styles.cancelInfo}>
-                      <p>
-                        Your subscription will end on{" "}
-                        {formatDate(subscription.current_period_end)}. You will
-                        not be charged again.
-                      </p>
-                    </div>
-                  ) : (
+                  ) : !subscription?.cancel_at_period_end ? (
                     <button
                       onClick={handleCancel}
                       className={styles.cancelButton}
@@ -430,8 +416,18 @@ const ProfilePage: React.FC = () => {
                     >
                       {cancelLoading ? "Processing..." : "Cancel subscription"}
                     </button>
-                  )}
-                </>
+                  ) : null}
+                </div>
+              </div>
+
+              {isPremiumMember() && subscription?.cancel_at_period_end && (
+                <div className={styles.cancelInfo}>
+                  <p>
+                    Your subscription will end on{" "}
+                    {formatDate(subscription.current_period_end)}. You will not
+                    be charged again.
+                  </p>
+                </div>
               )}
 
               {message && <div className={styles.message}>{message}</div>}
