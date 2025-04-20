@@ -387,8 +387,6 @@ const ProfilePage: React.FC = () => {
 
         {/* New Subscription Section */}
         <div className={styles.subscriptionSection}>
-          <h2 className={styles.sectionTitle}>Subscription</h2>
-
           {subscriptionLoading ? (
             <div className={styles.loadingState}>
               <div className={styles.spinner}></div>

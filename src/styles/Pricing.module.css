@@ -1,7 +1,7 @@
 @import "../styles.css";
 
 * {
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-primary), sans-serif;
 }
 
 .container {

@@ -43,7 +43,7 @@
 }
 
 .pageHeader h1 {
-  font-size: var(--font-size-3xl);
+  font-size: var(--font-size-5xl);
   font-weight: var(--font-weight-semibold);
   color: var(--text-color-primary);
   margin: 0;
@@ -88,7 +88,7 @@
 }
 
 .profileName {
-  font-size: 32px;
+  font-size: 42px;
   font-weight: 700;
   color: #111;
   margin: 0 0 8px;
@@ -187,7 +187,7 @@
 }
 
 .profileHeader h1 {
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 500;
   color: #000;
   margin: 0 0 4px 0;
@@ -253,12 +253,11 @@
 /* Updated Subscription Section */
 .subscriptionSection {
   margin-top: 32px;
-  margin-bottom: 32px;
   width: 100%;
   background-color: white;
   border-radius: 12px;
   border: 1px solid #e5e7eb;
-  padding: 24px;
+  padding: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
@@ -377,7 +376,7 @@
   justify-content: flex-end;
   align-items: center;
   gap: 16px; /* Space between buttons */
-  margin-bottom: 20px;
+  margin-bottom: 5px;
 }
 
 .seeMoreButton {
@@ -748,6 +747,7 @@
 }
 
 .interviewsButton:hover {
+  color: white;
   background-color: #134293;
 }
 

@@ -26,9 +26,9 @@ const FAQs: React.FC = () => {
         "We take privacy and data security seriously. Your audio and transcript data are used solely to generate personalized feedback during your session and are stored temporarily in secure, ephemeral caches. Any persistent data, like performance logs, is anonymized and stored in compliance with industry-standard security protocols.",
     },
     {
-      question: "Can I customize my interview experience?",
+      question: "What happens after I sign up and pay?",
       answer:
-        "Yes! Our platform allows you to tailor the interview experience to your specific needs. You can select interview formats, adjust difficulty levels, and even focus on particular areas—such as improving your quantitative analysis or enhancing your communication style—so you get targeted practice relevant to your career goals.",
+        "You'll be able to get started with your CasePrepared subscription as soon as you've completed your payment. We'll also send you a confirmation email with your paid invoice attached. Once you're in, you'll be able to enjoy your subscriber benefits right away. You'll get access to all of our premium cases and analysis services.",
     },
   ];
 
