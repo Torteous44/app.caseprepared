@@ -172,7 +172,7 @@ const PricingCards: React.FC<PricingCardsProps> = ({
               <CheckIcon /> Personalized software
             </li>
           </ul>
-          <div className={styles.divider}></div>
+          <div className={styles.premiumDivider}></div>
           <div className={styles.cardPrice}>
             <div className={styles.priceRow}>
               <span className={`${styles.currency} ${styles.premiumPrice}`}>
@@ -218,7 +218,7 @@ const PricingCards: React.FC<PricingCardsProps> = ({
               <CheckIcon /> Tailored for you
             </li>
           </ul>
-          <div className={styles.divider}></div>
+          <div className={styles.enterpriseDivider}></div>
           <div className={styles.cardPrice}>
             <div className={styles.priceRow}>
               <span className={styles.contactUs}>Contact us</span>

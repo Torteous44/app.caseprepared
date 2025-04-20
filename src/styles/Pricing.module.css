@@ -364,7 +364,6 @@
   background-color: var(--background-primary);
   border-radius: var(--border-radius-md);
   padding: var(--space-xl);
-  box-shadow: var(--shadow-sm);
   transition: transform var(--transition-normal), box-shadow var(--transition-normal);
   font-family: var(--font-primary);
   border: var(--border-width-thin) solid var(--border-color);
@@ -372,7 +371,6 @@
 
 .testimonialCard:hover {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
 }
 
 .testimonialStars {

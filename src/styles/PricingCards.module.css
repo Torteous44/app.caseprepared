@@ -50,11 +50,11 @@
 
 .badgePill {
   display: inline-block;
-  padding: 2px 12px;
+  padding: 0px 12px;
   border-radius: 24px;
   font-weight: 600;
   font-size: 16px;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   width: fit-content;
   align-self: flex-start;
 }
@@ -109,6 +109,15 @@
   margin-top: auto;
 }
 
+.premiumDivider,
+.enterpriseDivider {
+  height: 1px;
+  background-color: #ffffff;
+  width: 100%;
+  margin: 20px 0;
+  margin-top: auto;
+}
+
 .cardPrice {
   display: flex;
   flex-direction: column;
@@ -117,7 +126,7 @@
 
 .priceRow {
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
   justify-content: flex-start;
 }
 
@@ -133,8 +142,10 @@
 }
 
 .period {
-  font-size: 14px;
+  font-size: 12px;
   color: #174EA6;
+  align-self: flex-start;
+  margin-top: 2px;
 }
 
 .billingPeriod {
