@@ -71,6 +71,17 @@ const AppRoutes = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/subscription" element={<Subscription />} />
 
+            {/* Demo interview routes for authenticated users */}
+            <Route path="/interview/:id" element={<PublicInterviewDetail />} />
+            <Route
+              path="/interview/session/:sessionId"
+              element={<DemoSession />}
+            />
+            <Route
+              path="/interview/demo-session/:demoTypeId"
+              element={<DemoSession />}
+            />
+
             {/* Public pages accessible to authenticated users */}
             <Route path="/about" element={<About />} />
             <Route path="/pricing" element={<Pricing />} />
