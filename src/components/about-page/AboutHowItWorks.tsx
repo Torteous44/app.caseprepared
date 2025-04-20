@@ -55,36 +55,39 @@ const AboutHowItWorks: React.FC = () => {
         </div>
 
         <div className={styles.rightColumn}>
-          <div className={styles.caseCard}>
-            <div className={styles.caseHeader}>
-              <img
-                src="/assets/interviewCards/Logos/BCG.svg"
-                alt="BCG Logo"
-                className={styles.caseLogo}
-              />
-              <span className={styles.officialLabel}>Official Interview</span>
-            </div>
-            <div className={styles.caseImage}>
-              <img
-                src="/assets/interviewCards/image@2x-1.webp"
-                alt="Climate Case Interview"
-                className={styles.caseImg}
-              />
-            </div>
-            <div className={styles.caseContent}>
-              <h3 className={styles.caseTitle}>Climate Case - BCG Case</h3>
-              <p className={styles.caseDescription}>
-                The CEO of a global company wants to reduce their environmental
-                impact. Build the business case for setting a climate target and
-                determine what initiatives to undertake to achieve it.
-              </p>
-              <div className={styles.buttonWrapper}>
-                <Link to="/interviews" className={styles.mockButton}>
-                  Mock Interview <span className={styles.arrowIcon}>→</span>
-                </Link>
+          <Link to="/interviews">
+            <div className={styles.caseCard}>
+              <div className={styles.caseHeader}>
+                <img
+                  src="/assets/interviewCards/Logos/BCG.svg"
+                  alt="BCG Logo"
+                  className={styles.caseLogo}
+                />
+                <span className={styles.officialLabel}>Official Interview</span>
+              </div>
+              <div className={styles.caseImage}>
+                <img
+                  src="/assets/interviewCards/image@2x-1.webp"
+                  alt="Climate Case Interview"
+                  className={styles.caseImg}
+                />
+              </div>
+              <div className={styles.caseContent}>
+                <h3 className={styles.caseTitle}>Climate Case - BCG Case</h3>
+                <p className={styles.caseDescription}>
+                  The CEO of a global company wants to reduce their
+                  environmental impact. Build the business case for setting a
+                  climate target and determine what initiatives to undertake to
+                  achieve it.
+                </p>
+                <div className={styles.buttonWrapper}>
+                  <Link to="/interviews" className={styles.mockButton}>
+                    Mock Interview <span className={styles.arrowIcon}>→</span>
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
+          </Link>
         </div>
       </div>
     </section>
