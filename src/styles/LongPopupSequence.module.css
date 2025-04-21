@@ -13,4 +13,21 @@
 .popupSequence.animating {
   transform: translateX(-50%) translateY(20px);
   opacity: 0;
+}
+
+@media (max-width: 768px) {
+  .popupSequence {
+    width: 85%;
+    max-width: 350px;
+    bottom: 20px;
+  }
+  
+}
+
+@media (max-width: 480px) {
+  .popupSequence {
+    width: 90%;
+    max-width: 280px;
+    bottom: 15px;
+  }
 } 

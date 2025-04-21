@@ -144,10 +144,19 @@
   text-align: center;
 }
 
-@media (max-width: 768px) {  
+@media (max-width: 800px) {  
+  .pricingCard {
+    margin: 20px auto;
+    align-self: center;
+    flex-direction: column;
+    align-items: center;
+  }
+
   .premiumCard {
     width: 100%;
     max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
     margin-bottom: 20px;
   }
 } 

@@ -115,7 +115,7 @@
 .insight-card-container {
   position: absolute;
   bottom: -20px;
-  left: 50%;
+  left: 42.5%;
   transform: translateX(-50%);
   width: 80%;
   z-index: 10;
@@ -123,7 +123,7 @@
 
 .video-call-image {
   margin-top: 100px;
-  width: 110%;
+  width: 100%;
   height: auto;
   border-radius: 8px;
 }
@@ -136,7 +136,10 @@
   .hero-text h1 {
     font-size: 3rem;
   }
-
+  
+  .insight-card-container {
+    display: none;
+  }
   .hero-text p {
     font-size: 1.1rem;
   }
@@ -164,8 +167,9 @@
   
   .stats-pill {
     margin: 0 auto;
-    font-size: 0.75rem;
-    padding: 0.4rem 0.8rem;
+    font-size: 0.7rem;
+    padding: 0.35rem 0.7rem;
+    max-width: 90%;
   }
   
   .button-primary {
@@ -208,6 +212,15 @@
   .stats-pill {
     width: 100%;
     justify-content: center;
+    font-size: 0.65rem;
+    padding: 0.3rem 0.6rem;
+    max-width: 280px;
+  }
+
+  .divider {
+    width: 3px;
+    height: 3px;
+    margin: 0 0.4rem;
   }
 
   .video-call-image {

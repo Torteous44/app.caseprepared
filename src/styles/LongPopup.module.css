@@ -1,6 +1,7 @@
 .popupContainer {
   width: 100%;
   padding: 8px;
+  box-sizing: border-box;
 }
 
 .popupContent {
@@ -39,4 +40,16 @@
   font-size: 1rem;
   color: #333;
   line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+ .popupContainer {
+  display: none;
+ }
+}
+
+@media (max-width: 480px) {
+  .popupContainer {
+    display: none;
+  }
 } 

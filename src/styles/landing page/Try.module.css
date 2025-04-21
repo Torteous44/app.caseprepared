@@ -1,12 +1,15 @@
 @import "../../styles.css";
 *{
   font-family: var(--font-primary);
+  box-sizing: border-box;
 }
 .container {
   width: 100%;
   padding: 80px 20px;
   margin: 40px 0;
   background-color: white;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .content {
@@ -104,6 +107,8 @@
   .content {
     flex-direction: column;
     text-align: center;
+    width: 100%;
+    max-width: 100%;
   }
 
   .textContainer {
@@ -124,6 +129,8 @@
   .imageContainer {
     margin-top: 40px;
     width: 100%;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .button {
@@ -137,6 +144,10 @@
   .container {
     padding: 40px 16px;
     margin: 20px 0;
+    width: 100%;
+    max-width: 100%;
+    left: 0;
+    right: 0;
   }
 
   .content {
@@ -164,5 +175,15 @@
 
   .imageContainer {
     margin-top: 30px;
+    width: 100%;
+    max-width: 100%;
+    left: 0;
+    right: 0;
+    position: relative;
+  }
+  
+  .image {
+    max-width: 100%;
+    width: 100%;
   }
 } 

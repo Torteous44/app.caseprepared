@@ -13,7 +13,7 @@
   margin: 0 auto;
   margin-top: 40px;
   padding: 80px 20px 60px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-primary);
 }
 
 /* Add this media query for very small screens */
@@ -21,6 +21,7 @@
   .container {
     padding-left: 12px;
     padding-right: 12px;
+    padding-top: 60px;
   }
   
   .infoDisplay {
@@ -354,6 +355,7 @@
   justify-content: flex-end; /* Align to right side */
   overflow: hidden;
   padding-left: 10px; /* Add padding to avoid cutoff on left */
+  z-index: 0;
 }
 
 .decorativeImage img {
@@ -415,31 +417,79 @@
   }
   
   .decorativeImage {
-    position: relative;
-    width: 100%;
-    height: 120px;
-    margin-top: 16px;
-  }
-  
-  .decorativeImage img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+    display: none; /* Hide decorative image on mobile */
   }
   
   .subscriptionActions {
     flex-direction: row; /* Keep buttons side by side on mobile */
-    justify-content: center;
+    justify-content: space-between;
     width: 100%;
+    flex-wrap: wrap;
+    gap: 10px;
   }
   
   .seeMoreButton, .joinButton {
-    width: 100%;
+    flex: 1;
+    min-width: 120px;
     text-align: center;
+    padding: 10px;
   }
   
   .buttonContainer {
     justify-content: center;
+  }
+  
+  .profileHeader {
+    flex-direction: row; /* Keep as row instead of column */
+    justify-content: space-between; /* Maintain space between */
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .profileHeader h1 {
+    font-size: 22px;
+  }
+  
+  .premiumBadge {
+    align-self: flex-start;
+    font-size: 12px;
+    padding: 3px 6px;
+    margin-bottom: 0;
+    margin-top: 0;
+    white-space: nowrap;
+  }
+  
+  .infoField {
+    margin-bottom: 12px;
+  }
+  
+  .infoField label {
+    margin-bottom: 4px;
+  }
+  
+  .infoDisplay {
+    padding: 10px;
+  }
+  
+  .brandName {
+    font-size: 16px;
+  }
+  
+  .premiumTag {
+    font-size: 12px;
+    padding: 3px 8px;
+  }
+  
+  .priceAmount {
+    font-size: 32px;
+  }
+  
+  .dollarSign, .currency {
+    font-size: 16px;
+  }
+  
+  .pricePeriod {
+    font-size: 12px;
   }
 }
 
@@ -560,72 +610,42 @@
 }
 
 @media (max-width: 480px) {
-  .pageHeader {
-    margin-bottom: var(--space-lg);
-  }
-  
-  .pageHeader h1 {
-    font-size: var(--font-size-xl);
-  }
-  
-  .contentContainer {
-    padding: 0 var(--space-sm) var(--space-xl);
-  }
-  
-  .buttonGroup {
-    flex-direction: column;
-    width: 100%;
-    gap: var(--space-xs);
-  }
-  
-  .editButton, .cancelButton, .saveButton {
-    width: 100%;
-  }
-  
-  .layoutContainer {
-    padding: 0 12px 30px;
-  }
-  
-  .profileSidebar {
-    padding: 20px;
-  }
-  
-  .profileBox {
-    margin-bottom: 20px;
-  }
-  
-  .profileImagePlaceholder {
-    width: 70px;
-    height: 70px;
-    font-size: 22px;
-  }
-  
-  .profileName {
-    font-size: 24px;
-  }
-  
-  .premiumLabel {
-    font-size: 20px;
-  }
-  
-  .subscriptionBanner {
-    flex-direction: column;
-    align-items: center;
-    gap: 16px;
-    text-align: center;
-  }
-  
-  .viewDetailsLink {
-    width: 100%;
-    text-align: center;
-  }
-  
   .container {
     padding-top: 60px;
+    padding-bottom: 40px;
   }
   
   .actionButtons {
     flex-direction: column;
+    gap: 10px;
+  }
+  
+  .interviewsButton, .signOutButton {
+    width: 100%;
+    padding: 12px 10px;
+  }
+  
+  .cancelButton {
+    max-width: 100%;
+    margin: 10px 0;
+  }
+  
+  .subscriptionSection {
+    padding: 10px;
+  }
+  
+  .infoDisplay {
+    font-size: 14px;
+    padding: 8px 10px;
+  }
+  
+  .memberSince {
+    font-size: 13px;
+  }
+  
+  .cancelInfo, .message, .errorMessage {
+    padding: 10px;
+    font-size: 13px;
   }
 }
 

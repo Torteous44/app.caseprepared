@@ -6,7 +6,8 @@
   margin: 30px 0;
   margin-bottom: 80px;
   margin-top: 100px;
-  padding: 0 20px;
+  padding: 0 100px;
+  box-sizing: border-box;
 }
 
 .uni-banner h3 {
@@ -92,6 +93,8 @@
     margin: 60px 0;
     margin-bottom: 60px;
     margin-top: 60px;
+    padding: 0 15px;
+    max-width: 100%;
   }
 
   .uni-banner h3 {
@@ -101,6 +104,10 @@
 
   .scroll-container {
     height: 60px;
+    width: 100%;
+    max-width: 100%;
+    left: 0;
+    right: 0;
   }
 
   .universities-container {
@@ -117,6 +124,10 @@
     margin: 40px 0;
     margin-bottom: 40px;
     margin-top: 40px;
+    padding: 0 10px;
+    width: 100%;
+    left: 0;
+    right: 0;
   }
 
   .uni-banner h3 {
@@ -126,10 +137,16 @@
 
   .scroll-container {
     height: 50px;
+    width: 100%;
+    position: relative;
+    left: 0;
+    right: 0;
   }
 
   .universities-container {
     gap: 40px;
+    position: relative;
+    left: 0;
   }
 
   .university-item {
