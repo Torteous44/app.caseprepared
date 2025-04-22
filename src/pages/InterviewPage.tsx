@@ -42,9 +42,9 @@ const interviewsData: { [key: string]: InterviewData } = {
   "1": {
     id: 1,
     company: "McKinsey",
-    title: "Beautify - McKinsey Case",
+    title: "Premier Oil - McKinsey Case",
     description:
-      "Evaluating whether a global beauty products company should be training in-store beauty consultants in the effective use of virtual channels to connect with customers.",
+      "The pandemic-induced collapse in oil prices has sharply reduced profitability of a major UK-based offshore oil producer. Design a profitability improvement plan focusing on cost reduction strategies.",
     duration: "20m",
     official: "Official McKinsey Consulting Case practice",
     code: "C05A",
@@ -52,9 +52,9 @@ const interviewsData: { [key: string]: InterviewData } = {
   "2": {
     id: 2,
     company: "BCG",
-    title: "Climate Case - BCG Case",
+    title: "Betacer Market Entry - BCG Case",
     description:
-      "The CEO of a global company wants to reduce their environmental impact. Build the business case for setting a climate target and determine what initiatives to undertake to achieve it.",
+      "A major U.S. electronics manufacturer is considering entering the video-game market given low growth in various electronics segments. Evaluate whether this market entry strategy is wise.",
     duration: "25m",
     official: "Official BCG Consulting Case practice",
     code: "C396",
@@ -62,9 +62,9 @@ const interviewsData: { [key: string]: InterviewData } = {
   "3": {
     id: 3,
     company: "Bain",
-    title: "Coffee Shop Co. - Bain Case",
+    title: "Henderson Electric - Bain Case",
     description:
-      "A specialty coffee company wants to accelerate growth. Identify key market opportunities, evaluate profitability levers, and recommend a strategy to expand their footprint.",
+      "An industrial air conditioning company has low sales of their IoT monitoring software despite strong overall revenue. Develop a growth strategy to boost software sales and overcome market adoption barriers.",
     duration: "22m",
     official: "Official Bain Consulting Case practice",
     code: "7F23",
@@ -100,22 +100,21 @@ const caseContent: CaseContentMap = {
       {
         heading: "Client goal",
         content:
-          "Our client is Beautify. Beautify has approached McKinsey for help with exploring new ways to approach its customers.",
+          "Our client is Premier Oil, a major UK-based offshore upstream oil and gas producer. The pandemic-induced collapse in oil prices has sharply reduced their profitability, and the CEO has brought in a team to design a profitability improvement plan.",
       },
       {
         heading: "Situation description",
         content:
-          "Beautify is a global prestige cosmetics company that sells its products mainly inside high-end department stores such as Harrods and Shanghai No. 1. It also has a presence online with specialty retailers like Sephora. Beautify produces a number of makeup, fragrance, and skin care products sold under several different brands.",
-        subContent:
-          "In department stores, beauty consultants play a critical role with consumers:",
+          "Premier Oil operates rigs in seven areas in the North Sea. The company has assets only in the North Sea and doesn't plan to adjust its portfolio. Their profitability for 2020 was -12% (losses), which was common in the industry that year.",
+        subContent: "Additional context:",
         listItems: [
-          'approaching "passive" customers',
-          "demonstrating their knowledge of the products",
-          "actively selling the products",
-          "maintaining a loyal customer base of repeat buyers",
+          "No specific profitability improvement goal has been provided",
+          "Client is an independent oil and gas company owned by various strategic investors",
+          "The company needs to focus on cost reduction as there's limited opportunity to increase sales",
+          "Maintenance costs for offshore platforms have been increasing",
         ],
         additionalContent:
-          "These consultants are hired directly by Beautify or through specialist, third-party agencies that find new recruits for a fee. Beautify is then responsible for selecting, training, and paying the consultants. Within Beautify, beauty consultants are managed independently by each brand in each country. For example, this may mean a consultant might be part of the Chanel team in a store. However, consumers are shifting more to online shopping, and too many beauty consultants are left working in empty department stores.",
+          "Given the limited ability to impact revenue, cost management will be a key focus area for improving profitability.",
       },
     ],
   },
@@ -123,16 +122,16 @@ const caseContent: CaseContentMap = {
     title: "About this Case",
     sections: [
       {
-        heading: "Introduction",
+        heading: "Client goal",
         content:
-          "Our client is a global consumer goods company. The company's products include a wide variety of personal care products (e.g., hair care, skin care, cosmetics). The client's CEO feels strongly that her company needs to develop a plan to reduce its environmental impact and do its part in the fight against climate change, and has engaged BCG to help her create a business case for setting a science-based target to reduce the company's impact and determine what initiatives to undertake to achieve that target.",
+          "Our client is Betacer, a major U.S. electronics manufacturer that offers laptop and desktop PCs, tablets, smartphones, monitors, projectors and cloud solutions. Given low growth in various electronics segments, they are considering entering the U.S. video-game market and need advice on whether this is wise.",
       },
       {
-        heading: "Context",
+        heading: "Market context",
         content:
-          "Science-based targets provide a clearly-defined pathway for companies to reduce greenhouse gas emissions, helping prevent the worst impacts of climate change and future-proof business growth.",
+          "The U.S. video-game market was worth $41B in 2020, while the global market was $175B and grew rapidly that year. The market is fragmented with many major players.",
         additionalContent:
-          "Targets are considered science based if they are in line with what the latest climate science deems necessary to meet the goals of the Paris Agreement – limiting global warming to well-below 2°C above pre-industrial levels and pursuing efforts to limit warming to 1.5°C.",
+          "The client wants payback within 2 years after market entry and plans to target the mass market, not hardcore gamers. We need to evaluate if entering this market aligns with their capabilities and financial goals.",
       },
     ],
   },
@@ -140,19 +139,19 @@ const caseContent: CaseContentMap = {
     title: "About this Case",
     sections: [
       {
-        heading: "Introduction",
+        heading: "Client goal",
         content:
-          "You're having lunch with an old friend from university, and she's looking for some business advice. She is thinking of opening a coffee shop in Cambridge, England, a large university city an hour and a half away from London.",
+          "Our client is Henderson Electric, a company that offers industrial air conditioning units, maintenance services, and Internet-of-Things (IoT) enabled software to monitor system functionality in real-time. While overall sales are $1B, their software revenue remains low, and the CEO has hired a team to design a revenue growth plan to boost sales of their IoT-enabled software.",
       },
       {
-        heading: "The Challenge",
+        heading: "Business context",
         content:
-          "She sees potential in this business but wants your help in determining whether opening a coffee shop is a good idea. Cambridge is a vibrant city with a large student population, but it also has a competitive coffee shop market with both local and national chains.",
+          "The client's software alerts customers on system issues and maintenance needs. Importantly, their software works with equipment from other manufacturers as well, not just their own.",
       },
       {
-        heading: "What to Consider",
+        heading: "Market situation",
         content:
-          "As you help your friend evaluate this opportunity, consider factors such as market demand, competition, location options, startup costs, operational requirements, and potential revenue streams. Your analysis should help determine if this venture is viable and what strategy would give it the best chance of success.",
+          "Henderson Electric serves diverse facilities including food processing, medicine production, computer chip manufacturing, and other industrial settings. Out of 16,000 large manufacturing facilities in the U.S., only 4,000 have adopted software to monitor their air conditioning units. Understanding barriers to adoption will be critical for developing growth strategies.",
       },
     ],
   },
@@ -160,91 +159,96 @@ const caseContent: CaseContentMap = {
 
 // Demo questions for each interview type
 const demoQuestions: { [key: string]: QuestionData[] } = {
+  // For Bain Coffee Shop case
   profitability: [
     {
       id: 1,
-      title: "Problem Structuring",
+      title: "Opening",
       description:
-        "Structure the problem to identify key factors affecting beauty consultants' effectiveness.",
+        "Understand Henderson Electric's IoT software and the challenge of low software sales.",
       status: "current",
     },
     {
       id: 2,
-      title: "Data Analysis",
+      title: "Structuring Analysis",
       description:
-        "Analyze customer behavior and preferences for virtual vs in-store interactions.",
+        "Structure an approach to analyze the low sales of Henderson's software and develop recommendations.",
       status: "current",
     },
     {
       id: 3,
-      title: "Strategy Development",
+      title: "Growth Strategy",
       description:
-        "Develop recommendations for beauty consultants in a digital environment.",
+        "Develop strategies to help Henderson Electric increase the sales of their monitoring software.",
       status: "current",
     },
     {
       id: 4,
-      title: "Implementation Plan",
+      title: "Market Adoption Analysis",
       description:
-        "Create an implementation roadmap for training beauty consultants.",
+        "Analyze why many manufacturing facilities haven't adopted software monitoring for their air conditioning units.",
       status: "current",
     },
   ],
+  // For McKinsey Beautify case
   "market-entry": [
     {
       id: 1,
-      title: "Environmental Impact Analysis",
+      title: "Opening",
       description:
-        "Assess the company's current environmental footprint and identify key impact areas.",
+        "Understand Premier Oil's profitability challenge after pandemic-induced collapse in oil prices.",
       status: "current",
     },
     {
       id: 2,
-      title: "Target Setting",
+      title: "Initial Structuring",
       description:
-        "Determine appropriate science-based targets for emissions reduction.",
+        "Structure an approach to analyze Premier Oil's profitability improvement opportunities.",
       status: "current",
     },
     {
       id: 3,
-      title: "Initiative Prioritization",
+      title: "Cost Breakdown",
       description:
-        "Identify and prioritize initiatives to achieve the climate targets.",
+        "Identify Premier Oil's major expense categories to focus cost reduction efforts.",
       status: "current",
     },
     {
       id: 4,
-      title: "Business Case Development",
+      title: "Maintenance Cost Analysis",
       description:
-        "Build a business case for climate action including costs and benefits.",
+        "Analyze key drivers behind increasing maintenance costs for offshore platforms.",
       status: "current",
     },
   ],
+  // For BCG Climate case
   merger: [
     {
       id: 1,
-      title: "Market Assessment",
+      title: "Opening",
       description:
-        "Evaluate the coffee shop market in Cambridge and identify growth opportunities.",
+        "Understand Betacer's interest in entering the U.S. video-game market given low growth in electronics segments.",
       status: "current",
     },
     {
       id: 2,
-      title: "Competitor Analysis",
+      title: "Market Entry Assessment",
       description:
-        "Analyze existing coffee shops and identify competitive advantages.",
+        "Structure an approach to assess whether Betacer should enter the video-game market.",
       status: "current",
     },
     {
       id: 3,
-      title: "Financial Modeling",
-      description: "Develop financial projections for the coffee shop venture.",
+      title: "Customer Adoption",
+      description:
+        "Identify key factors that would drive customer adoption in the video-game market.",
       status: "current",
     },
     {
       id: 4,
-      title: "Location Strategy",
-      description: "Determine optimal locations and expansion strategy.",
+      title: "Synergy Analysis",
+      description:
+        "Evaluate potential synergies Betacer could capture by entering the video-game market.",
       status: "current",
     },
   ],
