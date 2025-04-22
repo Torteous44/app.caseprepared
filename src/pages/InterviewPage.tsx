@@ -84,9 +84,9 @@ const codeToId: { [key: string]: string } = {
 
 // Map interview IDs to demo types
 const idToDemoType: { [key: string]: string } = {
-  "1": "profitability",
-  "2": "market-entry",
-  "3": "merger",
+  "1": "market-entry",
+  "2": "merger",
+  "3": "profitability",
 };
 
 const BASE_URL = "https://casepreparedcrud.onrender.com";

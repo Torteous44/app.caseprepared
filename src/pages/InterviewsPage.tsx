@@ -70,9 +70,9 @@ const InterviewsPage: React.FC = () => {
     try {
       // Map the interview ID to the corresponding demo type
       const demoTypeMap: Record<number, string> = {
-        1: "profitability", // McKinsey - Beautify
-        2: "market-entry", // BCG - Climate Case
-        3: "merger", // Bain - Coffee Shop
+        1: "market-entry", // McKinsey - Beautify
+        2: "merger", // BCG - Climate Case
+        3: "profitability", // Bain - Coffee Shop
       };
 
       const demoType = demoTypeMap[card.id];
