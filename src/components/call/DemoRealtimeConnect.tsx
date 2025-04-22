@@ -83,6 +83,8 @@ const DemoRealtimeConnect: React.FC = () => {
     message: "",
     type: "info",
   });
+  // Helper notification state
+  const [showHelperNotification, setShowHelperNotification] = useState(false);
 
   // Refs
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
@@ -234,6 +236,20 @@ const DemoRealtimeConnect: React.FC = () => {
       }
     };
   }, [showNotification]);
+
+  // Show helper notification when call becomes active
+  useEffect(() => {
+    if (callActive && connectionState === "connected") {
+      setShowHelperNotification(true);
+      
+      // Hide the notification after 7 seconds
+      const timer = setTimeout(() => {
+        setShowHelperNotification(false);
+      }, 7000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [callActive, connectionState]);
 
   // Initiate connection when component mounts with session ID
   useEffect(() => {
@@ -1043,6 +1059,15 @@ const DemoRealtimeConnect: React.FC = () => {
 
   return (
     <div className={styles.container}>
+      {/* Helper notification */}
+      {showHelperNotification && (
+        <div className={styles.helperNotification}>
+          <div className={styles.helperNotificationContent}>
+            <span>Say hello to start the interview!</span>
+          </div>
+        </div>
+      )}
+      
       {/* Connection indicator */}
       <div className={styles.connectionIndicator}>
         <div
@@ -1107,23 +1132,21 @@ const DemoRealtimeConnect: React.FC = () => {
                   height="24"
                   fill="currentColor"
                 >
-                  <path d="M5.889 16H2a1 1 0 01-1-1V9a1 1 0 011-1h3.889l5.294-4.332a.5.5 0 01.817.387v15.89a.5.5 0 01-.817.387L5.89 16zm14.525-4l3.536 3.536-1.414 1.414L19 13.414l-3.536 3.536-1.414-1.414L17.586 12 14.05 8.464l1.414-1.414L19 10.586l3.536-3.536 1.414 1.414L20.414 12z" />
+                  <path d="M10.121 10.121L12 12m-7.071 2.828l7.071-7.07m0 0L14.12 5.88M12 12l2.121 2.121M4.242 10.121l1.414-1.414M18.364 17.657l1.414-1.414M18.364 6.343l-1.414-1.414M5.636 17.657L7.05 19.07M16 12H2m10-7v14" />
+                  <path d="M12,4L12,4c-1.105,0-2,0.895-2,2v5c0,1.105,0.895,2,2,2h0c1.105,0,2-0.895,2-2V6C14,4.895,13.105,4,12,4z" />
+                  <line x1="3" y1="3" x2="21" y2="21" stroke="currentColor" strokeWidth="2" />
                 </svg>
               </>
             ) : (
               <svg
-                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
                 width="24"
                 height="24"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
               >
-                <path
-                  fillRule="evenodd"
-                  d="M11.553 3.064A.75.75 0 0112 3.75v16.5a.75.75 0 01-1.255.555L5.46 16H2.75A1.75 1.75 0 011 14.25v-4.5C1 8.784 1.784 8 2.75 8h2.71l5.285-4.805a.75.75 0 01.808-.13zM10.5 5.445l-4.245 3.86a.75.75 0 01-.505.195h-3a.25.25 0 00-.25.25v4.5c0 .138.112.25.25.25h3a.75.75 0 01.505.195l4.245 3.86V5.445z"
-                />
-                <path d="M18.718 4.222a.75.75 0 011.06 0c4.296 4.296 4.296 11.26 0 15.556a.75.75 0 01-1.06-1.06 9.5 9.5 0 000-13.436.75.75 0 010-1.06z" />
-                <path d="M16.243 7.757a.75.75 0 10-1.061 1.061 4.5 4.5 0 010 6.364.75.75 0 001.06 1.06 6 6 0 000-8.485z" />
+                <path d="M12,16c1.1,0,2-0.9,2-2V6c0-1.1-0.9-2-2-2s-2,0.9-2,2v8C10,15.1,10.9,16,12,16z" />
+                <path d="M16,12v2c0,2.21-1.79,4-4,4s-4-1.79-4-4v-2H6v2c0,2.97,2.16,5.43,5,5.91V22h2v-2.09c2.84-0.48,5-2.94,5-5.91v-2H16z" />
               </svg>
             )}
           </button>
