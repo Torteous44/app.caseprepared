@@ -13,6 +13,7 @@ interface LocationState {
   questionNumber?: number;
   nextQuestionNumber?: number;
   demoType?: string;
+  callDuration?: number;
 }
 
 interface AnalysisSection {
@@ -268,6 +269,7 @@ const DemoPostQuestionScreen: React.FC = () => {
   // Show loading animation briefly for realism
   const [isLoading, setIsLoading] = useState(true);
   const [demoAnalysis, setDemoAnalysis] = useState<DemoAnalysis | null>(null);
+  const [shortCallMessage, setShortCallMessage] = useState<string | null>(null);
 
   // Check if user is coming from DemoRealtimeConnect
   useEffect(() => {
@@ -298,6 +300,7 @@ const DemoPostQuestionScreen: React.FC = () => {
     questionNumber = 1,
     nextQuestionNumber = questionNumber + 1,
     demoType = demoTypeId,
+    callDuration = 0,
   } = locationState;
 
   // Parse title to get the case name
@@ -311,12 +314,20 @@ const DemoPostQuestionScreen: React.FC = () => {
   // Simulate loading and then randomly select an analysis
   useEffect(() => {
     const timer = setTimeout(() => {
-      // Randomly select one of the analysis options
-      const randomIndex = Math.floor(
-        Math.random() * demoAnalysisOptions.length
-      );
-      setDemoAnalysis(demoAnalysisOptions[randomIndex]);
-      setIsLoading(false);
+      // Check if call was too short (less than 30 seconds)
+      if (callDuration < 30) {
+        setShortCallMessage(
+          "Your interview was too short to provide meaningful analysis. Please try again with a longer interview."
+        );
+        setIsLoading(false);
+      } else {
+        // Randomly select one of the analysis options
+        const randomIndex = Math.floor(
+          Math.random() * demoAnalysisOptions.length
+        );
+        setDemoAnalysis(demoAnalysisOptions[randomIndex]);
+        setIsLoading(false);
+      }
 
       // Clear the demo call flags after successful load to prevent re-access
       setTimeout(() => {
@@ -326,7 +337,7 @@ const DemoPostQuestionScreen: React.FC = () => {
     }, 2000); // 2 second delay for loading effect
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [callDuration]);
 
   // Handle continuing to next question or returning to interviews
   const handleContinue = () => {
@@ -490,6 +501,14 @@ const DemoPostQuestionScreen: React.FC = () => {
             <div className={styles.loadingContainer}>
               <div className={styles.spinner}></div>
               <p>Analyzing your performance...</p>
+            </div>
+          ) : shortCallMessage ? (
+            <div className={styles.noAnalysisContainer}>
+              <p>{shortCallMessage}</p>
+              <p>
+                We recommend spending more time on each interview question to
+                receive meaningful feedback.
+              </p>
             </div>
           ) : demoAnalysis ? (
             <div

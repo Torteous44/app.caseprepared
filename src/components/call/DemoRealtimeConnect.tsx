@@ -331,6 +331,7 @@ const DemoRealtimeConnect: React.FC = () => {
             title: interviewTitle,
             questionNumber: questionNumber,
             demoType: demoType,
+            callDuration: callDuration,
           },
         });
       } else {
@@ -384,6 +385,7 @@ const DemoRealtimeConnect: React.FC = () => {
           title: interviewTitle,
           questionNumber: questionNumber,
           demoType: demoType,
+          callDuration: callDuration,
         },
       });
     } else {
@@ -397,6 +399,7 @@ const DemoRealtimeConnect: React.FC = () => {
     demoType,
     interviewTitle,
     questionNumber,
+    callDuration,
   ]);
 
   // Check for 3 minute (180 second) limit for authenticated users
@@ -438,6 +441,7 @@ const DemoRealtimeConnect: React.FC = () => {
           title: interviewTitle,
           questionNumber: questionNumber,
           demoType: demoType,
+          callDuration: callDuration,
         },
       });
     }
