@@ -33,6 +33,11 @@ interface LocationState {
 // Ensure backend URL is correct for the environment
 const DEMO_API_BASE_URL = "https://casepreparedcrud.onrender.com/api/v1/demo";
 
+// Define the extension for HTMLAudioElement to include setSinkId
+interface HTMLAudioElementWithSinkId extends HTMLAudioElement {
+  setSinkId(deviceId: string): Promise<void>;
+}
+
 const DemoRealtimeConnect: React.FC = () => {
   const { demoTypeId, sessionId } = useParams<{
     demoTypeId: string;
@@ -170,6 +175,9 @@ const DemoRealtimeConnect: React.FC = () => {
             echoCancellation: true,
             noiseSuppression: true,
             autoGainControl: true,
+            // Enhanced audio quality settings
+            sampleRate: 48000,
+            channelCount: 2,
           },
         });
 
@@ -571,6 +579,9 @@ const DemoRealtimeConnect: React.FC = () => {
               echoCancellation: true,
               noiseSuppression: true,
               autoGainControl: true,
+              // Enhanced audio quality settings
+              sampleRate: 48000,
+              channelCount: 2,
             },
           });
 
@@ -757,6 +768,27 @@ const DemoRealtimeConnect: React.FC = () => {
                   audioRef.current.volume = 1.0; // Full volume
                   audioRef.current.muted = false;
 
+                  // Add audio quality optimizations
+                  try {
+                    // Cast to our interface with setSinkId
+                    const audioElementWithSinkId =
+                      audioRef.current as HTMLAudioElementWithSinkId;
+                    if (
+                      typeof audioElementWithSinkId.setSinkId === "function"
+                    ) {
+                      // Use default audio output device
+                      audioElementWithSinkId
+                        .setSinkId("default")
+                        .catch((e: Error) =>
+                          console.log("Could not set audio output device:", e)
+                        );
+                    }
+                  } catch (e) {
+                    console.log(
+                      "Browser doesn't support advanced audio output settings"
+                    );
+                  }
+
                   const playPromise = audioRef.current.play();
                   playPromise.catch((error) => {
                     console.error(
@@ -827,9 +859,40 @@ const DemoRealtimeConnect: React.FC = () => {
           }
         };
 
-        // Add local stream to peer connection
+        // Add local stream to peer connection with prioritized audio
         if (localStreamRef.current) {
-          localStreamRef.current.getTracks().forEach((track) => {
+          // Add audio tracks first with high priority
+          const audioTracks = localStreamRef.current.getAudioTracks();
+          if (audioTracks.length > 0) {
+            const audioTrack = audioTracks[0];
+            console.log("Adding audio track with high priority");
+            const sender = pc.addTrack(audioTrack, localStreamRef.current);
+
+            // Try to set high priority for audio (modern browsers only)
+            try {
+              const params = sender.getParameters();
+              if (!params.encodings) {
+                params.encodings = [{}];
+              }
+              params.encodings[0].priority = "high";
+              sender
+                .setParameters(params)
+                .catch((e) =>
+                  console.log(
+                    "Could not set audio priority, continuing anyway:",
+                    e
+                  )
+                );
+            } catch (e) {
+              console.log(
+                "Browser doesn't support advanced encoding parameters"
+              );
+            }
+          }
+
+          // Then add video tracks
+          const videoTracks = localStreamRef.current.getVideoTracks();
+          videoTracks.forEach((track) => {
             if (localStreamRef.current) {
               pc.addTrack(track, localStreamRef.current);
             }
@@ -840,6 +903,21 @@ const DemoRealtimeConnect: React.FC = () => {
         const offer = await pc.createOffer({
           offerToReceiveAudio: true,
         });
+
+        // Try to optimize audio bandwidth in SDP
+        try {
+          if (offer.sdp) {
+            // Set higher bitrate for audio (128kbps)
+            const modifiedSdp = offer.sdp.replace(
+              /(m=audio.*\r\n)/g,
+              "$1b=AS:128\r\n"
+            );
+            offer.sdp = modifiedSdp;
+            console.log("Applied audio bitrate optimization in SDP");
+          }
+        } catch (e) {
+          console.log("Could not modify SDP for bandwidth optimization:", e);
+        }
 
         await pc.setLocalDescription(offer);
 
