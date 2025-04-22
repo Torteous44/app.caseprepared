@@ -129,12 +129,14 @@ const PricingCards: React.FC<PricingCardsProps> = ({
               <CheckIcon /> CasePrepared resources
             </li>
           </ul>
+          <div style={{ height: "48px" }}></div>
           <div className={styles.divider}></div>
           <div className={styles.cardPrice}>
             <div className={styles.priceRow}>
               <span className={styles.currency}>US $0</span>
             </div>
             <span className={styles.period}>Free</span>
+            <div style={{ height: "22px" }}></div>
           </div>
           <button
             className={`${styles.cardButton} ${
@@ -172,15 +174,21 @@ const PricingCards: React.FC<PricingCardsProps> = ({
               <CheckIcon /> Personalized software
             </li>
           </ul>
+          <div className={styles.discountBadge}>
+            50% OFF
+          </div>
           <div className={styles.premiumDivider}></div>
           <div className={styles.cardPrice}>
             <div className={styles.priceRow}>
               <span className={`${styles.currency} ${styles.premiumPrice}`}>
-                US $39.99
+                US $19.99
               </span>
               <span className={styles.period}>monthly</span>
             </div>
             <span className={styles.billingPeriod}>Billed monthly</span>
+            <span className={styles.originalPrice}>
+              Was US $39.99
+            </span>
           </div>
           <button
             className={`${styles.cardButton} ${styles.premiumButton}`}
@@ -218,12 +226,14 @@ const PricingCards: React.FC<PricingCardsProps> = ({
               <CheckIcon /> Tailored for you
             </li>
           </ul>
+          <div style={{ height: "48px" }}></div>
           <div className={styles.enterpriseDivider}></div>
           <div className={styles.cardPrice}>
             <div className={styles.priceRow}>
               <span className={styles.contactUs}>Contact us</span>
             </div>
             <span className={styles.customQuote}>To set up your account</span>
+            <div style={{ height: "22px" }}></div>
           </div>
           <button
             className={`${styles.cardButton} ${styles.enterpriseButton}`}

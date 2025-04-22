@@ -35,7 +35,9 @@ export default function PricingCard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [currencySymbol, setCurrencySymbol] = useState("€");
-  const [price, setPrice] = useState("39.99");
+  const [price, setPrice] = useState("19.99");
+  const [originalPrice, setOriginalPrice] = useState("39.99");
+  const [discountPercentage, setDiscountPercentage] = useState(50);
 
   useEffect(() => {
     // Get user's location based on browser timezone
@@ -126,16 +128,21 @@ export default function PricingCard() {
             <CheckIcon /> Interview preparation resources
           </li>
         </ul>
+        <div className={styles.discountBadge}>
+          50% OFF
+        </div>
         <div className={styles.divider}></div>
         <div className={styles.cardPrice}>
           <div className={styles.priceRow}>
             <span className={`${styles.currency} ${styles.premiumPrice}`}>
-              {currencySymbol}
-              {price}
+              {currencySymbol}{price}
             </span>
             <span className={styles.period}>/month</span>
           </div>
           <span className={styles.billingPeriod}>Billed monthly</span>
+          <span className={styles.originalPrice}>
+            Was {currencySymbol}{originalPrice}
+          </span>
         </div>
         <button
           className={`${styles.cardButton} ${styles.premiumButton}`}
