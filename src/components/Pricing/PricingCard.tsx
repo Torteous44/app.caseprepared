@@ -12,16 +12,16 @@ const API_BASE_URL = "https://casepreparedcrud.onrender.com";
 // Check icon component to match PricingCards.tsx
 const CheckIcon = () => (
   <svg
-    width="12"
-    height="13"
-    viewBox="0 0 12 13"
+    width="16"
+    height="16"
+    viewBox="0 0 16 16"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
-      d="M2.25 6.875L5.25 9.875L9.75 3.125"
-      stroke="#848484"
-      strokeWidth="1.5"
+      d="M3 8L6.5 11.5L13 4.5"
+      stroke="var(--blue-primary)"
+      strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
@@ -123,12 +123,6 @@ export default function PricingCard() {
             <CheckIcon /> Full interview analysis
           </li>
           <li>
-            <CheckIcon /> Personalized software
-          </li>
-          <li>
-            <CheckIcon /> Direct access to professionals
-          </li>
-          <li>
             <CheckIcon /> Interview preparation resources
           </li>
         </ul>
@@ -139,7 +133,7 @@ export default function PricingCard() {
               {currencySymbol}
               {price}
             </span>
-            <span className={styles.period}>monthly</span>
+            <span className={styles.period}>/month</span>
           </div>
           <span className={styles.billingPeriod}>Billed monthly</span>
         </div>

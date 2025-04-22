@@ -10,26 +10,25 @@
   flex-direction: column;
 }
 
-
 .blueText {
-  color: #174EA6;
+  color: var(--blue-primary);
 }
 
 .premiumCard {
-  background-color: #E8EDF6;
-  border: 1px solid #E8EDF6;
-  border-radius: 12px;
-  padding: 24px;
+  background-color: #F5F5F7;
+  border-radius: var(--border-radius-lg);
+  padding: 28px;
   display: flex;
   flex-direction: column;
   position: relative;
   min-width: 200px;
   box-sizing: border-box;
+  box-shadow: var(--shadow-sm);
 }
 
 .badgePill {
   display: inline-block;
-  padding: 2px 12px;
+  padding: 4px 14px;
   border-radius: 24px;
   font-weight: 600;
   font-size: 22px;
@@ -40,37 +39,47 @@
 
 .premiumBadge {
   background-color: #FFE25C;
-  color: #174EA6;
+  color: var(--blue-primary);
 }
 
 .cardTitle {
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 600;
-  margin: 0 0 20px;
+  margin: 0 0 24px;
+  color: #1D1D1F;
 }
 
 .cardFeatures {
   list-style: none;
   padding: 0;
-  margin: 0 0 20px;
+  margin: 0 0 28px;
 }
 
 .cardFeatures li {
   display: flex;
   align-items: center;
-  padding: 6px 0;
-  font-size: 14px;
-  color: #333;
+  padding: 10px 0;
+  font-size: 18px;
+  color: #1D1D1F;
+  font-weight: 500;
+  line-height: 1.4;
 }
 
 .cardFeatures li svg {
-  margin-right: 10px;
+  margin-right: 14px;
   flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.cardFeatures li svg path {
+  stroke: var(--blue-primary);
+  stroke-width: 2;
 }
 
 .divider {
   height: 1px;
-  background-color: #E4E7EC;
+  background-color: rgba(0, 0, 0, 0.1);
   width: 100%;
   margin: 20px 0;
   margin-top: auto;
@@ -79,7 +88,7 @@
 .cardPrice {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 28px;
 }
 
 .priceRow {
@@ -89,37 +98,38 @@
 }
 
 .currency {
-  font-size: 22px;
+  font-size: 32px;
   font-weight: 700;
-  color: #111;
+  color: #1D1D1F;
   margin-right: 5px;
 }
 
 .premiumPrice {
-  color: #174EA6;
+  color: var(--blue-primary);
 }
 
 .period {
-  font-size: 14px;
-  color: #174EA6;
+  font-size: 18px;
+  color: var(--blue-primary);
+  font-weight: 500;
 }
 
 .billingPeriod {
-  font-size: 14px;
-  color: #174EA6;
-  margin-top: 4px;
+  font-size: 16px;
+  color: #6E6E73;
+  margin-top: 6px;
 }
 
 .cardButton {
   background: white;
-  color: #111;
-  font-weight: 600;
-  border: 1px solid #E4E7EC;
-  border-radius: 4px;
-  padding: 10px;
+  color: #1D1D1F;
+  font-weight: var(--font-weight-semibold);
+  border: none;
+  border-radius: var(--border-radius-md);
+  padding: 16px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 14px;
+  transition: all var(--transition-fast);
+  font-size: 16px;
   width: 100%;
 }
 
@@ -128,17 +138,17 @@
 }
 
 .premiumButton {
-  background: #174EA6;
+  background: var(--blue-primary);
   color: white;
   border: none;
 }
 
 .premiumButton:hover {
-  background: #0F3A85;
+  background: var(--blue-secondary);
 }
 
 .errorMessage {
-  color: #e63946;
+  color: #FF3B30;
   font-size: 14px;
   margin-top: 10px;
   text-align: center;

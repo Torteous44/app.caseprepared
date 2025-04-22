@@ -11,7 +11,7 @@
 .join-container {
     display: grid;
     grid-template-columns: minmax(500px, 600px) 1fr;
-    gap: 0rem;
+    gap: 2rem;
     align-items: center;
     max-width: 1400px;
     margin: 0 auto;
@@ -20,11 +20,21 @@
 
 .join-title {
     font-size: 2.5rem;
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 1.5rem;
-    color: #2D3748;
+    color: #1A202C;
     text-align: left;
-    line-height: 1.2;
+    line-height: 1.54;
+}
+
+.highlight {
+    background-color: rgba(255, 215, 0, 0.4);
+    padding: 0.1em 0.4em;
+    border-radius: 6px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    position: relative;
+    display: inline;
 }
 
 .join-subtitle {
@@ -33,6 +43,56 @@
     margin-bottom: 2rem;
     line-height: 1.6;
     text-align: left;
+    max-width: 520px;
+}
+
+.benefits-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 2rem;
+}
+
+.benefit-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    font-size: 1.05rem;
+    color: #4A5568;
+    line-height: 1.5;
+}
+
+.benefit-icon {
+    margin-right: 12px;
+    flex-shrink: 0;
+    color: var(--blue-primary);
+    background-color: rgba(66, 153, 225, 0.08);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-proof {
+    font-size: 0.9rem;
+    color: #718096;
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.enterprise-badge {
+    display: inline-flex;
+    align-items: center;
+    background-color: #F7FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 4px;
+    padding: 0.4rem 0.6rem;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: #4A5568;
+    font-weight: 600;
 }
 
 .membership-card {
@@ -40,10 +100,16 @@
     padding: 2.5rem;
     background-color: white;
     border: 1px solid var(--border-color);
-    border-radius: 12px;
+    border-radius: 16px;
     color: #2D3748;
     text-align: left;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.membership-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
 }
 
 .card-header {
@@ -51,12 +117,15 @@
 }
 
 .membership-label {
-    display: block;
+    display: inline-block;
     margin-bottom: 0.75rem;
     font-size: 1rem;
     color: var(--blue-primary);
     font-weight: 600;
     letter-spacing: 0.02em;
+    background-color: rgba(66, 153, 225, 0.08);
+    padding: 0.3em 0.8em;
+    border-radius: 20px;
 }
 
 .price {
@@ -106,21 +175,23 @@
 
 .cta-button {
     width: 100%;
-    padding: 1rem;
+    padding: 1.1rem 1.2rem;
     margin-top: 0.5rem;
     background-color: var(--blue-primary);
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     font-weight: 600;
     color: white;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
     font-size: 1rem;
     letter-spacing: 0.01em;
 }
 
 .cta-button:hover {
     background-color: var(--blue-secondary);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.15);
 }
 
 .content-side {
@@ -153,6 +224,8 @@
     .join-subtitle {
         text-align: center;
         margin-bottom: 0;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 
