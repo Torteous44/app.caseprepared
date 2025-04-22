@@ -521,7 +521,7 @@ const DemoPostQuestionScreen: React.FC = () => {
                     fontWeight: "550",
                     color: "#333",
                     marginBottom: "15px",
-                    fontFamily: "Inter",
+                    fontFamily: "Figtree",
                   }}
                 >
                   Join today for full access
@@ -532,7 +532,7 @@ const DemoPostQuestionScreen: React.FC = () => {
                     color: "#666",
                     marginBottom: "20px",
                     maxWidth: "400px",
-                    fontFamily: "Inter",
+                    fontFamily: "Figtree",
                   }}
                 >
                   Access insights and analytics into your interviews with
