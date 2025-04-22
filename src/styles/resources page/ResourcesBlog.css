@@ -99,6 +99,7 @@
 }
 
 .resources-blog-button:hover {
+  color: white;
   background-color: var(--blue-secondary);
 }
 
