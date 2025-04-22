@@ -3,8 +3,8 @@
 .container {
   width: 100%;
   max-width: 1200px;
-  margin: 60px auto;
-  padding: 0 20px;
+  margin: 0 auto;
+  padding: 60px 0px;
 }
 
 .cards {

@@ -227,6 +227,22 @@
         margin-left: auto;
         margin-right: auto;
     }
+    
+    .benefits-list {
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .benefit-item {
+        text-align: left;
+        justify-content: center;
+    }
+    
+    .enterprise-badge {
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 @media (max-width: 800px) {
@@ -234,6 +250,46 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+    
+    .membership-card {
+        text-align: center;
+        max-width: 500px;
+    }
+    
+    .card-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .feature-list {
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .feature-item {
+        text-align: left;
+        justify-content: flex-start;
+    }
+    
+    .cta-button {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .social-proof {
+        justify-content: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .enterprise-badge {
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        justify-content: center;
     }
 }
 
@@ -261,6 +317,24 @@
     .price {
         font-size: 2rem;
     }
+    
+    .benefit-item {
+        display: flex;
+        align-items: center;
+        text-align: left;
+    }
+    
+    .benefit-icon {
+        margin-right: 10px;
+    }
+    
+    .enterprise-badge {
+        display: flex;
+        justify-content: center;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 @media (max-width: 640px) {
@@ -284,5 +358,15 @@
 
     .price {
         font-size: 2rem;
+    }
+    
+    .feature-item {
+        justify-content: center;
+        text-align: left;
+    }
+    
+    .enterprise-badge {
+        font-size: 0.8rem;
+        padding: 0.35rem 0.5rem;
     }
 }

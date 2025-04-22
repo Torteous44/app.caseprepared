@@ -25,16 +25,17 @@
 .stats-pill {
   display: inline-flex;
   align-items: center;
-  background-color: white;
   border: 1px solid var(--border-color);
   border-radius: 50px;
   padding: 0.5rem 1rem;
   font-size: 0.85rem;
-  color: #333;
+  color: #4A5568;
+  font-weight: 600;
   max-width: fit-content;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  letter-spacing: 0.02em;
 }
 
 .divider {
@@ -59,51 +60,58 @@
   color: var(--blue-secondary);
 }
 .hero-text h1 {
-  font-size: 3.5rem;
+  font-size: 3.2rem;
   font-weight: 600;
   line-height: 1.1;
-  color: black;
+  color: #1A202C;
   margin-top: 0.5rem;
-  letter-spacing: -0.065em;
+  letter-spacing: -0.045em;
   margin-bottom: 0.1rem;
 }
 
 .hero-text p {
   font-size: 1.25rem;
   line-height: 1.5;
-  color: #333;
+  color: #4A5568;
   margin-bottom: 1rem;
+  max-width: 520px;
 }
 
 .button-primary {
   background-color: var(--blue-primary);
   color: white;
-  font-weight: 550;
+  font-weight: 600;
   padding: 0.85rem 2rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
   max-width: fit-content;
   font-size: 1rem;
   text-decoration: none;
   display: inline-block;
   text-align: center;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
   letter-spacing: 0.01em;
 }
 
 .button-primary:hover {
   background-color: var(--blue-secondary);
+  color: white;
 }
 
 .button-secondary {
   background-color: transparent;
-  color: #333;
+  color: #4A5568;
   padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
   text-decoration: underline;
+  transition: all 0.3s ease;
+}
+
+.button-secondary:hover {
+  color: var(--blue-primary);
 }
 
 .hero-image {
@@ -125,7 +133,7 @@
   margin-top: 100px;
   width: 100%;
   height: auto;
-  border-radius: 8px;
+  border-radius: 16px;
 }
 
 @media (max-width: 1024px) {
@@ -169,7 +177,11 @@
     margin: 0 auto;
     font-size: 0.7rem;
     padding: 0.35rem 0.7rem;
-    max-width: 90%;
+    max-width: fit-content;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   
   .button-primary {
@@ -210,17 +222,27 @@
   }
 
   .stats-pill {
-    width: 100%;
-    justify-content: center;
-    font-size: 0.65rem;
-    padding: 0.3rem 0.6rem;
-    max-width: 280px;
+    display: inline-flex;
+    width: 95%;
+    justify-content: flex-start;
+    font-size: 0.55rem;
+    padding: 0.25rem 0.5rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .stats-pill > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .divider {
     width: 3px;
     height: 3px;
-    margin: 0 0.4rem;
+    margin: 0 0.2rem;
+    flex-shrink: 0;
   }
 
   .video-call-image {
@@ -230,5 +252,17 @@
   .insight-card-container {
     max-width: 100%;
     margin: 15px auto 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .stats-pill {
+    font-size: 0.5rem;
+    padding: 0.2rem 0.4rem;
+    max-width: 100%;
+  }
+  
+  .divider {
+    margin: 0 0.15rem;
   }
 } 
