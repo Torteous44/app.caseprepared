@@ -167,8 +167,7 @@
   }
 
   .subtitle {
-    text-align: center;
-    width: 100%;
+    display: none;
   }
   
   .title {
@@ -176,9 +175,7 @@
   }
   
   .logoGrid {
-    max-width: 480px;
-    margin: 0 auto;
-    max-width: 350px;
+    display: none;
   }
 }
 

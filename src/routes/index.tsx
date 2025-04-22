@@ -36,6 +36,9 @@ const PublicInterviewDetail = lazy(() => import("../pages/InterviewPage"));
 const DemoSession = lazy(
   () => import("../components/call/DemoRealtimeConnect")
 );
+const DemoPostQuestion = lazy(
+  () => import("../components/interview/DemoPostQuestionScreen")
+);
 
 // Checkout pages
 const CheckoutSuccess = lazy(() => import("../pages/CheckoutSuccess"));
@@ -81,6 +84,10 @@ const AppRoutes = () => {
               path="/interview/demo-session/:demoTypeId"
               element={<DemoSession />}
             />
+            <Route
+              path="/interview/demo-post-question/:demoTypeId"
+              element={<DemoPostQuestion />}
+            />
 
             {/* Public pages accessible to authenticated users */}
             <Route path="/about" element={<About />} />
@@ -107,6 +114,10 @@ const AppRoutes = () => {
             <Route
               path="/interview/demo-session/:demoTypeId"
               element={<DemoSession />}
+            />
+            <Route
+              path="/interview/demo-post-question/:demoTypeId"
+              element={<DemoPostQuestion />}
             />
             <Route path="/blogs" element={<Blogs />} />
             <Route path="/blog/:id" element={<BlogPost />} />

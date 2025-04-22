@@ -162,7 +162,7 @@
 
 @media (max-width: 768px) {
   .measurements-section {
-    padding: var(--space-3xl) var(--space-lg);
+    padding: var(--space-md) var(--space-md);
   }
   
   .measurements-grid {
@@ -178,7 +178,7 @@
 
 @media (max-width: 480px) {
   .measurements-section {
-    padding: var(--space-xl) var(--space-md);
+    padding: var(--space-md) 0;
   }
   
   .measurements-title {

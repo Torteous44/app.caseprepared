@@ -67,8 +67,6 @@ const DemoRealtimeConnect: React.FC = () => {
   const [callActive, setCallActive] = useState(false);
   const [callDuration, setCallDuration] = useState(0);
   const [audioLevel, setAudioLevel] = useState(0); // For the circle visualizer
-  const [showAlmostReadyModal, setShowAlmostReadyModal] = useState(false);
-  const [showStartPrompt, setShowStartPrompt] = useState(false);
   const [interviewTitle, setInterviewTitle] =
     useState<string>("Case Interview");
   const [notification, setNotification] = useState<{
@@ -260,6 +258,40 @@ const DemoRealtimeConnect: React.FC = () => {
     }
   }, [demoType, callActive, isConnecting]);
 
+  // Mark the current question as complete
+  const markQuestionAsComplete = useCallback(async () => {
+    if (!demoType) return;
+
+    try {
+      const response = await fetch(
+        `${DEMO_API_BASE_URL}/interviews/complete-question`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            case_type: demoType,
+            question_number: questionNumber,
+          }),
+        }
+      );
+
+      if (response.ok) {
+        console.log(
+          `Question ${questionNumber} for demo ${demoType} marked as complete`
+        );
+      } else {
+        console.error(
+          "Failed to mark question as complete:",
+          await response.text()
+        );
+      }
+    } catch (error) {
+      console.error("Error marking question as complete:", error);
+    }
+  }, [demoType, questionNumber]);
+
   // Check for 60 second trial end
   useEffect(() => {
     if (callActive && callDuration === 60) {
@@ -287,8 +319,20 @@ const DemoRealtimeConnect: React.FC = () => {
       setConnectionState("closed");
 
       if (isAuthenticated) {
-        // For logged-in users, show the "almost ready" modal
-        setShowAlmostReadyModal(true);
+        // For authenticated users, navigate directly to the demo post question screen
+        markQuestionAsComplete();
+
+        // Set a flag in localStorage to indicate the user completed a demo call
+        localStorage.setItem("demo_call_completed", "true");
+        localStorage.setItem("demo_call_timestamp", Date.now().toString());
+
+        navigate(`/interview/demo-post-question/${demoType}`, {
+          state: {
+            title: interviewTitle,
+            questionNumber: questionNumber,
+            demoType: demoType,
+          },
+        });
       } else {
         // For non-logged in users, show the registration modal
         openModal("register");
@@ -299,7 +343,114 @@ const DemoRealtimeConnect: React.FC = () => {
         }, 500);
       }
     }
-  }, [callDuration, callActive, navigate, openModal, isAuthenticated]);
+  }, [
+    callDuration,
+    callActive,
+    navigate,
+    openModal,
+    isAuthenticated,
+    demoType,
+    interviewTitle,
+    questionNumber,
+    markQuestionAsComplete,
+  ]);
+
+  // End call
+  const handleEndCall = useCallback(() => {
+    if (peerConnectionRef.current) {
+      peerConnectionRef.current.close();
+      peerConnectionRef.current = null;
+    }
+
+    setConnectionState("closed");
+    setCallActive(false);
+
+    if (durationIntervalRef.current) {
+      clearInterval(durationIntervalRef.current);
+      durationIntervalRef.current = null;
+    }
+
+    // Mark question as complete before navigating
+    markQuestionAsComplete();
+
+    if (isAuthenticated) {
+      // Set a flag in localStorage to indicate the user completed a demo call
+      localStorage.setItem("demo_call_completed", "true");
+      localStorage.setItem("demo_call_timestamp", Date.now().toString());
+
+      // For authenticated users, navigate to the demo post question screen
+      navigate(`/interview/demo-post-question/${demoType}`, {
+        state: {
+          title: interviewTitle,
+          questionNumber: questionNumber,
+          demoType: demoType,
+        },
+      });
+    } else {
+      // For non-authenticated users, navigate back to interviews page
+      navigate("/interviews");
+    }
+  }, [
+    navigate,
+    markQuestionAsComplete,
+    isAuthenticated,
+    demoType,
+    interviewTitle,
+    questionNumber,
+  ]);
+
+  // Check for 3 minute (180 second) limit for authenticated users
+  useEffect(() => {
+    if (callActive && callDuration === 180 && isAuthenticated) {
+      // Stop all tracks
+      if (localStreamRef.current) {
+        localStreamRef.current.getTracks().forEach((track) => {
+          track.stop();
+        });
+      }
+
+      // Close peer connection
+      if (peerConnectionRef.current) {
+        peerConnectionRef.current.close();
+        peerConnectionRef.current = null;
+      }
+
+      // Stop the timer
+      if (durationIntervalRef.current) {
+        clearInterval(durationIntervalRef.current);
+        durationIntervalRef.current = null;
+      }
+
+      // Update state
+      setCallActive(false);
+      setConnectionState("closed");
+
+      // Mark question as complete before navigating
+      markQuestionAsComplete();
+
+      // Set a flag in localStorage to indicate the user completed a demo call
+      localStorage.setItem("demo_call_completed", "true");
+      localStorage.setItem("demo_call_timestamp", Date.now().toString());
+
+      // Navigate to the demo post question screen
+      navigate(`/interview/demo-post-question/${demoType}`, {
+        state: {
+          title: interviewTitle,
+          questionNumber: questionNumber,
+          demoType: demoType,
+        },
+      });
+    }
+  }, [
+    callDuration,
+    callActive,
+    isAuthenticated,
+    navigate,
+    demoType,
+    interviewTitle,
+    questionNumber,
+    markQuestionAsComplete,
+  ]);
 
   // Setup audio visualizer
   useEffect(() => {
@@ -380,62 +531,6 @@ const DemoRealtimeConnect: React.FC = () => {
       });
     }
   }, [isMuted]);
-
-  // Mark the current question as complete
-  const markQuestionAsComplete = useCallback(async () => {
-    if (!demoType) return;
-
-    try {
-      const response = await fetch(
-        `${DEMO_API_BASE_URL}/interviews/complete-question`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            case_type: demoType,
-            question_number: questionNumber,
-          }),
-        }
-      );
-
-      if (response.ok) {
-        console.log(
-          `Question ${questionNumber} for demo ${demoType} marked as complete`
-        );
-      } else {
-        console.error(
-          "Failed to mark question as complete:",
-          await response.text()
-        );
-      }
-    } catch (error) {
-      console.error("Error marking question as complete:", error);
-    }
-  }, [demoType, questionNumber]);
-
-  // End call
-  const handleEndCall = useCallback(() => {
-    if (peerConnectionRef.current) {
-      peerConnectionRef.current.close();
-      peerConnectionRef.current = null;
-    }
-
-    setConnectionState("closed");
-    setCallActive(false);
-
-    if (durationIntervalRef.current) {
-      clearInterval(durationIntervalRef.current);
-      durationIntervalRef.current = null;
-    }
-
-    // Mark question as complete before navigating
-    markQuestionAsComplete();
-
-    // Navigate back to interviews page
-    navigate("/interviews");
-  }, [navigate, markQuestionAsComplete]);
 
   // Connect to interview
   async function handleConnect() {
@@ -846,32 +941,6 @@ const DemoRealtimeConnect: React.FC = () => {
     return { transform: `scale(${scale})` };
   };
 
-  // Handle submit button click for "almost ready" modal
-  const handleSubmit = () => {
-    setShowAlmostReadyModal(false);
-    // Navigate to the subscription page
-    navigate("/subscription");
-  };
-
-  // Show start prompt after connection is established
-  useEffect(() => {
-    if (connectionState === "connected" && callActive) {
-      // Show the prompt after a short delay
-      const timer = setTimeout(() => {
-        setShowStartPrompt(true);
-      }, 2000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [connectionState, callActive]);
-
-  // Hide start prompt when interview starts (audio level increases)
-  useEffect(() => {
-    if (showStartPrompt && audioLevel > 0.1) {
-      setShowStartPrompt(false);
-    }
-  }, [audioLevel, showStartPrompt]);
-
   // Set interview title based on location state
   useEffect(() => {
     if (locationState.title) {
@@ -904,32 +973,6 @@ const DemoRealtimeConnect: React.FC = () => {
           {getConnectionStatusText(connectionState)}
         </span>
       </div>
-
-      {/* Start prompt popup */}
-      {showStartPrompt && (
-        <div className={styles.startPromptContainer}>
-          <LongPopup
-            icon={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-              </svg>
-            }
-            strokeColor="var(--blue-primary)"
-            category="Start"
-            text="Say hello to start the interview!"
-          />
-        </div>
-      )}
 
       {/* Main video and controls container */}
       <div className={styles.callContainer}>
@@ -1044,22 +1087,6 @@ const DemoRealtimeConnect: React.FC = () => {
           }`}
         >
           {notification.message}
-        </div>
-      )}
-
-      {/* Almost Ready Modal for logged-in users */}
-      {showAlmostReadyModal && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent}>
-            <h2 className={styles.modalTitle}>Ready to continue?</h2>
-            <p className={styles.modalText}>
-              Upgrade to premium to continue your practice session and access
-              all interviews without time limits.
-            </p>
-            <button className={styles.primaryButton} onClick={handleSubmit}>
-              Get Premium →
-            </button>
-          </div>
         </div>
       )}
     </div>

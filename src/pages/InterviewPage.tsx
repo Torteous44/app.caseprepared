@@ -374,7 +374,7 @@ const InterviewPage: React.FC = () => {
       navigate(`/interview/demo-session/${demoTypeToUse}`, {
         state: {
           title: interview.title,
-          questionNumber: 1, // Start with the first question
+          questionNumber: 1, // Explicitly start with the first question
           demoType: demoTypeToUse,
         },
       });
@@ -534,7 +534,7 @@ const InterviewPage: React.FC = () => {
             disabled={!mediaStatus.video || !mediaStatus.audio || isLoading}
             onClick={handleStartInterview}
           >
-            {isLoading ? "Starting..." : "Start Mock Interview"}
+            {isLoading ? "Starting..." : "Start Question 1"}
           </button>
 
           {startError && <p className={styles.startError}>{startError}</p>}
