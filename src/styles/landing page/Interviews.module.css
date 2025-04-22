@@ -150,6 +150,7 @@
   text-decoration: none;
 }
 .interview-button:hover {
+  color: white;
   background-color: var(--blue-secondary);
 }
 .interview-button svg {
