@@ -101,7 +101,7 @@ export default function PricingCard() {
   const handleSubscribe = () => {
     if (isAuthenticated) {
       // If authenticated, open Stripe checkout directly
-      handleStripeCheckout("price_1RFeEdIzbD323IQGvtSOXEsy");
+      handleStripeCheckout("price_1RGov6IzbD323IQGMNJWMu93");
     } else {
       // If not authenticated, open registration modal
       openModal("register");

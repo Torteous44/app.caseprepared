@@ -413,7 +413,7 @@ const DemoPostQuestionScreen: React.FC = () => {
         const response = await axios.post(
           `${API_BASE_URL}/api/v1/subscriptions/create-checkout-session`,
           {
-            price_id: "price_1RFeEdIzbD323IQGvtSOXEsy", // Premium plan price ID
+            price_id: "price_1RGov6IzbD323IQGMNJWMu93", // Premium plan price ID
             success_url: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${window.location.origin}/checkout/cancel`,
           },
