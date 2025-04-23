@@ -156,7 +156,7 @@ const SubscriptionCard = () => {
         <div className={styles.pricingContainer}>
           <div className={styles.price}>
             <span className={styles.dollarSign}>$</span>
-            <span className={styles.priceAmount}>39.99</span>
+            <span className={styles.priceAmount}>19.99</span>
             <span className={styles.currency}>USD</span>
           </div>
           <div className={styles.pricePeriod}>Price per month</div>
