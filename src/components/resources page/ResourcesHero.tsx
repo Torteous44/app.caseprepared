@@ -1,50 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styles from "../../styles/resources page/ResourcesHero.module.css";
 import "../../styles.css"; // Import global styles for CSS variables
 import { Link } from "react-router-dom";
-
-// Use the correct paths to the SVG logos
-const allLogos = [
-  "/assets/interviewCards/Logos/Bain.svg",
-  "/assets/interviewCards/Logos/Mckinsey.svg",
-  "/assets/interviewCards/Logos/BCG.svg",
-  "/assets/interviewCards/Logos/Wyman.svg",
-  "/assets/interviewCards/Logos/EY.svg",
-  "/assets/interviewCards/Logos/PWC.svg",
-];
-
-// Helper function to extract company name from path
-const getCompanyName = (path: string): string => {
-  const parts = path.split("/");
-  return parts[parts.length - 1].split(".")[0];
-};
+import CompaniesBanner from "./CompaniesBanner";
+import HeroRectangle from "./HeroRectangle";
 
 const ResourcesHero: React.FC = () => {
-  const [loadedLogos, setLoadedLogos] = useState<{ [key: string]: boolean }>(
-    {}
-  );
-
-  // Preload all SVG images
-  useEffect(() => {
-    allLogos.forEach((logoPath) => {
-      const img = new Image();
-      img.onload = () => {
-        setLoadedLogos((prev) => ({
-          ...prev,
-          [logoPath]: true,
-        }));
-      };
-      img.onerror = (e) => {
-        console.error(`Failed to load logo: ${logoPath}`, e);
-        setLoadedLogos((prev) => ({
-          ...prev,
-          [logoPath]: false,
-        }));
-      };
-      img.src = logoPath;
-    });
-  }, []);
-
   return (
     <section className={styles.hero}>
       <div className={styles.content}>
@@ -66,29 +27,11 @@ const ResourcesHero: React.FC = () => {
             </Link>
           </div>
         </div>
-
         <div className={styles.rightColumn}>
-          <p className={styles.subtitle}>
-            Our platform has helped candidates succeed at:
-          </p>
-          <div className={styles.logoGrid}>
-            {allLogos.map((logo, index) => (
-              <img
-                key={index}
-                src={logo}
-                alt={`${getCompanyName(logo)} Logo`}
-                className={styles.logo}
-                loading="lazy"
-                onError={(e) => {
-                  // Fallback handling if image fails to load
-                  (e.target as HTMLImageElement).style.display = "none";
-                  console.error(`Error loading logo: ${logo}`);
-                }}
-              />
-            ))}
-          </div>
+          <HeroRectangle />
         </div>
       </div>
+      <CompaniesBanner />
     </section>
   );
 };

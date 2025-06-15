@@ -13,6 +13,12 @@
   gap: 24px;
 }
 
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
 .card {
   background-color: #FFFFFF;
   border-radius: 12px;
@@ -20,13 +26,15 @@
   padding: 20px 20px 20px 20px;
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   height: 100%;
+  cursor: pointer;
 }
 
-.card:hover {
+.cardLink:hover .card {
   transform: translateY(-5px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: var(--blue-primary);
 }
 
 .cardHeader {
@@ -75,15 +83,15 @@
   font-weight: 700;
 }
 
-.card:nth-child(1) .highlight {
+.cardLink:nth-child(1) .highlight {
   color: var(--blue-primary);
 }
 
-.card:nth-child(2) .highlight {
+.cardLink:nth-child(2) .highlight {
   color: #FF9100;
 }
 
-.card:nth-child(3) .highlight {
+.cardLink:nth-child(3) .highlight {
   color: #E91E63;
 }
 
@@ -92,6 +100,33 @@
   line-height: 1.6;
   font-size: 1rem;
   margin: 0;
+  flex-grow: 1;
+  margin-bottom: 20px;
+}
+
+.cardButton {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  color: var(--blue-primary);
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-base);
+  transition: all 0.3s ease;
+  margin-top: auto;
+}
+
+.cardButton svg {
+  transition: transform 0.3s ease;
+}
+
+.cardLink:hover .cardButton {
+  font-weight: var(--font-weight-semibold);
+}
+
+.cardLink:hover .cardButton svg {
+  transform: translateX(2px);
 }
 
 @media (max-width: 1024px) {
@@ -126,6 +161,10 @@
   .cardText {
     font-size: 0.95rem;
   }
+
+  .cardButton {
+    font-size: 0.95rem;
+  }
 }
 
 @media (max-width: 480px) {
@@ -155,5 +194,10 @@
 
   .cardHeader h3 {
     font-size: 1.1rem;
+  }
+
+  .cardButton {
+    font-size: 0.9rem;
+    gap: 6px;
   }
 } 

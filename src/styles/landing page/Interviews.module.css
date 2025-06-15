@@ -89,6 +89,18 @@
   text-align: right;
 }
 
+.interview-tag {
+  background-color: #ffd70066;
+  color: #191f2b;
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 4px;
+  width: fit-content;
+  margin: 20px 0 4px 0;
+  text-align: left;
+}
+
 .thumbnail-container {
   width: 100%;
   height: 180px;

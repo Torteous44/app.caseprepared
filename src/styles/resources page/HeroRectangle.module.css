@@ -1,0 +1,361 @@
+@import "../../styles.css";
+
+/* Main container */
+.container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+/* Background rectangle (wireframe) */
+.backgroundRectangle {
+  position: absolute;
+  width: 24rem;
+  height: 14rem;
+  top: -3rem;
+  left: -3rem;
+  border: 1px solid rgba(75, 85, 99, 0.4);
+  border-radius: 2rem;
+  z-index: -2;
+  background: rgba(235, 243, 253, 0.6);
+  backdrop-filter: blur(5px);
+}
+
+.backgroundRectangle::before {
+  content: '';
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  right: 1rem;
+  height: 0.75rem;
+  background: rgba(58, 60, 64, 0.4);
+  border-radius: 1rem;
+}
+
+.backgroundRectangle::after {
+  content: '';
+  position: absolute;
+  top: 2.5rem;
+  left: 1rem;
+  width: 60%;
+  height: 0.5rem;
+  background: rgba(107, 114, 128, 0.5);
+  border-radius: 0.25rem;
+}
+
+/* Wireframe elements */
+.wireframeElement1 {
+  position: absolute;
+  top: 4rem;
+  left: 1rem;
+  width: 40%;
+  height: 0.5rem;
+  background: rgba(75, 85, 99, 0.6);
+  border-radius: 0.25rem;
+}
+
+.wireframeElement2 {
+  position: absolute;
+  top: 5.5rem;
+  left: 1rem;
+  width: 70%;
+  height: 0.4rem;
+  background: rgba(107, 114, 128, 0.5);
+  border-radius: 0.25rem;
+}
+
+.wireframeElement3 {
+  position: absolute;
+  top: 7rem;
+  right: 1rem;
+  width: 30%;
+  height: 0.6rem;
+  background: rgba(55, 65, 81, 0.7);
+  border-radius: 0.25rem;
+}
+
+.wireframeElement4 {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1rem;
+  right: 1rem;
+  height: 1rem;
+  background: rgba(75, 85, 99, 0.4);
+  border-radius: 0.5rem;
+}
+
+/* Main rectangle */
+.rectangle {
+  width: 26.5rem;
+  height: 15.25rem;
+  background: 
+    radial-gradient(circle at 25% 25%, rgba(23, 74, 166, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, hsla(189,100%,56%,0.25) 0%, transparent 50%),
+    radial-gradient(circle at 75% 25%, hsla(240,100%,91%,0.4) 0%, transparent 50%),
+    radial-gradient(circle at 25% 75%, rgba(23, 74, 166, 0.2) 0%, transparent 50%),
+    linear-gradient(135deg, #ffffff 0%, #bfe2f9 100%);
+  background-size: 300% 300%, 300% 300%, 300% 300%, 300% 300%, 100% 100%;
+  animation: smoothColorFlow 12s ease-in-out infinite;
+  border-radius: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.rectangle::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    transparent 50%,
+    #174ea6 65%,
+    #174ea6 85%,
+    transparent 100%
+  );
+  border-radius: 2rem;
+  animation: rotateBorder 4s linear infinite;
+  z-index: -1;
+  opacity: 0.8;
+}
+
+.rectangle::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: inherit;
+  border-radius: 2rem;
+  z-index: 1;
+}
+
+/* AI Label */
+.aiLabel {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  font-size: 0.75rem;
+  color: #174EA5;
+  font-weight: 600;
+  z-index: 10;
+  letter-spacing: -0.01em;
+  opacity: 0.9;
+}
+
+/* Logo container and logo */
+.logoContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoContainer::before {
+  content: '';
+  position: absolute;
+  width: 8rem;
+  height: 8rem;
+  background: radial-gradient(circle, rgba(23, 74, 166, 0.3) 0%, rgba(23, 74, 166, 0.1) 50%, transparent 70%);
+  border-radius: 50%;
+  transform: translateY(0.25rem);
+  z-index: 1;
+}
+
+.logo {
+  width: 3.75rem;
+  height: 3.75rem;
+  object-fit: contain;
+  position: relative;
+  z-index: 2;
+}
+
+/* Text container and animations */
+.textContainer {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
+  z-index: 10;
+}
+
+.textTag {
+  background: rgba(107, 114, 128, 0.9);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  backdrop-filter: blur(10px);
+  display: inline-block;
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.textTag.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.textTag.hidden {
+  opacity: 0;
+  transform: translateY(15px);
+}
+
+/* Background animations */
+@keyframes smoothColorFlow {
+  0%, 100% {
+    background-position: 0% 0%, 100% 100%, 100% 0%, 0% 100%, 0% 0%;
+  }
+  33% {
+    background-position: 50% 50%, 50% 50%, 50% 50%, 50% 50%, 0% 0%;
+  }
+  66% {
+    background-position: 100% 100%, 0% 0%, 0% 100%, 100% 0%, 0% 0%;
+  }
+}
+
+@keyframes rotateBorder {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .rectangle {
+    width: 40rem;
+    height: 22rem;
+  }
+  
+  .logo {
+    width: 5rem;
+    height: 5rem;
+  }
+  
+  .logoContainer::before {
+    width: 7rem;
+    height: 7rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .rectangle {
+    width: 35rem;
+    height: 20rem;
+  }
+  
+  .logo {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+  
+  .logoContainer::before {
+    width: 6rem;
+    height: 6rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .rectangle {
+    width: 100%;
+    max-width: 26rem;
+    height: 16rem;
+    margin: 0 auto;
+  }
+  
+  .logo {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+  
+  .logoContainer::before {
+    width: 5rem;
+    height: 5rem;
+  }
+  
+  .textContainer {
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+  }
+  
+  .textTag {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+  }
+  
+  .aiLabel {
+    font-size: 0.7rem;
+    top: 1rem;
+    left: 1rem;
+  }
+  
+  .backgroundRectangle {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .rectangle {
+    width: 100%;
+    height: 14rem;
+    max-width: 22rem;
+  }
+  
+  .logo {
+    width: 3rem;
+    height: 3rem;
+  }
+  
+  .logoContainer::before {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+  
+  .textContainer {
+    bottom: 0.75rem;
+    left: 0.75rem;
+    right: 0.75rem;
+  }
+  
+  .textTag {
+    font-size: 0.7rem;
+    padding: 0.35rem 0.7rem;
+  }
+  
+  .aiLabel {
+    font-size: 0.65rem;
+    top: 0.875rem;
+    left: 0.875rem;
+  }
+  
+  .backgroundRectangle {
+    display: none;
+  }
+} 

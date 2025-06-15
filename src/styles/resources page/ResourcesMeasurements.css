@@ -46,6 +46,12 @@
   gap: var(--space-lg);
 }
 
+.measurement-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
 .measurement-card {
   background-color: var(--background-primary);
   border: var(--border-width-thin) solid var(--border-color-dark);
@@ -53,6 +59,15 @@
   padding: var(--space-lg);
   display: flex;
   flex-direction: column;
+  height: 100%;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.measurement-card-link:hover .measurement-card {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: var(--blue-primary);
 }
 
 .title-container {
@@ -142,7 +157,33 @@
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
   color: var(--text-color-secondary);
-  margin: 0;
+  margin: 0 0 var(--space-lg) 0;
+  flex-grow: 1;
+}
+
+.measurement-card-button {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  color: var(--blue-primary);
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-base);
+  transition: all 0.3s ease;
+  margin-top: auto;
+}
+
+.measurement-card-button svg {
+  transition: transform 0.3s ease;
+}
+
+.measurement-card-link:hover .measurement-card-button {
+  font-weight: var(--font-weight-semibold);
+}
+
+.measurement-card-link:hover .measurement-card-button svg {
+  transform: translateX(2px);
 }
 
 /* Responsive adjustments */
@@ -199,6 +240,10 @@
   }
   
   .measurement-card p {
+    font-size: var(--font-size-sm);
+  }
+
+  .measurement-card-button {
     font-size: var(--font-size-sm);
   }
 } 

@@ -63,6 +63,10 @@ const Interviews: React.FC<InterviewsProps> = ({ cards = defaultCards }) => {
         Practice with only real cases from the best companies.
       </p>
 
+      <div className={styles["interview-tag"]}>
+        Try an interview for free
+      </div>
+
       <div className={styles["interviews-container"]}>
         {cards.map((card) => (
           <Link to={`/interview/${card.id}`} key={card.id}>

@@ -4,36 +4,35 @@
 }
 .hero {
   display: flex;
-  align-items: center; 
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   padding: var(--space-5xl) var(--space-5xl);
   margin: 100px auto;
-  padding-right: 0;
+  max-width: var(--container-max-width);
 }
 
 .content {
-  max-width: var(--container-max-width);
   width: 100%;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--space-5xl);
+  gap: var(--space-4xl);
+  margin-bottom: var(--space-3xl);
 }
 
 .leftColumn {
-  flex: 1;
+  max-width: 600px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  max-width: 600px;
+  flex: 1;
 }
 
 .rightColumn {
-  flex: 1;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding-top: var(--space-xl);
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
 .title {
@@ -114,10 +113,6 @@
     padding: var(--space-4xl) var(--space-xl);
   }
   
-  .content {
-    gap: var(--space-4xl);
-  }
-  
   .title {
     font-size: var(--font-size-4xl);
   }
@@ -128,10 +123,6 @@
     padding: var(--space-4xl) var(--space-lg);
   }
   
-  .content {
-    gap: var(--space-3xl);
-  }
-  
   .title {
     font-size: var(--font-size-4xl);
   }
@@ -139,22 +130,27 @@
 
 @media (max-width: 768px) {
   .hero {
-    padding: var(--space-5xl) var(--space-lg);
+    padding: var(--space-3xl) var(--space-lg);
+    margin: 60px auto;
   }
   
   .content {
     flex-direction: column;
     align-items: center;
+    text-align: center;
+    margin-bottom: var(--space-2xl);
     gap: var(--space-2xl);
   }
 
-  .leftColumn,
-  .rightColumn {
-    flex: none;
+  .leftColumn {
     width: 100%;
     align-items: center;
     text-align: center;
-    max-width: none;
+  }
+
+  .rightColumn {
+    width: 100%;
+    margin-top: var(--space-xl);
   }
   
   .description {
@@ -165,23 +161,16 @@
   .ctaContainer {
     align-items: center;
   }
-
-  .subtitle {
-    display: none;
-  }
   
   .title {
     text-align: center;
-  }
-  
-  .logoGrid {
-    display: none;
   }
 }
 
 @media (max-width: 480px) {
   .hero {
     padding: var(--space-2xl) var(--space-md);
+    margin: 40px auto;
   }
   
   .title {
@@ -194,13 +183,8 @@
     margin-bottom: var(--space-lg);
   }
   
-  .logoGrid {
-    gap: var(--space-md);
-    grid-template-columns: 1fr 1fr;
-  }
-  
   .content {
-    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
   }
   
   .ctaButton {

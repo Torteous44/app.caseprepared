@@ -1,0 +1,157 @@
+.companies-banner {
+  position: relative;
+  width: 100%;
+  background-color: white;
+  overflow: hidden;
+  padding: 0 100px;
+  box-sizing: border-box;
+  max-width: 1350px;
+  margin: 20px auto;
+  padding-bottom: 20px;
+  padding-top: 20px;
+}
+
+.companies-banner h3 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-color-secondary);
+  padding: 0 20px;
+  line-height: 1.4;
+}
+
+.scroll-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  height: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.companies-container {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+  padding: 0;
+  animation: scroll 40s linear infinite;
+  width: max-content;
+}
+
+.company-item {
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.company-item:hover {
+  opacity: 1;
+}
+
+.company-item img {
+  height: 100%;
+  object-fit: contain;
+  transition: filter 0.3s ease;
+}
+
+.gradient-overlay-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 20px;
+  background: linear-gradient(to right, white, rgba(255, 255, 255, 0));
+  z-index: 2;
+  pointer-events: none;
+}
+
+.gradient-overlay-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 20px;
+  background: linear-gradient(to left, white, rgba(255, 255, 255, 0));
+  z-index: 2;
+  pointer-events: none;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-50% - 40px));
+  }
+}
+
+@media (max-width: 768px) {
+  .companies-banner {
+    margin: 40px 0;
+    padding: 0 15px;
+    max-width: 100%;
+  }
+
+  .companies-banner h3 {
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+  }
+
+  .scroll-container {
+    height: 60px;
+    width: 100%;
+    max-width: 100%;
+    left: 0;
+    right: 0;
+  }
+
+  .companies-container {
+    gap: 60px;
+  }
+
+  .company-item {
+    height: 35px;
+  }
+}
+
+@media (max-width: 480px) {
+  .companies-banner {
+    margin: 30px 0;
+    padding: 0 10px;
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
+
+  .companies-banner h3 {
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+
+  .scroll-container {
+    height: 50px;
+    width: 100%;
+    position: relative;
+    left: 0;
+    right: 0;
+  }
+
+  .companies-container {
+    gap: 40px;
+    position: relative;
+    left: 0;
+  }
+
+  .company-item {
+    height: 30px;
+  }
+
+  .gradient-overlay-left,
+  .gradient-overlay-right {
+    width: 30px;
+  }
+} 
