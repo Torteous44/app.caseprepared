@@ -202,9 +202,6 @@
   .insight-card-container {
     display: none;
   }
-  .hero-image {
-    display: none;
-  }
 }
 
 @media (max-width: 480px) {
