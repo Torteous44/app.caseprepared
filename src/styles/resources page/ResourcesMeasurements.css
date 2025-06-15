@@ -246,4 +246,13 @@
   .measurement-card-button {
     font-size: var(--font-size-sm);
   }
+}
+
+.subheading {
+  font-size: 1.05rem;
+  color: #174AA6;
+  font-weight: 600;
+  margin-bottom: 6px;
+  letter-spacing: 0em;
+  text-align: center;
 } 

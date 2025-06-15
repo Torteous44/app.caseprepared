@@ -10,14 +10,13 @@ const ResourcesHero: React.FC = () => {
     <section className={styles.hero}>
       <div className={styles.content}>
         <div className={styles.leftColumn}>
+          <div className={styles.subheading}>Practice makes perfect</div>
           <h1 className={styles.title}>
             Consulting interview{" "}
-            <span className={styles.highlight}>preparation that works</span>
+            <span className={styles.highlight}>preparation that works.</span>
           </h1>
           <p className={styles.description}>
-            Access our curated collection of frameworks, case examples, and
-            AI-powered practice interviews designed to help you excel in
-            consulting case interviews at top firms.
+            Access our curated collection of AI powered practice interviews, consulting resources, and frameworks.
           </p>
           <div className={styles.ctaContainer}>
             <Link to="/interviews">

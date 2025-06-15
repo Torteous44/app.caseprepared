@@ -6,6 +6,7 @@ const AboutHero: React.FC = () => {
   return (
     <section className={styles.heroContainer}>
       <div className={styles.heroContent}>
+        <div className={styles.subheading}>Your path to consulting success</div>
         <h1 className={styles.mainHeading}>
           Helping students and graduates worldwide
           <br />

@@ -7,8 +7,9 @@ const ResourcesMeasurements: React.FC = () => {
   return (
     <section className="measurements-section">
       <div className="measurements-container">
+        <div className="subheading">What makes us different</div>
         <h2 className="measurements-title">
-          Built by consultants for future consultants
+          Built by consultants for future consultants.
         </h2>
         <p className="measurements-subtitle">
           Learn best practices for case interviews from consultants who've been

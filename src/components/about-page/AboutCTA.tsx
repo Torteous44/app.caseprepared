@@ -15,6 +15,7 @@ const AboutCTA: React.FC = () => {
 
   return (
     <section className={styles.ctaContainer}>
+      <span className={styles.subheader}>Start Your Journey</span>
       <h2 className={styles.ctaHeading}>Ready to land your dream job?</h2>
       <p className={styles.ctaText}>
         Join students worldwide using CasePrepared
