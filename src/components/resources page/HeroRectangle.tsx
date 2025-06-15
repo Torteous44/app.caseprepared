@@ -26,7 +26,7 @@ const HeroRectangle: React.FC = () => {
         }, 100);
       }, 600); // Longer exit duration
       
-    }, 4000); // Slower text changes - every 4 seconds
+    }, 2500); // Slower text changes - every 4 seconds
 
     return () => clearInterval(interval);
   }, [texts.length]);

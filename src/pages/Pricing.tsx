@@ -2,7 +2,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styles from "../styles/Pricing.module.css";
 import { useAuth } from "../contexts/AuthContext";
-import PricingCards from "../components/Pricing/PricingCards";
+
+import PricingCardNew from "../components/Pricing/PricingCardNew";
 import { BookOpen, BarChart2, Compass, Star } from "lucide-react";
 import Footer from "../components/common/Footer";
 
@@ -20,6 +21,11 @@ const Pricing: React.FC = () => {
           through AI case interview practice
         </h1>
         <p>Choose the plan that best fits your preparation needs.</p>
+      </div>
+
+      <div className={styles.newCardsContainer}>
+        <PricingCardNew type="left" />
+        <PricingCardNew type="right" />
       </div>
 
       <div className={styles.pricingGrid}>
@@ -66,7 +72,39 @@ const Pricing: React.FC = () => {
         </div>
 
         <div className={styles.rightContent}>
-          <PricingCards hasSubscription={hasSubscription} />
+          <Link to="/interviews">
+            <div className={styles.caseCard}>
+              <div className={styles.caseHeader}>
+                <img
+                  src="/assets/interviewCards/Logos/BCG.svg"
+                  alt="BCG Logo"
+                  className={styles.caseLogo}
+                />
+                <span className={styles.officialLabel}>Official Interview</span>
+              </div>
+              <div className={styles.caseImage}>
+                <img
+                  src="/assets/interviewCards/image@2x-1.webp"
+                  alt="Climate Case Interview"
+                  className={styles.caseImg}
+                />
+              </div>
+              <div className={styles.caseContent}>
+                <h3 className={styles.caseTitle}>Climate Case - BCG Case</h3>
+                <p className={styles.caseDescription}>
+                  The CEO of a global company wants to reduce their
+                  environmental impact. Build the business case for setting a
+                  climate target and determine what initiatives to undertake to
+                  achieve it.
+                </p>
+                <div className={styles.buttonWrapper}>
+                  <Link to="/interviews" className={styles.mockButton}>
+                    Mock Interview <span className={styles.arrowIcon}>→</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </Link>
         </div>
       </div>
 

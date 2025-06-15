@@ -1,25 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Lottie from "lottie-react";
 import styles from "../styles/CheckoutPage.module.css";
 import "../styles.css";
-
-// XCircle Icon for cancel page
-const XCircleIcon = () => (
-  <svg
-    width="64"
-    height="64"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="#EF4444"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <circle cx="12" cy="12" r="10" />
-    <line x1="15" y1="9" x2="9" y2="15" />
-    <line x1="9" y1="9" x2="15" y2="15" />
-  </svg>
-);
+import errorAnimation from "../assets/animations/error.json";
 
 // Icons for recommendation cards
 const RetryIcon = () => (
@@ -37,6 +21,21 @@ const RetryIcon = () => (
     <path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path>
     <path d="M3 22v-6h6"></path>
     <path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path>
+  </svg>
+);
+
+const ChevronRight = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M9 18l6-6-6-6"/>
   </svg>
 );
 
@@ -78,7 +77,10 @@ const CheckoutCancel: React.FC = () => {
   return (
     <div className="container">
       <div className={styles.cancelContainer}>
-        <XCircleIcon />
+        <Lottie 
+          animationData={errorAnimation} 
+          className={styles.errorAnimation}
+        />
         <h1>Payment Canceled</h1>
         <p>Your payment was canceled and you have not been charged.</p>
 
@@ -89,22 +91,6 @@ const CheckoutCancel: React.FC = () => {
           >
             Try Again
           </Link>
-          <Link to="/profile" className={styles.profileLink}>
-            Profile
-          </Link>
-        </div>
-
-        <div className={styles.infoSection}>
-          <h2>Common reasons for cancellation:</h2>
-          <ul>
-            <li>Changed your mind about subscribing</li>
-            <li>Need to use a different payment method</li>
-            <li>Encountered an issue during the payment process</li>
-          </ul>
-          <p>
-            If you experienced technical difficulties, please try again or
-            contact our support team.
-          </p>
         </div>
 
         <div className={styles.featuresGrid}>
@@ -121,6 +107,9 @@ const CheckoutCancel: React.FC = () => {
               You can always come back and complete your subscription when
               you're ready. Your progress is saved.
             </p>
+            <Link to="/profile" className={styles.featureCardLink}>
+              Profile <ChevronRight />
+            </Link>
           </div>
 
           <div
@@ -136,6 +125,9 @@ const CheckoutCancel: React.FC = () => {
               We support multiple payment options including credit cards,
               PayPal, and other regional payment systems.
             </p>
+            <Link to="/pricing" className={styles.featureCardLink}>
+              Explore <ChevronRight />
+            </Link>
           </div>
 
           <div className={`${styles.featureCard} ${styles.featureCardSupport}`}>
@@ -149,6 +141,9 @@ const CheckoutCancel: React.FC = () => {
               If you encountered any issues, our support team is ready to assist
               you with your subscription process.
             </p>
+            <a href="mailto:contact@caseprepared.com" className={styles.featureCardLink}>
+              Contact us <ChevronRight />
+            </a>
           </div>
         </div>
 
@@ -160,7 +155,7 @@ const CheckoutCancel: React.FC = () => {
           </p>
           <Link
             to="/pricing"
-            className={`btn btn-outline ${styles.contactButton}`}
+            className={`btn btn-primary ${styles.actionButton}`}
           >
             View Pricing
           </Link>

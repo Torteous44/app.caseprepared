@@ -74,6 +74,34 @@
   background-color: #F4D03F;
 }
 
+.newCardsContainer {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-lg);
+    margin: var(--space-3xl) auto var(--space-4xl);
+    max-width: var(--container-max-width);
+    align-items: stretch;
+    /* Prevent layout shifts during component initialization */
+    min-height: 430px;
+}
+
+.newCardsContainer > * {
+    flex: 1;
+    max-width: calc(50% - var(--space-lg) / 2);
+}
+
+@media (max-width: 768px) {
+    .newCardsContainer {
+        flex-direction: column;
+        gap: var(--space-md);
+        margin: var(--space-2xl) auto var(--space-3xl);
+    }
+    
+    .newCardsContainer > * {
+        max-width: 100%;
+    }
+}
+
 .pricingGrid {
     display: flex;
     flex-direction: row;
@@ -459,6 +487,118 @@
   }
 }
 
+/* Case card styles */
+.caseCard {
+  width: 100%;
+  max-width: 400px;
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  background-color: var(--background-primary);
+  border: var(--border-width-thin) solid var(--border-color);
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.caseCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+}
+
+.caseHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md);
+}
+
+.caseLogo {
+  height: 32px;
+  object-fit: contain;
+}
+
+.officialLabel {
+  color: var(--blue-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.caseImage {
+  width: 100%;
+  height: 180px;
+  padding: 0 var(--space-md);
+  box-sizing: border-box;
+}
+
+.caseImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+  border: var(--border-width-thin) solid var(--border-color);
+}
+
+.caseImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+  border: var(--border-width-thin) solid var(--border-color);
+}
+
+.caseContent {
+  padding: var(--space-md);
+}
+
+.caseTitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-color-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.caseDescription {
+  font-size: var(--font-size-base);
+  color: var(--text-color-secondary);
+  line-height: var(--line-height-normal);
+  margin-bottom: var(--space-md);
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.mockButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  background-color: var(--blue-primary);
+  color: white;
+  border: none;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  text-decoration: none;
+  width: fit-content;
+  transition: background-color var(--transition-fast);
+  margin-left: auto;
+}
+
+.mockButton:hover {
+  background-color: var(--blue-secondary);
+  color: white;
+}
+
+.arrowIcon {
+  font-size: var(--font-size-sm);
+  margin-left: var(--space-2xs);
+}
+
 @media (max-width: 480px) {
   .container {
     padding: var(--space-2xl) var(--space-md) var(--space-3xl);
@@ -483,5 +623,9 @@
   
   .testimonialText {
     font-size: var(--font-size-sm);
+  }
+  
+  .caseCard {
+    max-width: 300px;
   }
 } 

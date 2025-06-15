@@ -1,0 +1,332 @@
+@import "../../styles.css";
+
+/* Ensure proper font loading and prevent layout shifts */
+* {
+  font-display: swap;
+}
+
+.card {
+  background-color: var(--background-primary);
+  border: var(--border-width-thin) solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  font-family: var(--font-primary);
+  box-shadow: var(--shadow-sm);
+  height: fit-content;
+  opacity: 0;
+  animation: fadeIn 0.3s ease-in-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.leftCard {
+  padding: var(--space-xl);
+  text-align: left;
+  position: relative;
+  padding-bottom: calc(var(--space-xl) * 2 + 40px); /* Extra space for the button */
+  min-height: 430px; /* Minimum height instead of fixed */
+  height: auto; /* Allow flexible height */
+}
+
+.rightCard {
+  padding: var(--space-xl);
+  position: relative;
+  min-height: 430px; /* Minimum height to match left card */
+  height: auto; /* Allow flexible height */
+  background: 
+    radial-gradient(circle at 25% 25%, rgba(23, 74, 166, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, hsla(189,100%,56%,0.25) 0%, transparent 50%),
+    radial-gradient(circle at 75% 25%, hsla(240,100%,91%,0.4) 0%, transparent 50%),
+    radial-gradient(circle at 25% 75%, rgba(23, 74, 166, 0.2) 0%, transparent 50%),
+    linear-gradient(135deg, #ffffff 0%, #bfe2f9 100%);
+  overflow: hidden;
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-lg);
+}
+
+.logo {
+  height: 32px;
+  width: auto;
+}
+
+.premium {
+  background-color: #E9C46A;
+  color: #174AA6;
+  padding: 4px 24px;
+  border-radius: 24px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.description {
+  font-size: var(--font-size-base);
+  color: var(--text-color-secondary);
+  margin: 0 0 var(--space-xl) 0;
+  font-family: var(--font-primary);
+  line-height: var(--line-height-normal);
+}
+
+.buttonRow {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.planButton {
+  background-color: var(--background-primary);
+  border: var(--border-width-thin) solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-lg);
+  cursor: pointer;
+  font-family: var(--font-primary);
+  transition: border-color var(--transition-fast);
+  flex: 1;
+  position: relative;
+}
+
+.planButton.selected {
+  border-color: var(--blue-primary);
+}
+
+.planButton.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--background-secondary);
+}
+
+.planButton.disabled:hover {
+  border-color: var(--border-color);
+  background-color: var(--background-secondary);
+}
+
+.fullWidth {
+  width: 100%;
+  margin-bottom: var(--space-lg);
+}
+
+.buttonContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.planInfo {
+  text-align: left;
+  flex: 1;
+}
+
+.planType {
+  font-size: var(--font-size-sm);
+  color: var(--text-color-secondary);
+  margin-bottom: var(--space-xs);
+  font-family: var(--font-primary);
+}
+
+.planTypeRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-xs);
+}
+
+.savings {
+  color: var(--blue-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-primary);
+}
+
+.priceRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2xs);
+  margin-bottom: var(--space-xs);
+}
+
+.price {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-color-primary);
+  font-family: var(--font-primary);
+}
+
+.period {
+  font-size: var(--font-size-base);
+  color: var(--text-color-secondary);
+  font-family: var(--font-primary);
+}
+
+.caption {
+  font-size: var(--font-size-xs);
+  color: var(--text-color-tertiary);
+  font-family: var(--font-primary);
+}
+
+.radioCircle {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border-color-dark);
+  border-radius: 50%;
+  margin-top: 0;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+}
+
+.radioCircle.selected {
+  border-color: var(--blue-primary);
+  background-color: var(--blue-primary);
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+}
+
+.radioCircle.selected::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 6px;
+  height: 6px;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.securityInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-xs);
+  color: var(--text-color-tertiary);
+  font-family: var(--font-primary);
+}
+
+.stripeLink {
+  color: var(--blue-primary);
+  text-decoration: none;
+  font-family: var(--font-primary);
+}
+
+.stripeLink:hover {
+  text-decoration: underline;
+}
+
+.lockIcon {
+  width: 14px;
+  height: 14px;
+  margin-left: var(--space-xs);
+}
+
+.rightCardImage {
+  position: absolute;
+  width: 425px;
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+  border-radius: var(--border-radius-md);
+  /* Default position - can be overridden with CSS variables */
+  top: var(--image-top, 45%);
+  left: var(--image-left, 50%);
+  transform: translate(-50%, -40%) rotate(var(--image-rotation, 3deg));
+  opacity: 1;
+  transition: transform 0.3s ease-out;
+}
+
+.rightCard:hover .rightCardImage {
+  transform: translate(-50%, -42%) rotate(var(--image-rotation, 100deg));
+}
+
+.joinButton {
+  background-color: var(--blue-primary);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: var(--space-sm) var(--space-lg);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  position: absolute;
+  bottom: var(--space-xl);
+  right: var(--space-xl);
+}
+
+.joinButton:hover {
+  background-color: var(--blue-secondary);
+}
+
+.errorMessage {
+  color: #FF3B30;
+  font-size: var(--font-size-sm);
+  margin-top: var(--space-sm);
+  text-align: center;
+  font-family: var(--font-primary);
+}
+
+.cardContent {
+  font-size: var(--font-size-base);
+  color: var(--text-color-secondary);
+  margin: 0;
+  font-family: var(--font-primary);
+  line-height: var(--line-height-normal);
+}
+
+@media (max-width: 768px) {
+  .leftCard {
+    padding: var(--space-lg);
+    min-height: 400px; /* Minimum height for mobile */
+    height: auto; /* Allow flexible height */
+  }
+  
+  .rightCard {
+    padding: var(--space-lg);
+    min-height: 400px; /* Minimum height for mobile */
+    height: auto; /* Allow flexible height */
+  }
+  
+  .buttonRow {
+    flex-direction: column;
+  }
+  
+  .joinButton {
+    bottom: var(--space-lg);
+    right: var(--space-lg);
+    padding: var(--space-xs) var(--space-md);
+    font-size: var(--font-size-sm);
+  }
+  
+  .rightCardImage {
+    width: 300px; /* Smaller image on mobile */
+  }
+}
+
+/* Background animation */
+@keyframes smoothColorFlow {
+  0%, 100% {
+    background-position: 0% 0%, 100% 100%, 100% 0%, 0% 100%, 0% 0%;
+  }
+  33% {
+    background-position: 50% 50%, 50% 50%, 50% 50%, 50% 50%, 0% 0%;
+  }
+  66% {
+    background-position: 100% 100%, 0% 0%, 0% 100%, 100% 0%, 0% 0%;
+  }
+} 
