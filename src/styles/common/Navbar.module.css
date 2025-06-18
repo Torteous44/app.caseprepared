@@ -128,112 +128,27 @@
   transform: scale(0.95);
 }
 
-.userName {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #333;
-  margin-right: 20px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 150px;
-}
-
-.loginButton {
-  background: transparent;
-  border: none;
-  color: #333;
+/* Styled logout button */
+.logoutButton {
+  background-color: transparent;
+  color: var(--blue-primary);
+  border: 1px solid var(--blue-primary);
+  border-radius: var(--border-radius);
+  padding: 8px 16px;
   font-size: 0.95rem;
   font-weight: 550;
   cursor: pointer;
-  margin-right: 16px;
-  padding: 8px 16px;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
-  border-radius: var(--border-radius);
-  letter-spacing: -0.01em;
   font-family: var(--font-primary);
+  letter-spacing: -0.01em;
 }
 
-.loginButton:hover {
-  color: var(--blue-primary);
+.logoutButton:hover {
   background-color: rgba(35, 81, 255, 0.05);
   transform: translateY(-1px);
 }
 
-.loginButton:active {
-  transform: translateY(0);
-}
-
-.signupButton {
-  background: var(--blue-primary);
-  color: white;
-  border: none;
-  border-radius: var(--border-radius);
-  padding: 10px 20px;
-  font-size: 0.95rem;
-  font-weight: 550;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
-  overflow: hidden;
-  letter-spacing: -0.01em;
-  font-family: var(--font-primary);
-}
-
-.signupButton::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.1) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  transition: left 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.signupButton:hover::before {
-  left: 100%;
-}
-
-.signupButton:hover {
-  background: var(--blue-secondary);
-  transform: translateY(-2px);
-}
-
-.signupButton:active {
-  transform: translateY(0);
-  transition: all 0.1s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.navButton {
-  background: transparent;
-  border: none;
-  color: #333;
-  font-size: 0.95rem;
-  font-weight: 550;
-  cursor: pointer;
-  margin-right: 16px;
-  padding: 8px 16px;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  border-radius: var(--border-radius);
-  letter-spacing: 0.01em;
-  text-decoration: none;
-  display: inline-block;
-}
-
-.navButton:hover {
-  color: var(--blue-primary);
-  background-color: rgba(35, 81, 255, 0.05);
-  transform: translateY(-1px);
-}
-
-.navButton:active {
+.logoutButton:active {
   transform: translateY(0);
 }
 
@@ -387,7 +302,7 @@
   font-family: var(--font-primary);
 }
 
-.dropdownIcon, .arrowIcon {
+.arrowIcon {
   font-size: 1.2rem;
   color: var(--blue-primary);
   opacity: 0.9;

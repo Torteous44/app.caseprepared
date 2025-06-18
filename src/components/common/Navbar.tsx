@@ -2,13 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../../styles/common/Navbar.module.css";
 import { useAuth } from "../../contexts/AuthContext";
-import { useModal } from "../../contexts/ModalContext";
 
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { user, logout, isAuthenticated } = useAuth();
-  const { openModal } = useModal();
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,7 +45,6 @@ const Navbar: React.FC = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("/");
   };
 
   const toggleMobileMenu = () => {
@@ -59,10 +56,7 @@ const Navbar: React.FC = () => {
       <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ""}`}>
         <div className={styles.container}>
           <div className={styles.logo}>
-            <Link
-              to={isAuthenticated ? "/interviews" : "/"}
-              className={styles.logoText}
-            >
+            <Link to="/interviews" className={styles.logoText}>
               <img
                 src="/assets/Logo Text.svg"
                 alt="Case Prepared"
@@ -88,38 +82,16 @@ const Navbar: React.FC = () => {
               </Link>
             </li>
             <li className={styles.navItem}>
-              <Link to="/about" className={styles.navLink}>
-                About
+              <Link to="/profile" className={styles.navLink}>
+                Profile
               </Link>
             </li>
           </ul>
 
           <div className={styles.navCta}>
-            {isAuthenticated ? (
-              <>
-                <Link to="/profile" className={styles.navButton}>
-                  Profile
-                </Link>
-                <button className={styles.navButton} onClick={handleLogout}>
-                  Sign out
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  className={styles.loginButton}
-                  onClick={() => openModal("login")}
-                >
-                  Log in
-                </button>
-                <button
-                  className={styles.signupButton}
-                  onClick={() => openModal("register")}
-                >
-                  Sign up
-                </button>
-              </>
-            )}
+            <button className={styles.logoutButton} onClick={handleLogout}>
+              Sign out
+            </button>
           </div>
 
           <button
@@ -157,47 +129,24 @@ const Navbar: React.FC = () => {
           </button>
         </div>
 
-        {!isAuthenticated ? (
-          <div className={styles.mobileButtonsContainer}>
-            <button
-              className={styles.demoButton}
-              onClick={() => {
-                toggleMobileMenu();
-                openModal("login");
-              }}
-            >
-              Log in
-            </button>
-            <button
-              className={styles.trialButton}
-              onClick={() => {
-                toggleMobileMenu();
-                openModal("register");
-              }}
-            >
-              Sign up
-            </button>
-          </div>
-        ) : (
-          <div className={styles.mobileButtonsContainer}>
-            <Link
-              to="/profile"
-              className={styles.demoButton}
-              onClick={toggleMobileMenu}
-            >
-              Profile
-            </Link>
-            <button
-              className={styles.trialButton}
-              onClick={() => {
-                toggleMobileMenu();
-                handleLogout();
-              }}
-            >
-              Sign out
-            </button>
-          </div>
-        )}
+        <div className={styles.mobileButtonsContainer}>
+          <Link
+            to="/profile"
+            className={styles.demoButton}
+            onClick={toggleMobileMenu}
+          >
+            Profile
+          </Link>
+          <button
+            className={styles.trialButton}
+            onClick={() => {
+              toggleMobileMenu();
+              handleLogout();
+            }}
+          >
+            Sign out
+          </button>
+        </div>
 
         <nav className={styles.mobileNav}>
           <ul className={styles.mobileNavLinks}>
@@ -228,16 +177,6 @@ const Navbar: React.FC = () => {
                 onClick={toggleMobileMenu}
               >
                 Pricing
-                <span className={styles.arrowIcon}>→</span>
-              </Link>
-            </li>
-            <li className={styles.mobileNavItem}>
-              <Link
-                to="/about"
-                className={styles.mobileNavLink}
-                onClick={toggleMobileMenu}
-              >
-                About
                 <span className={styles.arrowIcon}>→</span>
               </Link>
             </li>

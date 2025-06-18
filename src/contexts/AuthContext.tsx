@@ -14,6 +14,12 @@ const APP_DOMAIN =
     ? "http://localhost:3001"
     : "https://app.caseprepared.com";
 
+// Determine the marketing site domain for redirects
+const MARKETING_DOMAIN =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : "https://caseprepared.com";
+
 interface SubscriptionDetails {
   id: string;
   plan: string;
@@ -37,18 +43,13 @@ interface User {
   created_at: string;
   updated_at?: string;
   subscription?: Subscription;
+  subscription_status?: string;
 }
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (
-    email: string,
-    password: string,
-    full_name: string
-  ) => Promise<void>;
-  googleLogin: (code: string) => Promise<void>;
+  hasSubscription: boolean;
   logout: () => void;
   refreshToken: () => Promise<boolean>;
   loading: boolean;
@@ -75,6 +76,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [hasSubscription, setHasSubscription] = useState<boolean>(false);
 
   const fetchUserProfile = async () => {
     try {
@@ -97,6 +99,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       const userData = await response.json();
       setUser(userData);
+
+      const isSubscribed =
+        userData.subscription?.is_active === true ||
+        userData.subscription_status === "active";
+      setHasSubscription(isSubscribed);
+
       localStorage.setItem("user", JSON.stringify(userData));
       return userData;
     } catch (err) {
@@ -130,6 +138,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       const updatedUserData = await response.json();
       setUser(updatedUserData);
+
+      const isSubscribed =
+        updatedUserData.subscription?.is_active === true ||
+        updatedUserData.subscription_status === "active";
+      setHasSubscription(isSubscribed);
+
       localStorage.setItem("user", JSON.stringify(updatedUserData));
       return updatedUserData;
     } catch (err) {
@@ -180,10 +194,49 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // Check for existing token on mount
     const checkAuth = async () => {
       try {
+        // First check if there's an access_token in the URL
+        // If so, don't redirect to marketing site - App.tsx will handle it
+        const urlParams = new URLSearchParams(window.location.search);
+        const accessTokenInUrl = urlParams.get("access_token");
+
+        // If there's a token in the URL, wait for App.tsx to process it
+        if (accessTokenInUrl) {
+          console.log("Token detected in URL, waiting for processing...");
+          // Short delay to ensure the token is processed by App.tsx
+          setTimeout(() => {
+            // After delay, check if token was stored and fetch user profile
+            const storedToken = localStorage.getItem("access_token");
+            if (storedToken) {
+              console.log(
+                "Token processed successfully, fetching user profile"
+              );
+              fetchUserProfile().catch((error) => {
+                console.error(
+                  "Error fetching user profile after token processing:",
+                  error
+                );
+                setLoading(false);
+              });
+            } else {
+              console.error(
+                "Token processing failed - no token in localStorage"
+              );
+              setLoading(false);
+            }
+          }, 500);
+          return;
+        }
+
+        // Otherwise check for token in localStorage
         const token = localStorage.getItem("access_token");
         if (token) {
+          console.log("Token found in localStorage, fetching user profile");
           // Try to fetch current user profile
           await fetchUserProfile();
+        } else {
+          console.log("No token found, redirecting to marketing site");
+          // Redirect to marketing site if no token is found
+          window.location.href = MARKETING_DOMAIN;
         }
       } catch (err) {
         console.error("Authentication check failed:", err);
@@ -200,11 +253,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               "Authentication failed after token refresh:",
               refreshErr
             );
-            logout();
+            redirectToLogin();
           }
         } else {
-          // Clear all auth data if refresh fails
-          logout();
+          // Clear all auth data if refresh fails and redirect
+          redirectToLogin();
         }
       } finally {
         setLoading(false);
@@ -214,154 +267,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     checkAuth();
   }, []);
 
-  const login = async (email: string, password: string) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ username: email, password }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Login failed");
-      }
-
-      const data = await response.json();
-
-      // Store tokens
-      localStorage.setItem("access_token", data.access_token);
-      localStorage.setItem("refresh_token", data.refresh_token || "");
-
-      // Fetch the user profile using the token
-      await fetchUserProfile();
-
-      // Redirect to app domain after successful login
-      window.location.href = APP_DOMAIN;
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "An unknown error occurred";
-      setError(errorMessage);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
+  // Redirect to login page on the marketing site
+  const redirectToLogin = () => {
+    logout();
+    window.location.href = `${MARKETING_DOMAIN}/login`;
   };
 
-  const register = async (
-    email: string,
-    password: string,
-    full_name: string
-  ) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const body = {
-        email,
-        password,
-        full_name,
-      };
-
-      const response = await fetch(`${API_BASE_URL}/api/v1/auth/signup`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || "Registration failed");
-      }
-
-      const data = await response.json();
-
-      // Store tokens
-      localStorage.setItem("access_token", data.access_token);
-      localStorage.setItem("refresh_token", data.refresh_token || "");
-
-      // Fetch the user profile using the token
-      await fetchUserProfile();
-
-      // Redirect to app domain after successful registration
-      window.location.href = APP_DOMAIN;
-    } catch (err) {
-      const errorMessage =
-        err instanceof Error ? err.message : "An unknown error occurred";
-      setError(errorMessage);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const googleLogin = async (code: string) => {
-    setLoading(true);
-    setError(null);
-    try {
-      console.log("Sending Google authorization code to backend");
-
-      const response = await fetch(
-        `${API_BASE_URL}/api/v1/auth/oauth/google/callback`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({ code }),
-        }
-      );
-
-      // Log full response details for debugging
-      console.log("Response status:", response.status);
-
-      const responseData = await response.json();
-      console.log("Response data:", responseData);
-
-      if (!response.ok) {
-        // Extract detailed error message if available
-        let errorMessage = "Google login failed";
-
-        if (responseData.detail) {
-          errorMessage =
-            typeof responseData.detail === "string"
-              ? responseData.detail
-              : JSON.stringify(responseData.detail);
-        }
-
-        throw new Error(errorMessage);
-      }
-
-      // Store tokens
-      localStorage.setItem("access_token", responseData.access_token);
-      localStorage.setItem("refresh_token", responseData.refresh_token || "");
-
-      // Fetch the user profile
-      await fetchUserProfile();
-
-      // Note: We don't redirect here as it's handled in the GoogleOAuthCallback component
-    } catch (err) {
-      console.error("Google login error details:", err);
-      const errorMessage =
-        err instanceof Error ? err.message : "An unknown error occurred";
-      setError(errorMessage);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Logout function
   const logout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("user");
     setUser(null);
+    window.location.href = MARKETING_DOMAIN;
   };
 
   return (
@@ -369,9 +287,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       value={{
         user,
         isAuthenticated: !!user,
-        login,
-        register,
-        googleLogin,
+        hasSubscription,
         logout,
         refreshToken,
         loading,

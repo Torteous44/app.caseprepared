@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import { useModal } from "../../contexts/ModalContext";
 import styles from "../../styles/PricingCards.module.css";
 import axios from "axios";
 
@@ -34,19 +33,13 @@ const PricingCards: React.FC<PricingCardsProps> = ({
   hasSubscription = false,
 }) => {
   const { isAuthenticated } = useAuth();
-  const { openModal } = useModal();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleFreeSignup = () => {
-    if (isAuthenticated) {
-      // If authenticated, navigate to profile page
-      navigate("/profile");
-    } else {
-      // If not authenticated, open registration modal
-      openModal("register");
-    }
+    // Navigate to profile page
+    navigate("/profile");
   };
 
   const handleStripeCheckout = async (priceId: string) => {
@@ -92,17 +85,12 @@ const PricingCards: React.FC<PricingCardsProps> = ({
   };
 
   const handleSubscribe = () => {
-    if (isAuthenticated) {
-      if (hasSubscription) {
-        // If authenticated with subscription, navigate to profile
-        navigate("/profile");
-      } else {
-        // If authenticated without subscription, open Stripe checkout directly
-        handleStripeCheckout("price_1RGov6IzbD323IQGMNJWMu93");
-      }
+    if (hasSubscription) {
+      // If authenticated with subscription, navigate to profile
+      navigate("/profile");
     } else {
-      // If not authenticated, open registration modal
-      openModal("register");
+      // If authenticated without subscription, open Stripe checkout directly
+      handleStripeCheckout("price_1RGov6IzbD323IQGMNJWMu93");
     }
   };
 

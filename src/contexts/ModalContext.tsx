@@ -1,12 +1,13 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
-type ModalType = "login" | "register" | null;
+type ModalType = "subscription" | "notification" | "custom";
 
 interface ModalContextType {
-  modalType: ModalType;
-  openModal: (type: "login" | "register") => void;
-  closeModal: () => void;
   isOpen: boolean;
+  modalType: ModalType;
+  modalProps: Record<string, any>;
+  openModal: (type: ModalType, props?: Record<string, any>) => void;
+  closeModal: () => void;
 }
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
@@ -24,25 +25,28 @@ interface ModalProviderProps {
 }
 
 export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
-  const [modalType, setModalType] = useState<ModalType>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [modalType, setModalType] = useState<ModalType>("notification");
+  const [modalProps, setModalProps] = useState<Record<string, any>>({});
 
-  const openModal = (type: "login" | "register") => {
+  const openModal = (type: ModalType, props: Record<string, any> = {}) => {
     setModalType(type);
+    setModalProps(props);
+    setIsOpen(true);
   };
 
   const closeModal = () => {
-    setModalType(null);
+    setIsOpen(false);
   };
-
-  const isOpen = modalType !== null;
 
   return (
     <ModalContext.Provider
       value={{
+        isOpen,
         modalType,
+        modalProps,
         openModal,
         closeModal,
-        isOpen,
       }}
     >
       {children}

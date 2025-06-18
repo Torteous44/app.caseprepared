@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Lock } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
-import { useModal } from "../../contexts/ModalContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "./PricingCardNew.module.css";
@@ -36,7 +35,6 @@ const PricingCardNew: React.FC<PricingCardNewProps> = ({
   const [isInitialized, setIsInitialized] = useState(false);
 
   const { isAuthenticated } = useAuth();
-  const { openModal } = useModal();
   const navigate = useNavigate();
 
   // Initialize currency symbol immediately to prevent layout shift
@@ -133,35 +131,30 @@ const PricingCardNew: React.FC<PricingCardNewProps> = ({
   };
 
   const handleSubscribe = () => {
-    if (isAuthenticated) {
-      // Map selected plan to price ID
-      let priceId = "";
-      let isOneTime = false;
+    // Map selected plan to price ID
+    let priceId = "";
+    let isOneTime = false;
 
-      switch (selectedPlan) {
-        case "monthly":
-          priceId = "price_1RaFI8IzbD323IQGSk75ygX0"; // $29.99
-          isOneTime = false;
-          break;
-        case "believer":
-          priceId = "price_1RaFJ9IzbD323IQGzslYNzzW"; // $200.00
-          isOneTime = true; // This is a one-time payment
-          break;
-        case "threemonth":
-          priceId = "price_1RaFISIzbD323IQGKD5lBMcG"; // $21.99
-          isOneTime = false;
-          break;
-        default:
-          priceId = "price_1RaFI8IzbD323IQGSk75ygX0"; // Default to monthly
-          isOneTime = false;
-      }
-
-      // If authenticated, open Stripe checkout directly
-      handleStripeCheckout(priceId, isOneTime);
-    } else {
-      // If not authenticated, open registration modal
-      openModal("register");
+    switch (selectedPlan) {
+      case "monthly":
+        priceId = "price_1RaFI8IzbD323IQGSk75ygX0"; // $29.99
+        isOneTime = false;
+        break;
+      case "believer":
+        priceId = "price_1RaFJ9IzbD323IQGzslYNzzW"; // $200.00
+        isOneTime = true; // This is a one-time payment
+        break;
+      case "threemonth":
+        priceId = "price_1RaFISIzbD323IQGKD5lBMcG"; // $21.99
+        isOneTime = false;
+        break;
+      default:
+        priceId = "price_1RaFI8IzbD323IQGSk75ygX0"; // Default to monthly
+        isOneTime = false;
     }
+
+    // Open Stripe checkout directly
+    handleStripeCheckout(priceId, isOneTime);
   };
 
   // Don't render until initialized to prevent layout issues

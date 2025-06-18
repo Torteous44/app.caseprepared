@@ -1,7 +1,8 @@
 {
-  "name": "consult_ai",
+  "name": "caseprepared-app",
   "version": "0.1.0",
   "private": true,
+  "description": "Authenticated application for Case Prepared - AI-powered case interview practice",
   "dependencies": {
     "@heroicons/react": "^2.1.1",
     "@react-three/drei": "^10.2.0",

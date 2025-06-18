@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "../common/LoadingSpinner";
 import styles from "../../styles/OAuthCallback.module.css";
 
+const API_BASE_URL = "http://127.0.0.1:8000";
+
+// Determine the app domain to redirect to
+const APP_DOMAIN =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3001"
+    : "https://app.caseprepared.com";
+
 const GoogleOAuthCallback: React.FC = () => {
-  const { googleLogin } = useAuth();
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
-
-  // Determine the app domain to redirect to
-  const APP_DOMAIN =
-    process.env.NODE_ENV === "development"
-      ? "http://localhost:3001"
-      : "https://app.caseprepared.com";
 
   useEffect(() => {
     const handleCallback = async () => {
@@ -33,11 +33,49 @@ const GoogleOAuthCallback: React.FC = () => {
           throw new Error("No authorization code received from Google");
         }
 
-        // Process the authorization code
-        await googleLogin(code);
+        // Process the authorization code directly
+        console.log("Sending Google authorization code to backend");
 
-        // Redirect to the app domain after successful login
-        window.location.href = APP_DOMAIN;
+        const response = await fetch(
+          `${API_BASE_URL}/api/v1/auth/oauth/google/callback`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({ code }),
+          }
+        );
+
+        // Log full response details for debugging
+        console.log("Response status:", response.status);
+
+        const responseData = await response.json();
+        console.log("Response data:", responseData);
+
+        if (!response.ok) {
+          // Extract detailed error message if available
+          let errorMessage = "Google login failed";
+
+          if (responseData.detail) {
+            errorMessage =
+              typeof responseData.detail === "string"
+                ? responseData.detail
+                : JSON.stringify(responseData.detail);
+          }
+
+          throw new Error(errorMessage);
+        }
+
+        // Store tokens
+        localStorage.setItem("access_token", responseData.access_token);
+        localStorage.setItem("refresh_token", responseData.refresh_token || "");
+
+        // Redirect to the app domain with token in URL for direct processing
+        window.location.href = `${APP_DOMAIN}/?access_token=${encodeURIComponent(
+          responseData.access_token
+        )}&ref=google_oauth&_t=${Date.now()}`;
       } catch (err) {
         console.error("Error processing Google OAuth callback:", err);
         setError(err instanceof Error ? err.message : "Authentication failed");
@@ -50,7 +88,7 @@ const GoogleOAuthCallback: React.FC = () => {
     };
 
     handleCallback();
-  }, [googleLogin, navigate, APP_DOMAIN]);
+  }, [navigate]);
 
   if (error) {
     return (

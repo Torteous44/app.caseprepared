@@ -7,6 +7,7 @@ import axios from "axios";
 
 // API base URL
 const API_BASE_URL = "http://127.0.0.1:8000";
+
 // Lock Icon SVG as component
 const LockIcon = () => (
   <svg
@@ -43,10 +44,7 @@ const CheckCircle = ({ size = 18, stroke = "#004494" }) => (
   </svg>
 );
 
-// Arrow component for CTA buttons
-const ArrowIcon = () => <span className={styles.ctaArrow}>→</span>;
-
-// Updated interface to match actual API response
+// Updated interface to match API documentation
 interface SubscriptionDetails {
   id?: string;
   plan?: string;
@@ -64,15 +62,17 @@ interface SubscriptionStatus {
   details: SubscriptionDetails;
 }
 
-// Extend the User type to include subscription
+// Extend the User type to include subscription and match API documentation
 interface ExtendedUser {
   id: string;
   email: string;
   full_name?: string;
   is_admin?: boolean;
+  is_active?: boolean;
   created_at: string;
   updated_at?: string;
   subscription?: SubscriptionStatus;
+  subscription_status?: string; // From token payload
 }
 
 // Checkout Button Component
@@ -143,7 +143,7 @@ const CheckoutButton = ({
   );
 };
 
-// Update the SubscriptionCard component to remove the buttons from inside the card
+// Subscription Card component
 const SubscriptionCard = () => {
   return (
     <div className={styles.subscriptionCard}>
@@ -171,7 +171,7 @@ const SubscriptionCard = () => {
 };
 
 const ProfilePage: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, updateUserProfile } = useAuth();
   const navigate = useNavigate();
   const [subscription, setSubscription] = useState<SubscriptionDetails | null>(
     null
@@ -180,12 +180,23 @@ const ProfilePage: React.FC = () => {
   const [cancelLoading, setCancelLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [editMode, setEditMode] = useState(false);
+  const [formData, setFormData] = useState({
+    full_name: "",
+    email: "",
+  });
 
   // Cast user to ExtendedUser to access subscription property
   const extendedUser = user as ExtendedUser;
 
   useEffect(() => {
     if (user) {
+      // Initialize form data with current user info
+      setFormData({
+        full_name: extendedUser.full_name || "",
+        email: extendedUser.email,
+      });
+
       // If user object already has subscription data, use it
       if (extendedUser.subscription?.details) {
         setSubscription(extendedUser.subscription.details);
@@ -242,7 +253,7 @@ const ProfilePage: React.FC = () => {
 
   const handleSignOut = async () => {
     await logout();
-    navigate("/login");
+    navigate("/");
   };
 
   const handleCancel = async () => {
@@ -250,12 +261,12 @@ const ProfilePage: React.FC = () => {
       return;
     }
 
-    setCancelLoading(true);
-    setMessage("");
-    setError(null);
-
     try {
+      setCancelLoading(true);
+      setError(null);
       const token = localStorage.getItem("access_token");
+      if (!token) return;
+
       const response = await fetch(
         `${API_BASE_URL}/api/v1/subscriptions/cancel`,
         {
@@ -267,19 +278,22 @@ const ProfilePage: React.FC = () => {
         }
       );
 
-      if (!response.ok) {
+      if (response.ok) {
         const data = await response.json();
-        throw new Error(data.message || "Failed to cancel subscription");
+        setSubscription(data);
+        setMessage(
+          "Your subscription has been canceled. You'll have access until the end of your billing period."
+        );
+      } else {
+        const errorData = await response.json();
+        setError(
+          errorData.detail || "Failed to cancel subscription. Please try again."
+        );
       }
-
-      setMessage(
-        "Your subscription has been cancelled. You will still have access until the end of your billing period."
-      );
-      fetchSubscription(); // Refresh subscription status
     } catch (error) {
-      console.error("Cancellation error:", error);
+      console.error("Error canceling subscription:", error);
       setError(
-        `Cancellation failed: ${
+        `Error canceling subscription: ${
           error instanceof Error ? error.message : "Unknown error"
         }`
       );
@@ -288,163 +302,254 @@ const ProfilePage: React.FC = () => {
     }
   };
 
-  if (!user) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.profileCard}>
-          <h1>Profile not available</h1>
-          <p>Please sign in to view your profile information.</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Extract user creation date
-  const formatMemberSince = (dateString: string) => {
-    if (!dateString) return "N/A";
-    const date = new Date(dateString);
-    return `${date.toLocaleString("default", {
-      month: "long",
-    })} ${date.getFullYear()}`;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
-  // Format date
+  const handleProfileUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setError(null);
+      // Only update fields that have changed
+      const updateData: { full_name?: string } = {};
+      if (formData.full_name !== extendedUser.full_name) {
+        updateData.full_name = formData.full_name;
+      }
+
+      // Only update if there are changes
+      if (Object.keys(updateData).length > 0) {
+        await updateUserProfile(updateData);
+        setMessage("Profile updated successfully");
+      }
+      setEditMode(false);
+    } catch (err) {
+      setError(
+        `Failed to update profile: ${
+          err instanceof Error ? err.message : "Unknown error"
+        }`
+      );
+    }
+  };
+
+  const formatMemberSince = (dateString: string) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }).format(date);
+  };
+
   const formatDate = (dateString?: string) => {
     if (!dateString) return "N/A";
-    // Check if the date is a unix timestamp (seconds) or an ISO date string
-    if (/^\d+$/.test(dateString)) {
-      return new Date(parseInt(dateString) * 1000).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      });
-    } else {
-      // Handle ISO format date string
-      return new Date(dateString).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      });
-    }
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }).format(date);
   };
 
   const isPremiumMember = () => {
-    // Check if user has a subscription property with is_active true
     if (extendedUser.subscription?.is_active) return true;
-
-    // Or check the subscription state directly
-    return (
-      subscription?.status === "active" &&
-      subscription?.plan === "price_1RGov6IzbD323IQGMNJWMu93"
-    );
+    if (extendedUser.subscription_status === "active") return true;
+    if (subscription?.status === "active") return true;
+    return false;
   };
 
   const getNextPaymentDate = () => {
-    // Use subscription.next_payment_date or current_period_end if available
-    if (subscription?.next_payment_date) return subscription.next_payment_date;
-    if (subscription?.current_period_end)
-      return subscription.current_period_end;
-
-    if (subscription?.created_at) {
-      // Add 30 days to creation date as an estimate if no next_payment_date is provided
-      const creationDate = new Date(subscription.created_at);
-      const nextPaymentDate = new Date(creationDate);
-      nextPaymentDate.setDate(nextPaymentDate.getDate() + 30);
-      return nextPaymentDate.toISOString();
+    if (subscription?.current_period_end) {
+      return formatDate(subscription.current_period_end);
     }
-
-    return null;
+    if (subscription?.next_payment_date) {
+      return formatDate(subscription.next_payment_date);
+    }
+    return "N/A";
   };
 
+  if (!user) {
+    return <div className={styles.loading}>Loading user profile...</div>;
+  }
+
   return (
-    <>
-      <div className={styles.container}>
-        <header className={styles.profileHeader}>
-          <div>
-            <h1>{extendedUser.full_name || "User"}</h1>
-            <p className={styles.memberSince}>
-              Member since {formatMemberSince(extendedUser.created_at)}
-            </p>
+    <div className={styles.profileContainer}>
+      <div className={styles.profileHeader}>
+        <h1>Profile</h1>
+        <p className={styles.memberSince}>
+          Member since {formatMemberSince(extendedUser.created_at)}
+        </p>
+      </div>
+
+      <div className={styles.profileContent}>
+        <div className={styles.profileSection}>
+          <div className={styles.sectionHeader}>
+            <h2>Account Information</h2>
+            {!editMode && (
+              <button
+                className={styles.editButton}
+                onClick={() => setEditMode(true)}
+              >
+                Edit
+              </button>
+            )}
           </div>
-          {isPremiumMember() && (
-            <span className={styles.premiumBadge}>Premium</span>
-          )}
-        </header>
 
-        <div className={styles.profileInfo}>
-          <div className={styles.infoField}>
-            <label>Name</label>
-            <div className={styles.infoDisplay}>
-              {extendedUser.full_name || ""}
-            </div>
-          </div>
-
-          <div className={styles.infoField}>
-            <label>Email</label>
-            <div className={styles.infoDisplay}>{extendedUser.email || ""}</div>
-          </div>
-        </div>
-
-        {/* New Subscription Section */}
-        <div className={styles.subscriptionSection}>
-          {subscriptionLoading ? (
-            <div className={styles.loadingState}>
-              <div className={styles.spinner}></div>
-              <p>Loading subscription details...</p>
-            </div>
-          ) : (
-            <>
-              <SubscriptionCard />
-
-              <div className={styles.buttonContainer}>
-                <div className={styles.subscriptionActions}>
-                  <Link to="/pricing" className={styles.seeMoreButton}>
-                    See more
-                  </Link>
-                  {!isPremiumMember() ? (
-                    <CheckoutButton
-                      priceId="price_1RGov6IzbD323IQGMNJWMu93"
-                      className={styles.joinButton}
-                    />
-                  ) : !subscription?.cancel_at_period_end ? (
-                    <button
-                      onClick={handleCancel}
-                      className={styles.cancelButton}
-                      disabled={cancelLoading}
-                    >
-                      {cancelLoading ? "Processing..." : "Cancel subscription"}
-                    </button>
-                  ) : null}
-                </div>
+          {editMode ? (
+            <form onSubmit={handleProfileUpdate} className={styles.profileForm}>
+              <div className={styles.formGroup}>
+                <label htmlFor="full_name">Full Name</label>
+                <input
+                  type="text"
+                  id="full_name"
+                  name="full_name"
+                  value={formData.full_name}
+                  onChange={handleInputChange}
+                  className={styles.formInput}
+                />
               </div>
 
-              {isPremiumMember() && subscription?.cancel_at_period_end && (
-                <div className={styles.cancelInfo}>
-                  <p>
-                    Your subscription will end on{" "}
-                    {formatDate(subscription.current_period_end)}. You will not
-                    be charged again.
-                  </p>
+              <div className={styles.formGroup}>
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  disabled
+                  className={`${styles.formInput} ${styles.disabled}`}
+                />
+                <small>Email cannot be changed</small>
+              </div>
+
+              <div className={styles.formActions}>
+                <button type="submit" className={styles.saveButton}>
+                  Save Changes
+                </button>
+                <button
+                  type="button"
+                  className={styles.cancelButton}
+                  onClick={() => {
+                    setEditMode(false);
+                    setFormData({
+                      full_name: extendedUser.full_name || "",
+                      email: extendedUser.email,
+                    });
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          ) : (
+            <div className={styles.profileInfo}>
+              <div className={styles.infoRow}>
+                <span className={styles.infoLabel}>Full Name:</span>
+                <span className={styles.infoValue}>
+                  {extendedUser.full_name || "Not provided"}
+                </span>
+              </div>
+              <div className={styles.infoRow}>
+                <span className={styles.infoLabel}>Email:</span>
+                <span className={styles.infoValue}>{extendedUser.email}</span>
+              </div>
+              <div className={styles.infoRow}>
+                <span className={styles.infoLabel}>Account Status:</span>
+                <span className={styles.infoValue}>
+                  {extendedUser.is_active !== false ? "Active" : "Inactive"}
+                </span>
+              </div>
+              {extendedUser.is_admin && (
+                <div className={styles.infoRow}>
+                  <span className={styles.infoLabel}>Admin Status:</span>
+                  <span className={styles.infoValue}>Administrator</span>
                 </div>
               )}
-
-              {message && <div className={styles.message}>{message}</div>}
-              {error && <div className={styles.errorMessage}>{error}</div>}
-            </>
+            </div>
           )}
         </div>
 
-        <div className={styles.actionButtons}>
-          <Link to="/interviews" className={styles.interviewsButton}>
-            Interviews
-          </Link>
-          <button onClick={handleSignOut} className={styles.signOutButton}>
-            Sign out
-          </button>
+        <div className={styles.profileSection}>
+          <h2>Subscription</h2>
+          {subscriptionLoading ? (
+            <div className={styles.loading}>
+              Loading subscription details...
+            </div>
+          ) : isPremiumMember() ? (
+            <div className={styles.subscriptionInfo}>
+              <SubscriptionCard />
+              <div className={styles.subscriptionDetails}>
+                <div className={styles.infoRow}>
+                  <span className={styles.infoLabel}>Status:</span>
+                  <span className={`${styles.infoValue} ${styles.active}`}>
+                    Active
+                  </span>
+                </div>
+                <div className={styles.infoRow}>
+                  <span className={styles.infoLabel}>Plan:</span>
+                  <span className={styles.infoValue}>
+                    {subscription?.plan || "Premium"}
+                  </span>
+                </div>
+                <div className={styles.infoRow}>
+                  <span className={styles.infoLabel}>Next Payment:</span>
+                  <span className={styles.infoValue}>
+                    {getNextPaymentDate()}
+                  </span>
+                </div>
+                {subscription?.cancel_at_period_end && (
+                  <div className={styles.cancelNotice}>
+                    Your subscription will end on{" "}
+                    {formatDate(subscription.current_period_end)}
+                  </div>
+                )}
+                {!subscription?.cancel_at_period_end && (
+                  <button
+                    className={styles.cancelSubscriptionButton}
+                    onClick={handleCancel}
+                    disabled={cancelLoading}
+                  >
+                    {cancelLoading ? "Processing..." : "Cancel Subscription"}
+                  </button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className={styles.noSubscription}>
+              <p>You don't have an active subscription.</p>
+              <CheckoutButton
+                priceId="price_1PJPcmIzbD323IQGTmzuFcNj"
+                className={styles.subscribeButton}
+              />
+            </div>
+          )}
+        </div>
+
+        <div className={styles.profileSection}>
+          <h2>Security</h2>
+          <div className={styles.securityOptions}>
+            <div className={styles.securityOption}>
+              <div className={styles.securityOptionHeader}>
+                <LockIcon />
+                <h3>Sign Out</h3>
+              </div>
+              <p>Sign out from your account on this device</p>
+              <button className={styles.signOutButton} onClick={handleSignOut}>
+                Sign Out
+              </button>
+            </div>
+          </div>
         </div>
       </div>
+
+      {message && <div className={styles.successMessage}>{message}</div>}
+      {error && <div className={styles.errorMessage}>{error}</div>}
+
       <Footer />
-    </>
+    </div>
   );
 };
 
