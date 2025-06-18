@@ -6,11 +6,13 @@ import React, {
   ReactNode,
 } from "react";
 
-// // API base URL from environment
-// const API_BASE_URL =
-//   process.env.REACT_APP_API_BASE_URL || "https://casepreparedcrud.onrender.com";
+const API_BASE_URL = "http://127.0.0.1:8000";
 
-const API_BASE_URL = "https://casepreparedcrud.onrender.com";
+// Determine the app domain to redirect to
+const APP_DOMAIN =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3001"
+    : "https://app.caseprepared.com";
 
 interface SubscriptionDetails {
   id: string;
@@ -46,8 +48,9 @@ interface AuthContextType {
     password: string,
     full_name: string
   ) => Promise<void>;
-  googleLogin: (token: string) => Promise<void>;
+  googleLogin: (code: string) => Promise<void>;
   logout: () => void;
+  refreshToken: () => Promise<boolean>;
   loading: boolean;
   error: string | null;
   fetchUserProfile: () => Promise<void>;
@@ -138,6 +141,41 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const refreshToken = async (): Promise<boolean> => {
+    try {
+      const refresh = localStorage.getItem("refresh_token");
+
+      if (!refresh) {
+        console.error("No refresh token available");
+        return false;
+      }
+
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/refresh`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ refresh_token: refresh }),
+      });
+
+      if (!response.ok) {
+        console.error("Failed to refresh token");
+        return false;
+      }
+
+      const data = await response.json();
+
+      // Store new tokens
+      localStorage.setItem("access_token", data.access_token);
+      localStorage.setItem("refresh_token", data.refresh_token || "");
+
+      return true;
+    } catch (err) {
+      console.error("Token refresh error:", err);
+      return false;
+    }
+  };
+
   useEffect(() => {
     // Check for existing token on mount
     const checkAuth = async () => {
@@ -149,9 +187,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
       } catch (err) {
         console.error("Authentication check failed:", err);
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
-        localStorage.removeItem("user");
+
+        // Try to refresh the token if fetch fails
+        const refreshed = await refreshToken();
+
+        if (refreshed) {
+          try {
+            // Try again with the new token
+            await fetchUserProfile();
+          } catch (refreshErr) {
+            console.error(
+              "Authentication failed after token refresh:",
+              refreshErr
+            );
+            logout();
+          }
+        } else {
+          // Clear all auth data if refresh fails
+          logout();
+        }
       } finally {
         setLoading(false);
       }
@@ -164,17 +218,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/auth/json-login`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username: email, password }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Login failed");
+        throw new Error(errorData.detail || "Login failed");
       }
 
       const data = await response.json();
@@ -185,6 +239,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       // Fetch the user profile using the token
       await fetchUserProfile();
+
+      // Redirect to app domain after successful login
+      window.location.href = APP_DOMAIN;
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "An unknown error occurred";
@@ -207,10 +264,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         email,
         password,
         full_name,
-        organization_name: null, // Add organization_name field
       };
 
-      const response = await fetch(`${API_BASE_URL}/api/v1/auth/register`, {
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -220,7 +276,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Registration failed");
+        throw new Error(errorData.detail || "Registration failed");
       }
 
       const data = await response.json();
@@ -231,6 +287,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       // Fetch the user profile using the token
       await fetchUserProfile();
+
+      // Redirect to app domain after successful registration
+      window.location.href = APP_DOMAIN;
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "An unknown error occurred";
@@ -241,28 +300,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const googleLogin = async (token: string) => {
+  const googleLogin = async (code: string) => {
     setLoading(true);
     setError(null);
     try {
-      console.log(
-        "Sending Google token to backend:",
-        token.substring(0, 10) + "..."
+      console.log("Sending Google authorization code to backend");
+
+      const response = await fetch(
+        `${API_BASE_URL}/api/v1/auth/oauth/google/callback`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ code }),
+        }
       );
-
-      // Use a hybrid approach - POST request but with token in query parameter
-      // This matches the actual backend implementation based on the error message
-      const queryUrl = `${API_BASE_URL}/api/v1/auth/google-login?token=${encodeURIComponent(
-        token
-      )}`;
-
-      const response = await fetch(queryUrl, {
-        method: "POST", // Using POST as per documentation, but with query parameter as per actual implementation
-        headers: {
-          Accept: "application/json",
-        },
-        // No body needed as the token is in the query parameter
-      });
 
       // Log full response details for debugging
       console.log("Response status:", response.status);
@@ -275,29 +329,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         let errorMessage = "Google login failed";
 
         if (responseData.detail) {
-          // Handle FastAPI-style errors
-          if (typeof responseData.detail === "object") {
-            console.error(
-              "Detailed validation errors:",
-              JSON.stringify(responseData.detail)
-            );
-            // Try to extract all validation errors
-            errorMessage = "Validation error: ";
-            if (Array.isArray(responseData.detail)) {
-              errorMessage += responseData.detail
-                .map(
-                  (err: any) =>
-                    `${err.loc ? err.loc.join(".") + ": " : ""}${err.msg}`
-                )
-                .join("; ");
-            } else {
-              errorMessage += JSON.stringify(responseData.detail);
-            }
-          } else {
-            errorMessage = responseData.detail;
-          }
-        } else if (responseData.message) {
-          errorMessage = responseData.message;
+          errorMessage =
+            typeof responseData.detail === "string"
+              ? responseData.detail
+              : JSON.stringify(responseData.detail);
         }
 
         throw new Error(errorMessage);
@@ -309,6 +344,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       // Fetch the user profile
       await fetchUserProfile();
+
+      // Note: We don't redirect here as it's handled in the GoogleOAuthCallback component
     } catch (err) {
       console.error("Google login error details:", err);
       const errorMessage =
@@ -336,6 +373,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         register,
         googleLogin,
         logout,
+        refreshToken,
         loading,
         error,
         fetchUserProfile,

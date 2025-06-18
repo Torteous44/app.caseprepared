@@ -16,6 +16,11 @@ const Blogs = lazy(() => import("../pages/Blogs"));
 const BlogPost = lazy(() => import("../pages/BlogPost"));
 const NotFound = lazy(() => import("../pages/NotFoundPage"));
 
+// Auth components
+const GoogleOAuthCallback = lazy(
+  () => import("../components/auth/GoogleOAuthCallback")
+);
+
 // Authenticated pages
 const Interviews = lazy(() => import("../pages/AuthenticatedInterviewsPage"));
 const InterviewDetail = lazy(
@@ -54,6 +59,9 @@ const AppRoutes = () => {
   return (
     <Suspense fallback={<LoadingSpinner />}>
       <Routes>
+        {/* Common routes that don't need layout wrapping */}
+        <Route path="/auth/google/callback" element={<GoogleOAuthCallback />} />
+
         {/* Authenticated Routes */}
         {isAuthenticated ? (
           <Route element={<AuthenticatedLayout />}>

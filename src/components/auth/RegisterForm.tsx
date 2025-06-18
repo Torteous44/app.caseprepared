@@ -12,6 +12,13 @@ const RegisterForm: React.FC = () => {
   const { register, loading } = useAuth();
   const { openModal, closeModal } = useModal();
 
+  const validatePassword = (password: string): string | null => {
+    if (password.length < 5) {
+      return "Password must be at least 5 characters long";
+    }
+    return null;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError("");
@@ -22,8 +29,10 @@ const RegisterForm: React.FC = () => {
       return;
     }
 
-    if (password.length < 6) {
-      setFormError("Password must be at least 6 characters long");
+    // Password validation
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+      setFormError(passwordError);
       return;
     }
 
@@ -94,7 +103,7 @@ const RegisterForm: React.FC = () => {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
           required
-          minLength={6}
+          minLength={8}
         />
       </div>
 

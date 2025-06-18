@@ -6,7 +6,7 @@ import axios from "axios";
 import TranscriptionWithRef from "./Transcription";
 
 // API base URL defined in AuthContext
-const API_BASE_URL = "https://casepreparedcrud.onrender.com";
+const API_BASE_URL = "http://127.0.0.1:8000";
 
 // Types
 type ConnectionState =

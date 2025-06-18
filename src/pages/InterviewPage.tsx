@@ -89,8 +89,8 @@ const idToDemoType: { [key: string]: string } = {
   "3": "profitability",
 };
 
-const BASE_URL = "https://casepreparedcrud.onrender.com";
-const DEMO_API_BASE_URL = "https://casepreparedcrud.onrender.com/api/v1/demo"; // Demo API base URL
+const BASE_URL = "http://127.0.0.1:8000";
+const DEMO_API_BASE_URL = "http://127.0.0.1:8000/api/v1/demo"; // Demo API base URL
 
 // Case-specific content
 const caseContent: CaseContentMap = {

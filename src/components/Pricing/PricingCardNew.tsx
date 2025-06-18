@@ -7,7 +7,13 @@ import axios from "axios";
 import styles from "./PricingCardNew.module.css";
 
 // API base URL
-const API_BASE_URL = "https://casepreparedcrud.onrender.com";
+const API_BASE_URL = "http://127.0.0.1:8000";
+
+// Determine the app domain to redirect to
+const APP_DOMAIN =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3001"
+    : "https://app.caseprepared.com";
 
 interface PricingCardNewProps {
   type: "left" | "right";
@@ -22,7 +28,7 @@ const PricingCardNew: React.FC<PricingCardNewProps> = ({
   className = "",
   imageTop = "45%",
   imageLeft = "50%",
-  imageRotation = "3deg"
+  imageRotation = "3deg",
 }) => {
   const [selectedPlan, setSelectedPlan] = useState<string>("monthly");
   const [loading, setLoading] = useState(false);
@@ -37,8 +43,12 @@ const PricingCardNew: React.FC<PricingCardNewProps> = ({
   const [currencySymbol] = useState(() => {
     try {
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const isEurope = /Europe|Berlin|Paris|Rome|Madrid|Amsterdam/.test(timezone);
-      const isAmerica = /America|New_York|Los_Angeles|Chicago|Toronto/.test(timezone);
+      const isEurope = /Europe|Berlin|Paris|Rome|Madrid|Amsterdam/.test(
+        timezone
+      );
+      const isAmerica = /America|New_York|Los_Angeles|Chicago|Toronto/.test(
+        timezone
+      );
 
       if (isAmerica) {
         return "$";
@@ -62,7 +72,10 @@ const PricingCardNew: React.FC<PricingCardNewProps> = ({
     return () => clearTimeout(timer);
   }, []);
 
-  const handleStripeCheckout = async (priceId: string, isOneTime: boolean = false) => {
+  const handleStripeCheckout = async (
+    priceId: string,
+    isOneTime: boolean = false
+  ) => {
     try {
       setLoading(true);
       setError(null);
@@ -73,16 +86,18 @@ const PricingCardNew: React.FC<PricingCardNewProps> = ({
       }
 
       // Different request body for one-time payments vs subscriptions
-      const requestBody = isOneTime ? {
-        price_id: priceId,
-        mode: "payment", // For one-time payments
-        success_url: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${window.location.origin}/checkout/cancel`,
-      } : {
-        price_id: priceId,
-        success_url: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${window.location.origin}/checkout/cancel`,
-      };
+      const requestBody = isOneTime
+        ? {
+            price_id: priceId,
+            mode: "payment", // For one-time payments
+            success_url: `${APP_DOMAIN}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${APP_DOMAIN}/checkout/cancel`,
+          }
+        : {
+            price_id: priceId,
+            success_url: `${APP_DOMAIN}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${APP_DOMAIN}/checkout/cancel`,
+          };
 
       console.log("Checkout request:", { priceId, isOneTime, requestBody });
 
@@ -122,7 +137,7 @@ const PricingCardNew: React.FC<PricingCardNewProps> = ({
       // Map selected plan to price ID
       let priceId = "";
       let isOneTime = false;
-      
+
       switch (selectedPlan) {
         case "monthly":
           priceId = "price_1RaFI8IzbD323IQGSk75ygX0"; // $29.99
@@ -140,7 +155,7 @@ const PricingCardNew: React.FC<PricingCardNewProps> = ({
           priceId = "price_1RaFI8IzbD323IQGSk75ygX0"; // Default to monthly
           isOneTime = false;
       }
-      
+
       // If authenticated, open Stripe checkout directly
       handleStripeCheckout(priceId, isOneTime);
     } else {
@@ -152,8 +167,12 @@ const PricingCardNew: React.FC<PricingCardNewProps> = ({
   // Don't render until initialized to prevent layout issues
   if (!isInitialized) {
     return (
-      <div className={`${styles.card} ${styles.leftCard} ${className}`} style={{ opacity: 0 }}>
-        <div style={{ height: '430px' }} /> {/* Placeholder to maintain space */}
+      <div
+        className={`${styles.card} ${styles.leftCard} ${className}`}
+        style={{ opacity: 0 }}
+      >
+        <div style={{ height: "430px" }} />{" "}
+        {/* Placeholder to maintain space */}
       </div>
     );
   }
@@ -162,18 +181,25 @@ const PricingCardNew: React.FC<PricingCardNewProps> = ({
     return (
       <div className={`${styles.card} ${styles.leftCard} ${className}`}>
         <div className={styles.logoContainer}>
-          <img src="/assets/Logo Text.svg" alt="CasePrepared" className={styles.logo} />
+          <img
+            src="/assets/Logo Text.svg"
+            alt="CasePrepared"
+            className={styles.logo}
+          />
           <span className={styles.premium}>Premium</span>
         </div>
-        
+
         <p className={styles.description}>
-          Practice with 20+ case interviews from top MBB firms. New interviews every week.
+          Practice with 20+ case interviews from top MBB firms. New interviews
+          every week.
         </p>
-        
+
         <div className={styles.buttonRow}>
-          <button 
-            className={`${styles.planButton} ${selectedPlan === 'monthly' ? styles.selected : ''}`}
-            onClick={() => setSelectedPlan('monthly')}
+          <button
+            className={`${styles.planButton} ${
+              selectedPlan === "monthly" ? styles.selected : ""
+            }`}
+            onClick={() => setSelectedPlan("monthly")}
           >
             <div className={styles.buttonContent}>
               <div className={styles.planInfo}>
@@ -184,14 +210,19 @@ const PricingCardNew: React.FC<PricingCardNewProps> = ({
                 </div>
                 <div className={styles.caption}>Cancel anytime</div>
               </div>
-              <div className={`${styles.radioCircle} ${selectedPlan === 'monthly' ? styles.selected : ''}`} />
+              <div
+                className={`${styles.radioCircle} ${
+                  selectedPlan === "monthly" ? styles.selected : ""
+                }`}
+              />
             </div>
           </button>
-          
-          <button 
-            className={`${styles.planButton} ${selectedPlan === 'believer' ? styles.selected : ''} ${styles.disabled}`}
-            onClick={() => {/* Disabled for now */}}
-            disabled={true}
+
+          <button
+            className={`${styles.planButton} ${
+              selectedPlan === "believer" ? styles.selected : ""
+            }`}
+            onClick={() => setSelectedPlan("believer")}
           >
             <div className={styles.buttonContent}>
               <div className={styles.planInfo}>
@@ -199,16 +230,22 @@ const PricingCardNew: React.FC<PricingCardNewProps> = ({
                 <div className={styles.priceRow}>
                   <span className={styles.price}>{currencySymbol}200.00</span>
                 </div>
-                <div className={styles.caption}>Temporarily unavailable</div>
+                <div className={styles.caption}>One-time payment</div>
               </div>
-              <div className={`${styles.radioCircle} ${selectedPlan === 'believer' ? styles.selected : ''}`} />
+              <div
+                className={`${styles.radioCircle} ${
+                  selectedPlan === "believer" ? styles.selected : ""
+                }`}
+              />
             </div>
           </button>
         </div>
-        
-        <button 
-          className={`${styles.planButton} ${styles.fullWidth} ${selectedPlan === 'threemonth' ? styles.selected : ''}`}
-          onClick={() => setSelectedPlan('threemonth')}
+
+        <button
+          className={`${styles.planButton} ${styles.fullWidth} ${
+            selectedPlan === "threemonth" ? styles.selected : ""
+          }`}
+          onClick={() => setSelectedPlan("threemonth")}
         >
           <div className={styles.buttonContent}>
             <div className={styles.planInfo}>
@@ -222,15 +259,19 @@ const PricingCardNew: React.FC<PricingCardNewProps> = ({
               </div>
               <div className={styles.caption}>Cancel anytime</div>
             </div>
-            <div className={`${styles.radioCircle} ${selectedPlan === 'threemonth' ? styles.selected : ''}`} />
+            <div
+              className={`${styles.radioCircle} ${
+                selectedPlan === "threemonth" ? styles.selected : ""
+              }`}
+            />
           </div>
         </button>
-        
+
         <div className={styles.securityInfo}>
           <span>Payments secured with </span>
-          <a 
-            href="https://stripe.com/resources/more/secure-payment-systems-explained#:~:text=When%20a%20customer%20enters%20payment,be%20encrypted%20for%20added%20security." 
-            target="_blank" 
+          <a
+            href="https://stripe.com/resources/more/secure-payment-systems-explained#:~:text=When%20a%20customer%20enters%20payment,be%20encrypted%20for%20added%20security."
+            target="_blank"
             rel="noopener noreferrer"
             className={styles.stripeLink}
           >
@@ -238,15 +279,15 @@ const PricingCardNew: React.FC<PricingCardNewProps> = ({
           </a>
           <Lock className={styles.lockIcon} />
         </div>
-        
-        <button 
+
+        <button
           className={styles.joinButton}
           onClick={handleSubscribe}
           disabled={loading}
         >
           {loading ? "Processing..." : "Join Today"}
         </button>
-        
+
         {error && <div className={styles.errorMessage}>{error}</div>}
       </div>
     );
@@ -254,16 +295,16 @@ const PricingCardNew: React.FC<PricingCardNewProps> = ({
 
   // Right card - with image
   const imageStyle = {
-    '--image-top': imageTop,
-    '--image-left': imageLeft,
-    '--image-rotation': imageRotation,
+    "--image-top": imageTop,
+    "--image-left": imageLeft,
+    "--image-rotation": imageRotation,
   } as React.CSSProperties;
 
   return (
     <div className={`${styles.card} ${styles.rightCard} ${className}`}>
-      <img 
-        src="/assets/CaseprepPrem.png" 
-        alt="CasePrepared Premium" 
+      <img
+        src="/assets/CaseprepPrem.png"
+        alt="CasePrepared Premium"
         className={styles.rightCardImage}
         style={imageStyle}
       />
@@ -271,4 +312,4 @@ const PricingCardNew: React.FC<PricingCardNewProps> = ({
   );
 };
 
-export default PricingCardNew; 
+export default PricingCardNew;

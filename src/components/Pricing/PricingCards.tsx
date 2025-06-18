@@ -6,7 +6,7 @@ import styles from "../../styles/PricingCards.module.css";
 import axios from "axios";
 
 // API base URL
-const API_BASE_URL = "https://casepreparedcrud.onrender.com";
+const API_BASE_URL = "http://127.0.0.1:8000";
 
 const CheckIcon = () => (
   <svg
@@ -174,9 +174,7 @@ const PricingCards: React.FC<PricingCardsProps> = ({
               <CheckIcon /> Personalized software
             </li>
           </ul>
-          <div className={styles.discountBadge}>
-            50% OFF
-          </div>
+          <div className={styles.discountBadge}>50% OFF</div>
           <div className={styles.premiumDivider}></div>
           <div className={styles.cardPrice}>
             <div className={styles.priceRow}>
@@ -186,9 +184,7 @@ const PricingCards: React.FC<PricingCardsProps> = ({
               <span className={styles.period}>monthly</span>
             </div>
             <span className={styles.billingPeriod}>Billed monthly</span>
-            <span className={styles.originalPrice}>
-              Was US $39.99
-            </span>
+            <span className={styles.originalPrice}>Was US $39.99</span>
           </div>
           <button
             className={`${styles.cardButton} ${styles.premiumButton}`}

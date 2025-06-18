@@ -31,7 +31,7 @@ interface LocationState {
 
 // Demo API base URL
 // Ensure backend URL is correct for the environment
-const DEMO_API_BASE_URL = "https://casepreparedcrud.onrender.com/api/v1/demo";
+const DEMO_API_BASE_URL = "http://127.0.0.1:8000/api/v1/demo";
 
 // Define the extension for HTMLAudioElement to include setSinkId
 interface HTMLAudioElementWithSinkId extends HTMLAudioElement {
@@ -241,12 +241,12 @@ const DemoRealtimeConnect: React.FC = () => {
   useEffect(() => {
     if (callActive && connectionState === "connected") {
       setShowHelperNotification(true);
-      
+
       // Hide the notification after 7 seconds
       const timer = setTimeout(() => {
         setShowHelperNotification(false);
       }, 7000);
-      
+
       return () => clearTimeout(timer);
     }
   }, [callActive, connectionState]);
@@ -1067,7 +1067,7 @@ const DemoRealtimeConnect: React.FC = () => {
           </div>
         </div>
       )}
-      
+
       {/* Connection indicator */}
       <div className={styles.connectionIndicator}>
         <div
@@ -1134,7 +1134,14 @@ const DemoRealtimeConnect: React.FC = () => {
                 >
                   <path d="M10.121 10.121L12 12m-7.071 2.828l7.071-7.07m0 0L14.12 5.88M12 12l2.121 2.121M4.242 10.121l1.414-1.414M18.364 17.657l1.414-1.414M18.364 6.343l-1.414-1.414M5.636 17.657L7.05 19.07M16 12H2m10-7v14" />
                   <path d="M12,4L12,4c-1.105,0-2,0.895-2,2v5c0,1.105,0.895,2,2,2h0c1.105,0,2-0.895,2-2V6C14,4.895,13.105,4,12,4z" />
-                  <line x1="3" y1="3" x2="21" y2="21" stroke="currentColor" strokeWidth="2" />
+                  <line
+                    x1="3"
+                    y1="3"
+                    x2="21"
+                    y2="21"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  />
                 </svg>
               </>
             ) : (

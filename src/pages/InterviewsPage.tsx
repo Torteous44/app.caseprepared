@@ -16,7 +16,7 @@ interface InterviewCard {
   code: string; // API code for looking up
 }
 
-const BASE_URL = "https://casepreparedcrud.onrender.com";
+const BASE_URL = "http://127.0.0.1:8000";
 
 // Hardcoded interview cards with all display data
 const interviewCards: InterviewCard[] = [
