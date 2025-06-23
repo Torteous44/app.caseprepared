@@ -73,7 +73,7 @@ const RealtimeConnect: React.FC = () => {
       await setupUserMedia();
       
       // Set up session timer
-      const ttl = session.ttl_seconds || (interview.demo ? 120 : 3600);
+      const ttl = session.ttl_seconds || (interview.demo ? 90 : 3600);
       setTimeRemaining(ttl);
       startSessionTimer(ttl);
     },

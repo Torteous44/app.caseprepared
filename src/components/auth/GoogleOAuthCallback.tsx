@@ -84,7 +84,6 @@ const AuthCallback: React.FC = () => {
     <div className={styles["oauth-callback-container"]}>
       <div className={styles["oauth-callback-loading"]}>
         <LoadingSpinner />
-        <p>Processing your login, please wait...</p>
       </div>
     </div>
   );
