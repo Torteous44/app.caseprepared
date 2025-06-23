@@ -8,18 +8,6 @@ import React, {
 
 const API_BASE_URL = "https://caseprepcrud.onrender.com";
 
-// Determine the app domain to redirect to
-const APP_DOMAIN =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:3000"
-    : "https://app.caseprepared.com";
-
-// Determine the marketing site domain for redirects
-const MARKETING_DOMAIN =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:3000"
-    : "https://caseprepared.com";
-
 interface SubscriptionDetails {
   id: string;
   plan: string;
@@ -56,7 +44,6 @@ interface AuthContextType {
   error: string | null;
   fetchUserProfile: () => Promise<void>;
   updateUserProfile: (userData: Partial<User>) => Promise<void>;
-  handleGoogleOAuth: (code: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -191,40 +178,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const handleGoogleOAuth = async (code: string): Promise<void> => {
-    try {
-      setLoading(true);
-      setError(null);
 
-      const response = await fetch(`${API_BASE_URL}/api/v1/auth/oauth/google/callback`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ code }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.detail || 'Google authentication failed');
-      }
-
-      // Store tokens
-      localStorage.setItem('access_token', data.access_token);
-      localStorage.setItem('refresh_token', data.refresh_token || '');
-
-      // Fetch user profile
-      await fetchUserProfile();
-    } catch (err) {
-      console.error('Google OAuth error:', err);
-      const errorMessage = err instanceof Error ? err.message : 'Google authentication failed';
-      setError(errorMessage);
-      throw err;
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     // Check for existing token on mount
@@ -326,7 +280,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         error,
         fetchUserProfile,
         updateUserProfile,
-        handleGoogleOAuth,
       }}
     >
       {children}

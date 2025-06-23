@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useGoogleLogin } from '@react-oauth/google';
 import { useAuth } from "../../contexts/AuthContext";
 import LoadingSpinner from "../common/LoadingSpinner";
 import styles from "./AuthScreen.module.css";
 
 const API_BASE_URL = "https://caseprepcrud.onrender.com";
 
-// Determine the marketing site domain for Google OAuth
-const MARKETING_DOMAIN =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:3000"
-    : "https://caseprepared.com";
+// Get Google Client ID from environment variables
+const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 const AuthScreen: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -19,7 +15,7 @@ const AuthScreen: React.FC = () => {
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { fetchUserProfile, handleGoogleOAuth } = useAuth();
+  const { fetchUserProfile } = useAuth();
 
   useEffect(() => {
     document.body.classList.add("auth-page");
@@ -80,31 +76,22 @@ const AuthScreen: React.FC = () => {
     }
   };
 
-  const googleLogin = useGoogleLogin({
-    onSuccess: async (response) => {
-      try {
-        setLoading(true);
-        setError(null);
-        await handleGoogleOAuth(response.code);
-      } catch (err) {
-        console.error('Google authentication failed:', err);
-        setError(err instanceof Error ? err.message : 'Google authentication failed');
-      } finally {
-        setLoading(false);
-      }
-    },
-    onError: () => {
-      console.error('Google Sign-In failed');
-      setError('Google authentication was cancelled or failed');
-    },
-    flow: 'auth-code',
-    scope: 'email profile openid',
-    ux_mode: 'popup',
-  });
-
   const handleGoogleLogin = () => {
-    if (loading) return;
-    googleLogin();
+    if (loading || !GOOGLE_CLIENT_ID) return;
+    
+    setLoading(true);
+    setError(null);
+
+    // Create Google OAuth URL with redirect to backend
+    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+      `client_id=${GOOGLE_CLIENT_ID}&` +
+      `redirect_uri=${encodeURIComponent(`${API_BASE_URL}/api/v1/auth/oauth/google/callback`)}&` +
+      `response_type=code&` +
+      `scope=${encodeURIComponent('email profile openid')}&` +
+      `state=${encodeURIComponent(window.location.href)}`;
+    
+    // Redirect to Google OAuth
+    window.location.href = googleAuthUrl;
   };
 
   const toggleAuthMode = () => {
@@ -121,7 +108,7 @@ const AuthScreen: React.FC = () => {
           <button
             onClick={handleGoogleLogin}
             className={styles.googleButton}
-            disabled={loading}
+            disabled={loading || !GOOGLE_CLIENT_ID}
           >
             <img
               src="/assets/google-logo.svg"

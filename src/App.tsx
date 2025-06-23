@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { GoogleOAuthProvider } from '@react-oauth/google';
 import { AuthProvider } from "./contexts/AuthContext";
 import { ModalProvider } from "./contexts/ModalContext";
 import { StripeProvider } from "./contexts/StripeContext";
@@ -40,6 +39,7 @@ const processAuthTokens = () => {
   // Parse URL parameters
   const params = new URLSearchParams(window.location.search);
   const accessToken = params.get("access_token");
+  const refreshToken = params.get("refresh_token");
   const ref = params.get("ref");
   const priceId = params.get("price_id");
   const isOneTime = params.get("is_one_time") === "true";
@@ -47,12 +47,13 @@ const processAuthTokens = () => {
 
   // If we have an access token, store it and clean up URL
   if (accessToken) {
-    console.log("Processing authentication token from URL parameters");
+    console.log("Processing authentication tokens from URL parameters");
 
     try {
-      // Store the token
+      // Store the tokens
       localStorage.setItem("access_token", accessToken);
-      console.log("Token stored successfully");
+      localStorage.setItem("refresh_token", refreshToken || "");
+      console.log("Tokens stored successfully");
 
       // Clean up URL parameters for security
       const cleanUrl = window.location.pathname;
@@ -86,7 +87,7 @@ const processAuthTokens = () => {
 
       return true;
     } catch (error) {
-      console.error("Error processing auth token:", error);
+      console.error("Error processing auth tokens:", error);
       return false;
     }
   }
@@ -95,7 +96,6 @@ const processAuthTokens = () => {
 };
 
 const App = () => {
-  const [tokenProcessed, setTokenProcessed] = useState(false);
   const [initializing, setInitializing] = useState(true);
 
   // Process tokens before rendering the app
@@ -106,8 +106,7 @@ const App = () => {
     }
 
     // Process authentication tokens on initial load
-    const hasToken = processAuthTokens();
-    setTokenProcessed(true);
+    processAuthTokens();
 
     // Short delay to ensure token is fully processed
     setTimeout(() => {
@@ -131,27 +130,18 @@ const App = () => {
     );
   }
 
-  // Get Google Client ID from environment variables
-  const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-
-  if (!googleClientId) {
-    console.warn("Google Client ID not found in environment variables");
-  }
-
   return (
-    <GoogleOAuthProvider clientId={googleClientId || ""}>
-      <AuthProvider>
-        <ModalProvider>
-          <StripeProvider>
-            <Router>
-              <Analytics />
-              <ScrollToTop />
-              <AppRoutes />
-            </Router>
-          </StripeProvider>
-        </ModalProvider>
-      </AuthProvider>
-    </GoogleOAuthProvider>
+    <AuthProvider>
+      <ModalProvider>
+        <StripeProvider>
+          <Router>
+            <Analytics />
+            <ScrollToTop />
+            <AppRoutes />
+          </Router>
+        </StripeProvider>
+      </ModalProvider>
+    </AuthProvider>
   );
 };
 

@@ -14,7 +14,7 @@ const BlogPost = lazy(() => import("../pages/BlogPost"));
 const NotFound = lazy(() => import("../pages/NotFoundPage"));
 
 // Auth components
-const GoogleOAuthCallback = lazy(
+const AuthCallback = lazy(
   () => import("../components/auth/GoogleOAuthCallback")
 );
 const AuthScreen = lazy(() => import("../components/auth/AuthScreen"));
@@ -42,7 +42,7 @@ const AppRoutes = () => {
     <Suspense fallback={<LoadingSpinner />}>
       <Routes>
         {/* Auth handler routes - accessible without layout */}
-        <Route path="/auth/google/callback" element={<GoogleOAuthCallback />} />
+        <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/login" element={<AuthScreen />} />
         <Route path="/signup" element={<AuthScreen />} />
 
