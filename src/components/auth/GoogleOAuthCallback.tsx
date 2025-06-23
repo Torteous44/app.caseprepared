@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
 import LoadingSpinner from "../common/LoadingSpinner";
 import styles from "../../styles/OAuthCallback.module.css";
 
 const AuthCallback: React.FC = () => {
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
+  const { fetchUserProfile } = useAuth();
 
   useEffect(() => {
     const handleCallback = async () => {
@@ -23,6 +25,15 @@ const AuthCallback: React.FC = () => {
 
         // Handle missing tokens
         if (!accessToken) {
+          // Instead of throwing error immediately, check localStorage
+          const storedToken = localStorage.getItem("access_token");
+          if (storedToken) {
+            // If we have a token in localStorage, we can proceed
+            console.log("Using existing token from localStorage");
+            await fetchUserProfile();
+            navigate("/interviews", { replace: true });
+            return;
+          }
           throw new Error("No access token received from authentication");
         }
 
@@ -30,9 +41,16 @@ const AuthCallback: React.FC = () => {
 
         // Store tokens
         localStorage.setItem("access_token", accessToken);
-        localStorage.setItem("refresh_token", refreshToken || "");
+        if (refreshToken) {
+          localStorage.setItem("refresh_token", refreshToken);
+        }
 
-        console.log("Tokens stored successfully, redirecting to dashboard");
+        console.log("Tokens stored successfully, fetching user profile");
+
+        // Fetch user profile
+        await fetchUserProfile();
+
+        console.log("User profile fetched successfully, redirecting to dashboard");
 
         // Redirect to the main app (dashboard/interviews)
         navigate("/interviews", { replace: true });
@@ -48,7 +66,7 @@ const AuthCallback: React.FC = () => {
     };
 
     handleCallback();
-  }, [navigate]);
+  }, [navigate, fetchUserProfile]);
 
   if (error) {
     return (
