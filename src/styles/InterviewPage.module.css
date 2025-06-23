@@ -218,7 +218,7 @@
   border: 1px solid #e0e0e0; /* Light stroke around the component */
   border-radius: 8px;
   background-color: #fafafa;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
 }
 
 .readyToJoinTitle {
@@ -254,6 +254,7 @@
   font-weight: 400;
   cursor: pointer;
   transition: background-color 0.2s;
+  border: 0.5px solid #333;
 }
 
 .startButton:hover:not(:disabled) {

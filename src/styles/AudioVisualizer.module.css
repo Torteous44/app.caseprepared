@@ -46,7 +46,7 @@
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  background: #174EA6;
+  background: radial-gradient(circle at center, #174EA6 40%, #0f89ed 90%, #42A5F5 100%);
   position: relative;
   z-index: 3;
   box-shadow: 0 4px 16px rgba(23, 78, 166, 0.25);

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import LoadingSpinner from "../common/LoadingSpinner";
 import styles from "./AuthScreen.module.css";
 
 const API_BASE_URL = "https://caseprepcrud.onrender.com";
@@ -179,7 +178,18 @@ const AuthScreen: React.FC = () => {
               className={styles.submitButton}
               disabled={loading}
             >
-              {loading ? <LoadingSpinner /> : isLogin ? "Sign in" : "Sign up"}
+              {loading ? (
+                <span className={styles.loadingText}>
+                  {isLogin ? "Signing in" : "Signing up"}
+                  <span className={styles.loadingDots}>
+                    <span>.</span>
+                    <span>.</span>
+                    <span>.</span>
+                  </span>
+                </span>
+              ) : (
+                isLogin ? "Sign in" : "Sign up"
+              )}
             </button>
           </form>
           

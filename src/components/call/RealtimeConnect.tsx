@@ -50,6 +50,7 @@ const RealtimeConnect: React.FC = () => {
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
   const [transcripts, setTranscripts] = useState<TranscriptItem[]>([]);
+  const [isMicrophoneActive, setIsMicrophoneActive] = useState(false);
   const [metrics, setMetrics] = useState<SessionMetrics>({
     startTime: Date.now(),
     duration: 0,
@@ -65,9 +66,11 @@ const RealtimeConnect: React.FC = () => {
 
   // Initialize ElevenLabs conversation
   const conversation = useConversation({
-    onConnect: () => {
-
+    onConnect: async () => {
       setIsSessionActive(true);
+      
+      // Request microphone access only when session starts
+      await setupUserMedia();
       
       // Set up session timer
       const ttl = session.ttl_seconds || (interview.demo ? 120 : 3600);
@@ -76,6 +79,8 @@ const RealtimeConnect: React.FC = () => {
     },
     onDisconnect: () => {
       setIsSessionActive(false);
+      // Clean up microphone access immediately when session ends
+      cleanupUserMedia();
       handleSessionComplete();
     },
     onMessage: (message: any) => {
@@ -118,78 +123,127 @@ const RealtimeConnect: React.FC = () => {
         });
       }
     },
-    onError: (error) => {
-      console.error('❌ Conversation error:', error);
+    onError: (error) => { 
       setError(`Connection error: ${error}`);
     }
   });
 
-  // Set up user's video display
-  useEffect(() => {
-    const setupUserVideo = async () => {
+  // Set up user's media (microphone and camera)
+  const setupUserMedia = async () => {
+    try {
+      setIsMicrophoneActive(true);
+      
+      let stream: MediaStream | null = null;
+      
       try {
-        // Request microphone access first (required)
-        await navigator.mediaDevices.getUserMedia({ audio: true });
-        
-        let stream: MediaStream | null = null;
-        
-        try {
-          // Try to get video + audio
-          stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-              width: { ideal: 1280 },
-              height: { ideal: 720 },
-              facingMode: "user",
-            },
-            audio: {
-              echoCancellation: true,
-              noiseSuppression: true,
-              autoGainControl: true,
-            }
-          });
-        } catch (videoError) {
-          // Fallback to audio only
-          stream = await navigator.mediaDevices.getUserMedia({
-            audio: {
-              echoCancellation: true,
-              noiseSuppression: true,
-              autoGainControl: true,
-            }
-          });
-        }
-
-        if (stream) {
-          setUserStream(stream);
-          if (userVideoRef.current && stream.getVideoTracks().length > 0) {
-            userVideoRef.current.srcObject = stream;
+        // Try to get video + audio
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+            facingMode: "user",
+          },
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true,
           }
-          
-          // Set up audio analyzer for volume detection
-          setupAudioAnalyzer(stream);
-        }
-      } catch (error) {
-        console.error('❌ Failed to setup media:', error);
-        setError('Microphone access required. Please allow permissions and refresh.');
+        });
+      } catch (videoError) {
+        // Fallback to audio only
+        stream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true,
+          }
+        });
       }
-    };
 
-    setupUserVideo();
+      if (stream) {
+        setUserStream(stream);
+        if (userVideoRef.current && stream.getVideoTracks().length > 0) {
+          userVideoRef.current.srcObject = stream;
+        }
+        
+        // Set up audio analyzer for volume detection
+        setupAudioAnalyzer(stream);
+      }
+    } catch (error) {
+      setIsMicrophoneActive(false);
+      setError('Microphone access required. Please allow permissions and refresh.');
+    }
+  };
 
-    return () => {
+  // Clean up user's media access
+  const cleanupUserMedia = () => {
+    
+    try {
       if (userStream) {
-        userStream.getTracks().forEach(track => track.stop());
+        userStream.getTracks().forEach(track => {
+          if (track.readyState !== 'ended') {
+            track.stop();
+          }
+        });
+        setUserStream(null);
       }
       
       // Clean up audio analyzer
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
       }
       
-      if (audioContextRef.current) {
+      if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
         audioContextRef.current.close();
+        audioContextRef.current = null;
       }
+      
+      // Reset video ref
+      if (userVideoRef.current) {
+        userVideoRef.current.srcObject = null;
+      }
+      
+      // Reset volume and state
+      setUserVolume(0);
+      setIsMicrophoneActive(false);
+    } catch (error) {
+      // Force state reset even if cleanup fails
+      setUserStream(null);
+      setUserVolume(0);
+      setIsMicrophoneActive(false);
+    }
+  };
+
+  // Component cleanup on unmount
+  useEffect(() => {
+    return () => {
+      cleanupUserMedia();
     };
   }, []);
+
+  // Additional cleanup on page visibility change or beforeunload
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden && isMicrophoneActive) {
+        cleanupUserMedia();
+      }
+    };
+
+    const handleBeforeUnload = () => {
+      if (isMicrophoneActive) {
+        cleanupUserMedia();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isMicrophoneActive]);
   
   // Set up audio analyzer for volume detection
   const setupAudioAnalyzer = (stream: MediaStream) => {
@@ -242,7 +296,6 @@ const RealtimeConnect: React.FC = () => {
 
       analyzeAudio();
     } catch (error) {
-      console.error('❌ Failed to setup audio analyzer:', error);
     }
   };
 
@@ -259,7 +312,7 @@ const RealtimeConnect: React.FC = () => {
         const id = await conversation.startSession({ signedUrl: ws_url });
         setConversationId(id);
       } catch (error) {
-        console.error('❌ Failed to start conversation:', error);
+
         setError('Failed to connect to interview. Please try again.');
       }
     };
@@ -281,6 +334,7 @@ const RealtimeConnect: React.FC = () => {
     sessionTimerRef.current = setInterval(() => {
       setTimeRemaining((prev) => {
         if (prev <= 1) {
+          cleanupUserMedia(); // Ensure cleanup on timeout
           setError('Session time limit reached.');
           handleSessionComplete();
           return 0;
@@ -297,6 +351,9 @@ const RealtimeConnect: React.FC = () => {
     const duration = Math.floor((Date.now() - metrics.startTime) / 1000);
     const updatedMetrics = { ...metrics, duration };
     setMetrics(updatedMetrics);
+
+    // IMPORTANT: Clean up microphone access immediately before navigation
+    cleanupUserMedia();
 
     // Navigate immediately to post-interview screen
     navigate(`/interview/analytics/${interview?.id}`, {
@@ -325,8 +382,7 @@ const RealtimeConnect: React.FC = () => {
       if (interview?.id) {
         await completeInterviewSession(interview.id, completionData);
       }
-    } catch (error) {
-      console.error('❌ Failed to complete session in background:', error);
+    } catch (error) { 
     }
   };
 
@@ -334,9 +390,11 @@ const RealtimeConnect: React.FC = () => {
   const handleEndSession = useCallback(async () => {
     try {
       await conversation.endSession();
+      // Cleanup will be handled by onDisconnect callback
       handleSessionComplete();
     } catch (error) {
-      console.error('❌ Error ending session:', error);
+      // Ensure cleanup even if session end fails
+      cleanupUserMedia();
       handleSessionComplete();
     }
   }, [conversation]);
@@ -475,6 +533,7 @@ const RealtimeConnect: React.FC = () => {
           <p>Speaking: {conversation.isSpeaking ? 'Yes' : 'No'}</p>
           <p>User Volume: {userVolume.toFixed(2)}</p>
           <p>User Speaking: {userVolume > 0.1 ? 'Yes' : 'No'}</p>
+          <p>Microphone: {isMicrophoneActive ? 'Active' : 'Inactive'}</p>
           <p>Time: {formatTime(timeRemaining)}</p>
           <p>Session ID: {conversationId}</p>
           <p>Transcripts: {transcripts.length}</p>
