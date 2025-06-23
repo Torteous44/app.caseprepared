@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 // Dynamically import non-critical CSS
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";

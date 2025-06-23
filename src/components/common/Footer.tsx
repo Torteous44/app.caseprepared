@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styles from "../../styles/common/Footer.module.css";
 
 export interface FooterProps {
@@ -65,10 +66,10 @@ const Footer: React.FC<FooterProps> = ({
               <h3>Sections</h3>
               <ul>
                 <li>
-                  <a href="/interviews">Mock Interviews</a>
+                  <Link to="/interviews">Mock Interviews</Link>
                 </li>
                 <li>
-                  <a href="/blogs">CasePrepared Blog</a>
+                  <Link to="/blogs">CasePrepared Blog</Link>
                 </li>
               </ul>
             </div>
@@ -90,10 +91,10 @@ const Footer: React.FC<FooterProps> = ({
               <h3>Other</h3>
               <ul>
                 <li>
-                  <a href="/privacy">Privacy Policy</a>
+                  <Link to="/privacy">Privacy Policy</Link>
                 </li>
                 <li>
-                  <a href="/terms">Terms and Conditions</a>
+                  <Link to="/terms">Terms and Conditions</Link>
                 </li>
               </ul>
             </div>
