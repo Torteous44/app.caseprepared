@@ -129,15 +129,12 @@ const InterviewPage: React.FC = () => {
           setCaseContent(generatedContent);
 
           // Pre-create session for demo interviews only
-          console.log("🚀 Pre-creating session for demo interview:", demoInterview.id);
           createInterviewSession(demoInterview.id, true)
             .then(session => {
-              console.log("✅ Demo session pre-created successfully:", session.progress_id);
               setPreCreatedSession(session);
               setSessionPreloadError(null);
             })
             .catch(error => {
-              console.warn("⚠️ Demo session pre-creation failed (will fallback to normal flow):", error.message);
               setSessionPreloadError(error.message);
               setPreCreatedSession(null);
             });
@@ -217,27 +214,14 @@ const InterviewPage: React.FC = () => {
         });
         hasVideo = true;
         hasAudio = true;
-        console.log("✅ Successfully got camera and microphone access");
-        console.log("🎥 Video stream details:", {
-          id: stream.id,
-          active: stream.active,
-          videoTracks: stream.getVideoTracks().length,
-          audioTracks: stream.getAudioTracks().length
-        });
+        
         
         // Log video track details
         stream.getVideoTracks().forEach((track, index) => {
-          console.log(`🎥 Video track ${index}:`, {
-            id: track.id,
-            kind: track.kind,
-            label: track.label,
-            enabled: track.enabled,
-            readyState: track.readyState,
-            settings: track.getSettings()
-          });
+          
         });
       } catch (videoError) {
-        console.log("❌ Camera access failed, trying audio only:", videoError);
+        
         
         // If video fails, try audio only
         try {
@@ -250,9 +234,9 @@ const InterviewPage: React.FC = () => {
           });
           hasVideo = false;
           hasAudio = true;
-          console.log("✅ Successfully got microphone access (audio only)");
+          
         } catch (audioError) {
-          console.error("❌ Both camera and microphone access failed:", audioError);
+          
           throw audioError; // Re-throw the audio error since that's the minimum requirement
         }
       }
@@ -300,22 +284,14 @@ const InterviewPage: React.FC = () => {
     const connectVideoStream = () => {
       if (videoRef.current && mediaStatus.video && localStreamRef.current) {
         const stream = localStreamRef.current;
-        console.log("🎥 Connecting video stream to element after render");
-        console.log("🎥 Stream has video tracks:", stream.getVideoTracks().length);
-        console.log("🎥 Video tracks active:", stream.getVideoTracks().map(track => track.enabled && track.readyState === 'live'));
+        
         
         videoRef.current.srcObject = stream;
         
         // Set video properties for better rendering
         videoRef.current.onloadedmetadata = () => {
           if (videoRef.current) {
-            console.log("🎥 Video metadata loaded, dimensions:", videoRef.current.videoWidth, "x", videoRef.current.videoHeight);
-            console.log("🎥 Video element ready state:", videoRef.current.readyState);
-            videoRef.current.play().then(() => {
-              console.log("🎥 Video started playing successfully");
-            }).catch((e) => {
-              console.error("❌ Error playing video:", e);
-            });
+            
           }
         };
         
@@ -326,28 +302,24 @@ const InterviewPage: React.FC = () => {
         
         // Add additional event listeners for debugging
         videoRef.current.oncanplay = () => {
-          console.log("🎥 Video can start playing");
+          
         };
         
         videoRef.current.onplaying = () => {
-          console.log("🎥 Video is now playing");
+          
         };
         
         // Also try to play immediately if metadata is already loaded
         if (videoRef.current.readyState >= 1) {
-          console.log("🎥 Metadata already loaded, playing immediately");
+          
           videoRef.current.play().then(() => {
-            console.log("🎥 Video started playing immediately");
+            
           }).catch((e) => {
-            console.error("❌ Error playing video immediately:", e);
+            
           });
         }
       } else {
-        console.log("🎥 Video connection not ready yet:", {
-          videoRef: !!videoRef.current,
-          mediaStatusVideo: mediaStatus.video,
-          localStream: !!localStreamRef.current
-        });
+        
       }
     };
 
@@ -441,14 +413,14 @@ const InterviewPage: React.FC = () => {
 
       // Check if we have a valid pre-created session for demo interviews
       if (interview.demo && preCreatedSession && isSessionValid(preCreatedSession)) {
-        console.log("✅ Using pre-created demo session:", preCreatedSession.progress_id);
+        
         session = preCreatedSession;
       } else {
         // Create new session (fallback for demo or normal flow for premium)
         if (interview.demo && preCreatedSession && !isSessionValid(preCreatedSession)) {
-          console.log("⚠️ Pre-created session expired, creating new session");
+          
         } else if (interview.demo) {
-          console.log("⚠️ No pre-created session available, creating new session");
+          
         }
         
         session = await createInterviewSession(interview.id, interview.demo);
@@ -464,7 +436,7 @@ const InterviewPage: React.FC = () => {
         },
       });
     } catch (error: any) {
-      console.error("Failed to start interview session:", error);
+          
       if (error instanceof Error && error.message.includes('subscription')) {
         setStartError("Active subscription required for premium interviews. Redirecting to pricing...");
         setTimeout(() => navigate("/pricing"), 2000);
