@@ -4,7 +4,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import LoadingSpinner from "../common/LoadingSpinner";
 import styles from "./AuthScreen.module.css";
 
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL = "https://caseprepcrud.onrender.com";
 
 // Determine the marketing site domain for Google OAuth
 const MARKETING_DOMAIN =

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL = "https://caseprepcrud.onrender.com";
 
 const AuthHandler: React.FC = () => {
   const navigate = useNavigate();

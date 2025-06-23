@@ -31,7 +31,7 @@ interface LocationState {
 
 // Demo API base URL
 // Ensure backend URL is correct for the environment
-const DEMO_API_BASE_URL = "http://127.0.0.1:8000/api/v1/demo";
+const DEMO_API_BASE_URL = "https://caseprepcrud.onrender.com/api/v1/demo";
 
 // Define the extension for HTMLAudioElement to include setSinkId
 interface HTMLAudioElementWithSinkId extends HTMLAudioElement {
