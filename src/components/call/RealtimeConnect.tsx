@@ -45,6 +45,7 @@ const RealtimeConnect: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [timeRemaining, setTimeRemaining] = useState<number>(0);
   const [userStream, setUserStream] = useState<MediaStream | null>(null);
+  const [userVolume, setUserVolume] = useState<number>(0);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [isTranscriptOpen, setIsTranscriptOpen] = useState(false);
@@ -58,6 +59,9 @@ const RealtimeConnect: React.FC = () => {
   const sessionTimerRef = useRef<NodeJS.Timeout | null>(null);
   const conversationDataRef = useRef<any[]>([]);
   const transcriptRef = useRef<HTMLDivElement>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const analyserRef = useRef<AnalyserNode | null>(null);
+  const animationFrameRef = useRef<number | null>(null);
 
   // Initialize ElevenLabs conversation
   const conversation = useConversation({
@@ -162,6 +166,9 @@ const RealtimeConnect: React.FC = () => {
           if (userVideoRef.current && stream.getVideoTracks().length > 0) {
             userVideoRef.current.srcObject = stream;
           }
+          
+          // Set up audio analyzer for volume detection
+          setupAudioAnalyzer(stream);
         }
       } catch (error) {
         console.error('❌ Failed to setup media:', error);
@@ -175,8 +182,72 @@ const RealtimeConnect: React.FC = () => {
       if (userStream) {
         userStream.getTracks().forEach(track => track.stop());
       }
+      
+      // Clean up audio analyzer
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+      
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+      }
     };
   }, []);
+  
+  // Set up audio analyzer for volume detection
+  const setupAudioAnalyzer = (stream: MediaStream) => {
+    try {
+      // Create audio context and analyzer
+      audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
+      analyserRef.current = audioContextRef.current.createAnalyser();
+      
+      const source = audioContextRef.current.createMediaStreamSource(stream);
+      source.connect(analyserRef.current);
+
+      analyserRef.current.fftSize = 256;
+      const bufferLength = analyserRef.current.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      // Start analyzing audio levels
+      const analyzeAudio = () => {
+        if (analyserRef.current) {
+          analyserRef.current.getByteFrequencyData(dataArray);
+          
+          // Calculate average volume
+          let sum = 0;
+          for (let i = 0; i < bufferLength; i++) {
+            sum += dataArray[i];
+          }
+          const average = sum / bufferLength;
+          
+          // Normalize to 0-1 range and apply better scaling for responsiveness
+          const normalizedVolume = Math.min(average / 128, 1);
+          
+          // Apply noise gate - ignore very low volumes that are likely background noise
+          const noiseGate = 0.05;
+          const volumeAboveNoise = normalizedVolume > noiseGate ? normalizedVolume : 0;
+          
+          // More sensitive scaling - amplify quieter sounds more
+          const sensitivityBoost = Math.pow(volumeAboveNoise, 0.6) * 2.0;
+          const scaledVolume = Math.max(Math.min(sensitivityBoost, 1), 0);
+          
+          // Only update if not AI speaking
+          if (!conversation.isSpeaking) {
+            setUserVolume(scaledVolume);
+          } else {
+            // When AI is speaking, set user volume to 0
+            setUserVolume(0);
+          }
+          
+          animationFrameRef.current = requestAnimationFrame(analyzeAudio);
+        }
+      };
+
+      analyzeAudio();
+    } catch (error) {
+      console.error('❌ Failed to setup audio analyzer:', error);
+    }
+  };
 
   // Start conversation when component mounts
   useEffect(() => {
@@ -330,7 +401,7 @@ const RealtimeConnect: React.FC = () => {
         <AudioVisualizer 
           isConnected={conversation.status === 'connected'}
           isSpeaking={conversation.isSpeaking}
-          volume={conversation.isSpeaking ? 0.8 : 0}
+          volume={conversation.isSpeaking ? 0.8 : userVolume}
           status={conversation.status}
         />
       </div>
@@ -409,6 +480,8 @@ const RealtimeConnect: React.FC = () => {
         <div className={styles.debugInfo}>
           <p>Status: {conversation.status}</p>
           <p>Speaking: {conversation.isSpeaking ? 'Yes' : 'No'}</p>
+          <p>User Volume: {userVolume.toFixed(2)}</p>
+          <p>User Speaking: {userVolume > 0.1 ? 'Yes' : 'No'}</p>
           <p>Time: {formatTime(timeRemaining)}</p>
           <p>Session ID: {conversationId}</p>
           <p>Transcripts: {transcripts.length}</p>

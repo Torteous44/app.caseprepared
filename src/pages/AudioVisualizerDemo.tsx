@@ -11,16 +11,29 @@ const AudioVisualizerDemo: React.FC = () => {
   const micStreamRef = useRef<MediaStream | null>(null);
   const animationFrameRef = useRef<number | null>(null);
 
-  // Simulate volume changes for AI speaking
+  // Simulate volume changes for AI speaking with more realistic patterns
   useEffect(() => {
     if (speakingState === "ai") {
+      let timeElapsed = 0;
       const simulateAudio = () => {
-        setVolume(Math.random() * 0.7 + 0.3);
+        // More realistic speech pattern with pauses and variations
+        const speechCycle = (timeElapsed % 4000) / 4000; // 4 second cycle
+        const isPause = speechCycle > 0.7 && speechCycle < 0.85; // 15% pause time
+        
+        if (isPause) {
+          setVolume(0.1 + Math.random() * 0.1); // Low background volume during pauses
+        } else {
+          // Simulate natural speech volume variations
+          const baseVolume = 0.4 + Math.sin(speechCycle * Math.PI * 2) * 0.1;
+          const variation = Math.random() * 0.4;
+          setVolume(Math.min(baseVolume + variation, 0.9));
+        }
+        timeElapsed += 100;
       };
-      const interval = setInterval(simulateAudio, 200);
+      const interval = setInterval(simulateAudio, 100);
       return () => clearInterval(interval);
     } else if (speakingState === "none") {
-      setVolume(0.1);
+      setVolume(0.05);
     }
     // For "user" state, volume will be set by microphone analysis
   }, [speakingState]);
@@ -73,9 +86,11 @@ const AudioVisualizerDemo: React.FC = () => {
           }
           const average = sum / bufferLength;
           
-          // Normalize to 0-1 range and apply some scaling
+          // Normalize to 0-1 range and apply better scaling for responsiveness
           const normalizedVolume = Math.min(average / 128, 1);
-          const scaledVolume = Math.max(normalizedVolume * 2, 0.1); // Amplify and set minimum
+          // More sensitive scaling - amplify quieter sounds more
+          const sensitivityBoost = Math.pow(normalizedVolume, 0.7) * 3;
+          const scaledVolume = Math.max(Math.min(sensitivityBoost, 1), 0.05);
           
           setVolume(scaledVolume);
           

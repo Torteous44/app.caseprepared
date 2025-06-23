@@ -8,6 +8,7 @@
     max-width: var(--container-max-width);
     margin: 0 auto;
     padding: var(--space-5xl) var(--space-md) var(--space-5xl);
+    padding-top: 100px;
 }
 
 @media (max-width: 768px) {

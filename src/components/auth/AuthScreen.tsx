@@ -84,116 +84,112 @@ const AuthScreen: React.FC = () => {
     window.location.href = `${MARKETING_DOMAIN}/login?redirect=app`;
   };
 
+  const toggleAuthMode = () => {
+    setIsLogin(!isLogin);
+    setError(null);
+  };
+
   return (
     <div className={styles.authContainer}>
-      <div className={styles.authCard}>
-        <img
-          src="/assets/Logo.avif"
-          alt="CasePrepared"
-          className={styles.logo}
-        />
-        <h1 className={styles.title}>Welcome to CasePrepared</h1>
-        <p className={styles.subtitle}>
-          Your AI-powered case interview preparation platform
-        </p>
-
-        <div className={styles.tabContainer}>
+      <div className={styles.leftPanel}>
+        <div style={{ width: '100%' }}>
+          <h2 className={styles.signInTitle}>{isLogin ? "Sign in" : "Sign up"}</h2>
+          
           <button
-            className={`${styles.tab} ${isLogin ? styles.active : ""}`}
-            onClick={() => setIsLogin(true)}
-          >
-            Sign In
-          </button>
-          <button
-            className={`${styles.tab} ${!isLogin ? styles.active : ""}`}
-            onClick={() => setIsLogin(false)}
-          >
-            Sign Up
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit} className={styles.form}>
-          {!isLogin && (
-            <div className={styles.inputGroup}>
-              <label htmlFor="fullName">Full Name</label>
-              <input
-                type="text"
-                id="fullName"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="Enter your full name"
-                required={!isLogin}
-              />
-            </div>
-          )}
-
-          <div className={styles.inputGroup}>
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              required
-            />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              required
-              minLength={5}
-            />
-          </div>
-
-          {error && <div className={styles.error}>{error}</div>}
-
-          <button
-            type="submit"
-            className={styles.submitButton}
+            onClick={handleGoogleLogin}
+            className={styles.googleButton}
             disabled={loading}
           >
-            {loading ? (
-              <LoadingSpinner />
-            ) : isLogin ? (
-              "Sign In"
-            ) : (
-              "Create Account"
-            )}
+            <img
+              src="/assets/google-logo.svg"
+              alt="Google"
+              className={styles.googleIcon}
+            />
+            {isLogin ? "Sign in with Google" : "Sign up with Google"}
           </button>
-        </form>
+          
+          <div className={styles.divider}>OR</div>
+          
+          <form onSubmit={handleSubmit} className={styles.form}>
+            {!isLogin && (
+              <div className={styles.inputGroup}>
+                <label htmlFor="fullName">Full Name</label>
+                <input
+                  type="text"
+                  id="fullName"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="Enter your full name"
+                  required={!isLogin}
+                />
+              </div>
+            )}
 
-        <div className={styles.divider}>or</div>
+            <div className={styles.inputGroup}>
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                required
+              />
+            </div>
 
-        <button
-          onClick={handleGoogleLogin}
-          className={styles.googleButton}
-          disabled={loading}
-        >
-          <img
-            src="/assets/google-logo.svg"
-            alt="Google"
-            className={styles.googleIcon}
-          />
-          Continue with Google
-        </button>
+            <div className={styles.inputGroup}>
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                required
+                minLength={5}
+              />
+            </div>
 
-        <div className={styles.footer}>
-          <p>
-            {isLogin ? "Don't have an account? " : "Already have an account? "}
+            {error && <div className={styles.error}>{error}</div>}
+
             <button
-              className={styles.linkButton}
-              onClick={() => setIsLogin(!isLogin)}
+              type="submit"
+              className={styles.submitButton}
+              disabled={loading}
             >
-              {isLogin ? "Sign up" : "Sign in"}
+              {loading ? <LoadingSpinner /> : isLogin ? "Sign in" : "Sign up"}
             </button>
-          </p>
+          </form>
+          
+          <div className={styles.footer}>
+            <p>
+              {isLogin ? "Don't have an account? " : "Already have an account? "}
+              <button
+                className={styles.linkButton}
+                onClick={toggleAuthMode}
+              >
+                {isLogin ? "Sign up" : "Sign in"}
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div className={styles.rightPanel}>
+        <div className={styles.logoContainer}>
+          <img src="/logoauth.svg" alt="Case Prepared" className={styles.logo} />
+        </div>
+        
+        <div className={styles.mainContent}>
+          <h2>Land your dream role in consulting through AI practice interviews.</h2>
+        </div>
+        
+        <div className={styles.bottomContent}>
+          <p className={styles.partnerText}>A 24/7 case interview partner to land your dream role.</p>
+        </div>
+        
+        <div className={styles.taglineBox}>
+          AI practice interviews to help you crack the case.
         </div>
       </div>
     </div>

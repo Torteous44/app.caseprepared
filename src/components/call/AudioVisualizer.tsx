@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
+import { motion, useSpring, useTransform, useMotionValue, useAnimationFrame } from "motion/react";
 import styles from "../../styles/AudioVisualizer.module.css";
 
 interface AudioVisualizerProps {
@@ -14,54 +15,94 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
   volume = 0,
   status = "disconnected"
 }) => {
-  const [circleScale, setCircleScale] = useState(1);
-
+  // Motion values for better performance
+  const volumeMotionValue = useMotionValue(0);
+  const timeRef = useRef(0);
+  
   // Determine if user is speaking (not AI speaking but has volume)
-  const isUserSpeaking = !isSpeaking && isConnected && volume > 0.2;
+  // Increased threshold for better detection
+  const isUserSpeaking = !isSpeaking && isConnected && volume > 0.1;
 
-  // Animate circle based on user speaking volume
-  useEffect(() => {
+  // Use transform to derive scale from volume - more declarative and performant
+  const baseScale = useTransform(
+    volumeMotionValue, 
+    [0, 0.1, 1], 
+    [1, 1, 1.25]
+  );
+  
+  // Spring animation for smooth scaling
+  const scale = useSpring(baseScale, { 
+    stiffness: 200, 
+    damping: 15,
+    mass: 0.8
+  });
+
+  // Use useAnimationFrame instead of requestAnimationFrame
+  useAnimationFrame(() => {
+    // Smooth interpolation of volume
+    const targetVolume = volume;
+    const currentVolume = volumeMotionValue.get();
+    
+    // Smooth interpolation with different factors for AI vs user
+    const lerpFactor = isSpeaking ? 0.25 : 0.15; 
+    const newVolume = currentVolume + (targetVolume - currentVolume) * lerpFactor;
+    
+    volumeMotionValue.set(newVolume);
+
+    // Add organic movement when user is speaking
     if (isUserSpeaking) {
-      // User is speaking - scale the main circle based on volume
-      const interval = setInterval(() => {
-        // Scale circle based on volume (subtle scaling)
-        const volumeScale = 1 + (volume - 0.2) * 0.2; // Convert 0.2-1.0 volume to 1.0-1.16 scale
-        setCircleScale(Math.min(volumeScale, 1.3)); // Cap at 1.3x scale
-      }, 50); // Frequent updates for responsiveness
-
-      return () => clearInterval(interval);
+      timeRef.current += 0.02;
+      
+      // Create subtle, organic movement
+      const volumeIntensity = Math.max(0, newVolume - 0.1);
+      const normalizedIntensity = Math.min(volumeIntensity / 0.9, 1);
+      
+      // Calculate organic variation
+      const organicVariation = Math.sin(timeRef.current * 3.7) * 0.03 + 
+                              Math.cos(timeRef.current * 2.3) * 0.02;
+      
+      // Apply organic variation to scale
+      const finalScale = 1 + (normalizedIntensity * 0.25) + organicVariation;
+      baseScale.set(Math.min(finalScale, 1.3));
+    } else if (isSpeaking) {
+      // AI is speaking - use fixed scale
+      baseScale.set(1);
     } else {
-      // Reset scale when not user speaking
-      setCircleScale(1);
+      // No one is speaking - return to base scale
+      baseScale.set(1);
+      timeRef.current = 0;
     }
-  }, [isUserSpeaking, volume]);
+  });
 
-  const getStatusText = () => {
-    if (!isConnected) return "Connecting...";
-    if (isSpeaking) return "AI is speaking";
-    return "Listening...";
-  };
 
   const getStatusColor = () => {
-    if (!isConnected) return "#fbbf24"; // Yellow
-    if (isSpeaking) return "#3b82f6"; // Blue
-    return "#10b981"; // Green
+    return "#174EA6"; // Always blue
   };
+
+  // Transform volume to status dot scale
+  const statusDotScale = useTransform(
+    volumeMotionValue,
+    [0, 1],
+    [1, 1.3],
+    { clamp: true }
+  );
+
+  // For debugging
+  const debugText = isUserSpeaking ? "User Speaking" : (isSpeaking ? "AI Speaking" : "Silent");
 
   return (
     <div className={styles.container}>
       <div className={styles.visualizerWrapper}>
-        {/* Main Circle - scales when user speaks, static when AI speaks */}
-        <div 
+        {/* Main Circle with organic motion */}
+        <motion.div 
           className={styles.mainCircle}
           style={{ 
             backgroundColor: getStatusColor(),
-            transform: `scale(${circleScale})`,
-            transition: isSpeaking ? 'none' : 'transform 0.1s ease'
+            scale
           }}
         />
 
-        {/* Ripple effects - only show when AI is speaking, originate from main circle */}
+        {/* Ripple effects - only show when AI is speaking */}
         {isSpeaking && (
           <>
             <div className={`${styles.ripple} ${styles.ripple1}`} />
@@ -71,17 +112,16 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
         )}
       </div>
 
-      <div className={styles.statusContainer}>
-        <div 
-          className={styles.statusDot}
-          style={{ backgroundColor: getStatusColor() }}
-        />
-        <span className={styles.statusText}>{getStatusText()}</span>
-      </div>
 
-      <div className={styles.brandingContainer}>
-        <span className={styles.brandingText}>CasePrepared AI Interview</span>
-      </div>
+      
+      {/* Debug info - only show in development */}
+      {process.env.NODE_ENV === 'development' && (
+        <div style={{ position: 'absolute', top: '10px', left: '10px', color: 'rgba(255,255,255,0.5)', fontSize: '12px' }}>
+          <div>Status: {status}</div>
+          <div>Volume: {volume.toFixed(2)}</div>
+          <div>Speaking: {debugText}</div>
+        </div>
+      )}
     </div>
   );
 };

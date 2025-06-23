@@ -1,92 +1,123 @@
 .authContainer {
   min-height: 100vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f0f2f5;
+  width: 100%;
+  overflow: hidden;
 }
 
-.authCard {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  width: 100%;
-  max-width: 400px;
-  padding: 40px;
-  box-sizing: border-box;
+.leftPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 80px;
+  max-width: 500px;
+  background-color: white;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.rightPanel {
+  flex: 1;
+  background-color: var(--blue-primary, #174EA6);
+  display: flex;
+  flex-direction: column;
+  color: white;
+  position: relative;
+  padding: 40px 0 0 0;
+  background-image: linear-gradient(to bottom, #507cdb 0%, #0A3A8C 100%);
+  max-height: 100vh;
+}
+
+.logoContainer {
+  padding-left: 40px;
 }
 
 .logo {
-  display: block;
-  width: 60px;
-  height: 60px;
-  margin: 0 auto 16px;
-  border-radius: 8px;
+  height: 40px;
+  width: auto;
 }
 
-.title {
-  text-align: center;
-  font-size: 24px;
-  font-weight: 700;
-  margin: 0 0 8px 0;
-  color: #212529;
+.mainContent {
+  position: absolute;
+  bottom: 170px;
+  left: 70px;
+  max-width: 650px;
 }
 
-.subtitle {
-  text-align: center;
+.mainContent h2 {
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 1.2;
+  margin-bottom: 0;
+  color: white;
+}
+
+.bottomContent {
+  position: absolute;
+  bottom: 80px;
+  right: 40px;
+  text-align: right;
+}
+
+.partnerText {
   font-size: 16px;
-  margin: 0 0 32px 0;
-  color: #6c757d;
+  color: white;
+  opacity: 0.9;
+  margin-bottom: 40px;
 }
 
-.tabContainer {
-  display: flex;
-  margin-bottom: 24px;
-  border-bottom: 1px solid #dee2e6;
+.taglineBox {
+  font-size: 22px;
+  font-weight: 500;
+  padding: 20px 30px;
+  background-color: white;
+  color: var(--blue-primary, #174EA6);
+  border-radius: 0;
+  border-top-left-radius: 10px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  max-width: 400px;
+  margin: 0;
 }
 
-.tab {
-  flex: 1;
-  padding: 12px 16px;
-  border: none;
-  background: transparent;
-  font-size: 16px;
+.signInTitle {
+  font-size: 28px;
   font-weight: 600;
-  cursor: pointer;
-  color: #6c757d;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-}
-
-.tab.active {
-  color: #0d6efd;
-  border-bottom-color: #0d6efd;
+  margin-bottom: 30px;
+  align-self: flex-start;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
+  width: 100%;
 }
 
 .inputGroup {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
+  width: 100%;
 }
 
 .inputGroup label {
   font-size: 14px;
   font-weight: 500;
-  color: #495057;
+  color: #333;
+  text-align: left;
 }
 
 .inputGroup input {
-  padding: 10px 12px;
-  border: 1px solid #ced4da;
+  padding: 12px 16px;
+  border: 1px solid #e0e0e0;
   border-radius: 6px;
   font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #f5f5f5;
 }
 
 .error {
@@ -96,20 +127,21 @@
   padding: 12px;
   border-radius: 6px;
   font-size: 14px;
-  margin-top: 8px;
+  width: 100%;
 }
 
 .submitButton {
-  background-color: #0d6efd;
+  background-color: #1a4fc0;
   color: white;
   border: none;
   padding: 12px;
   border-radius: 6px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
-  margin-top: 8px;
-  min-height: 44px;
+  height: 48px;
+  margin-top: 10px;
+  width: 100%;
 }
 
 .submitButton:disabled {
@@ -121,85 +153,92 @@
   align-items: center;
   text-align: center;
   margin: 24px 0;
-  color: #6c757d;
-  font-size: 12px;
+  color: #666;
+  font-size: 14px;
+  width: 100%;
 }
 
 .divider::before,
 .divider::after {
   content: "";
   flex: 1;
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 1px solid #ddd;
 }
 
 .divider:not(:empty)::before {
-  margin-right: 0.5em;
+  margin-right: 16px;
 }
 
 .divider:not(:empty)::after {
-  margin-left: 0.5em;
+  margin-left: 16px;
 }
 
 .googleButton {
   width: 100%;
   background: white;
-  border: 1px solid #ced4da;
-  padding: 10px;
+  border: 1px solid #e0e0e0;
+  padding: 12px;
   border-radius: 6px;
   font-size: 16px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
+  height: 48px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .googleIcon {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
 }
 
 .footer {
+  margin-top: 40px;
   text-align: center;
-  margin-top: 24px;
+  width: 100%;
 }
 
 .footer p {
   margin: 0;
   font-size: 14px;
+  color: #666;
 }
 
 .linkButton {
   background: none;
   border: none;
-  color: #0d6efd;
-  font-weight: 600;
+  color: #1a4fc0;
+  font-weight: 500;
   cursor: pointer;
   padding: 0;
   font-size: 14px;
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 /* Responsive design */
-@media (max-width: 480px) {
+@media (max-width: 1150px) {
   .authContainer {
-    padding: 10px;
+    flex-direction: column;
   }
   
-  .authCard {
-    border-radius: 12px;
+  .rightPanel {
+    display: none;
   }
   
-  .logo {
-    width: 40px;
-    height: 40px;
+  .leftPanel {
+    max-width: 100%;
+    padding: 20px;
+    align-items: center;
   }
   
-  .title {
-    font-size: 20px;
+  .leftPanel > div {
+    max-width: 400px;
+    width: 100%;
   }
   
-  .subtitle {
-    font-size: 14px;
+  .logoContainer {
+    margin-bottom: 30px;
   }
 } 
