@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useGoogleLogin } from '@react-oauth/google';
 import { useAuth } from "../../contexts/AuthContext";
 import LoadingSpinner from "../common/LoadingSpinner";
 import styles from "./AuthScreen.module.css";
@@ -18,7 +19,7 @@ const AuthScreen: React.FC = () => {
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { fetchUserProfile } = useAuth();
+  const { fetchUserProfile, handleGoogleOAuth } = useAuth();
 
   useEffect(() => {
     document.body.classList.add("auth-page");
@@ -79,9 +80,31 @@ const AuthScreen: React.FC = () => {
     }
   };
 
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (response) => {
+      try {
+        setLoading(true);
+        setError(null);
+        await handleGoogleOAuth(response.code);
+      } catch (err) {
+        console.error('Google authentication failed:', err);
+        setError(err instanceof Error ? err.message : 'Google authentication failed');
+      } finally {
+        setLoading(false);
+      }
+    },
+    onError: () => {
+      console.error('Google Sign-In failed');
+      setError('Google authentication was cancelled or failed');
+    },
+    flow: 'auth-code',
+    scope: 'email profile openid',
+    ux_mode: 'popup',
+  });
+
   const handleGoogleLogin = () => {
-    // Redirect to marketing site for Google OAuth
-    window.location.href = `${MARKETING_DOMAIN}/login?redirect=app`;
+    if (loading) return;
+    googleLogin();
   };
 
   const toggleAuthMode = () => {

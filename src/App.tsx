@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { AuthProvider } from "./contexts/AuthContext";
 import { ModalProvider } from "./contexts/ModalContext";
 import { StripeProvider } from "./contexts/StripeContext";
@@ -130,18 +131,27 @@ const App = () => {
     );
   }
 
+  // Get Google Client ID from environment variables
+  const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+
+  if (!googleClientId) {
+    console.warn("Google Client ID not found in environment variables");
+  }
+
   return (
-    <AuthProvider>
-      <ModalProvider>
-        <StripeProvider>
-          <Router>
-            <Analytics />
-            <ScrollToTop />
-            <AppRoutes />
-          </Router>
-        </StripeProvider>
-      </ModalProvider>
-    </AuthProvider>
+    <GoogleOAuthProvider clientId={googleClientId || ""}>
+      <AuthProvider>
+        <ModalProvider>
+          <StripeProvider>
+            <Router>
+              <Analytics />
+              <ScrollToTop />
+              <AppRoutes />
+            </Router>
+          </StripeProvider>
+        </ModalProvider>
+      </AuthProvider>
+    </GoogleOAuthProvider>
   );
 };
 

@@ -56,6 +56,7 @@ interface AuthContextType {
   error: string | null;
   fetchUserProfile: () => Promise<void>;
   updateUserProfile: (userData: Partial<User>) => Promise<void>;
+  handleGoogleOAuth: (code: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -190,6 +191,41 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const handleGoogleOAuth = async (code: string): Promise<void> => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch(`${API_BASE_URL}/api/v1/auth/oauth/google/callback`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.detail || 'Google authentication failed');
+      }
+
+      // Store tokens
+      localStorage.setItem('access_token', data.access_token);
+      localStorage.setItem('refresh_token', data.refresh_token || '');
+
+      // Fetch user profile
+      await fetchUserProfile();
+    } catch (err) {
+      console.error('Google OAuth error:', err);
+      const errorMessage = err instanceof Error ? err.message : 'Google authentication failed';
+      setError(errorMessage);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     // Check for existing token on mount
     const checkAuth = async () => {
@@ -290,6 +326,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         error,
         fetchUserProfile,
         updateUserProfile,
+        handleGoogleOAuth,
       }}
     >
       {children}
