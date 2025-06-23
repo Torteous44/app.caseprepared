@@ -98,7 +98,7 @@ const AuthScreen: React.FC = () => {
       `client_id=${GOOGLE_CLIENT_ID}&` +
       `redirect_uri=${encodeURIComponent(`${API_BASE_URL}/api/v1/auth/oauth/google/callback`)}&` +
       `response_type=code&` +
-      `scope=${encodeURIComponent('email profile openid')}&` +
+      `scope=${encodeURIComponent('openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile')}&` +
       `state=${encodeURIComponent(window.location.href)}`;
     
     // Redirect to Google OAuth
