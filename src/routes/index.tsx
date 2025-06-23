@@ -29,6 +29,9 @@ const PostQuestion = lazy(
   () => import("../components/interview/PostQuestionScreen")
 );
 
+// Demo page (temporary)
+const AudioVisualizerDemo = lazy(() => import("../pages/AudioVisualizerDemo"));
+
 // Checkout pages
 const CheckoutSuccess = lazy(() => import("../pages/CheckoutSuccess"));
 const CheckoutCancel = lazy(() => import("../pages/CheckoutCancel"));
@@ -66,6 +69,9 @@ const AppRoutes = () => {
           <Route path="/checkout" element={<CheckoutSuccess />} />
           <Route path="/checkout/success" element={<CheckoutSuccess />} />
           <Route path="/checkout/cancel" element={<CheckoutCancel />} />
+
+          {/* Demo page (temporary) */}
+          <Route path="/demo/audiovisualizer" element={<AudioVisualizerDemo />} />
 
           {/* Information pages */}
           <Route path="/about" element={<About />} />

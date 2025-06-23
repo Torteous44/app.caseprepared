@@ -14,24 +14,27 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
   volume = 0,
   status = "disconnected"
 }) => {
-  const [pulseScale, setPulseScale] = useState(1);
+  const [circleScale, setCircleScale] = useState(1);
 
-  // Animate the visualizer based on speaking state and volume
+  // Determine if user is speaking (not AI speaking but has volume)
+  const isUserSpeaking = !isSpeaking && isConnected && volume > 0.2;
+
+  // Animate circle based on user speaking volume
   useEffect(() => {
-    if (isSpeaking && isConnected) {
-      // Create pulsing animation when AI is speaking
+    if (isUserSpeaking) {
+      // User is speaking - scale the main circle based on volume
       const interval = setInterval(() => {
-        setPulseScale(prev => {
-          const variation = 0.1 + (volume * 0.3); // Scale based on volume
-          return prev === 1 ? 1 + variation : 1;
-        });
-      }, 200);
+        // Scale circle based on volume (subtle scaling)
+        const volumeScale = 1 + (volume - 0.2) * 0.2; // Convert 0.2-1.0 volume to 1.0-1.16 scale
+        setCircleScale(Math.min(volumeScale, 1.3)); // Cap at 1.3x scale
+      }, 50); // Frequent updates for responsiveness
 
       return () => clearInterval(interval);
     } else {
-      setPulseScale(1);
+      // Reset scale when not user speaking
+      setCircleScale(1);
     }
-  }, [isSpeaking, isConnected, volume]);
+  }, [isUserSpeaking, volume]);
 
   const getStatusText = () => {
     if (!isConnected) return "Connecting...";
@@ -48,39 +51,17 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
   return (
     <div className={styles.container}>
       <div className={styles.visualizerWrapper}>
+        {/* Main Circle - scales when user speaks, static when AI speaks */}
         <div 
-          className={`${styles.outerCircle} ${isSpeaking ? styles.speaking : ''}`}
+          className={styles.mainCircle}
           style={{ 
-            transform: `scale(${pulseScale})`,
-            borderColor: getStatusColor()
+            backgroundColor: getStatusColor(),
+            transform: `scale(${circleScale})`,
+            transition: isSpeaking ? 'none' : 'transform 0.1s ease'
           }}
-        >
-          <div 
-            className={styles.innerCircle}
-            style={{ backgroundColor: getStatusColor() }}
-          >
-            <div className={styles.aiIcon}>
-              <svg 
-                width="48" 
-                height="48" 
-                viewBox="0 0 24 24" 
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                color="white"
-              >
-                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                <line x1="12" y1="19" x2="12" y2="23"/>
-                <line x1="8" y1="23" x2="16" y2="23"/>
-              </svg>
-            </div>
-          </div>
-        </div>
+        />
 
-        {/* Ripple effects for speaking animation */}
+        {/* Ripple effects - only show when AI is speaking, originate from main circle */}
         {isSpeaking && (
           <>
             <div className={`${styles.ripple} ${styles.ripple1}`} />

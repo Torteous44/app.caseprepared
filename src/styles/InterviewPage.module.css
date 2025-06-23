@@ -1,7 +1,7 @@
 @import "../styles.css";
 
 .container {
-  max-width: 1200px;
+  max-width: 1000px; /* Reduced by 30% from 1200px */
   margin: 0 auto;
   padding: 100px 20px;
 }
@@ -57,20 +57,22 @@
 .interviewLayout {
   display: grid;
   grid-template-columns: 1fr 280px;
-  gap: 40px;
+  gap: 0px; /* Reduced gap to bring join section closer */
   margin-bottom: 40px;
+  align-items: center; /* Center items vertically */
 }
 
 .cameraContainer {
   display: flex;
   flex-direction: column;
-  width: 90%;
+  width: 100%;
 }
 
 .camera {
   background-color: #1a1a1a;
   border-radius: 8px;
-  height: 320px;
+  aspect-ratio: 16/9; /* Force 16:9 aspect ratio */
+  width: 80%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -176,10 +178,33 @@
   margin: 0;
 }
 
-.cameraInstructions {
+.deviceInfo {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  margin-top: 12px;
+  width: 100%; /* Match video width */
+}
+
+.deviceItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
   color: #666;
-  font-size: 14px;
-  margin: 0;
+  padding: 4px 0;
+}
+
+.deviceItem svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.deviceItem span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 120px; /* Reduced for horizontal layout */
 }
 
 .joinSection {
@@ -189,7 +214,11 @@
   justify-content: center;
   text-align: center;
   gap: 16px;
-  height: 320px;
+  padding: 24px;
+  border: 1px solid #e0e0e0; /* Light stroke around the component */
+  border-radius: 8px;
+  background-color: #fafafa;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .readyToJoinTitle {

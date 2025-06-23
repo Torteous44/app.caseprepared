@@ -3,7 +3,7 @@ import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import styles from "../styles/InterviewPage.module.css";
 import { useAuth } from "../contexts/AuthContext";
 import LoadingSpinner from "../components/common/LoadingSpinner";
-import { fetchInterview, createInterviewSession, Interview } from "../utils/interviewService";
+import { fetchInterview, createInterviewSession, Interview, InterviewSession } from "../utils/interviewService";
 import { DEMO_INTERVIEWS, DemoInterview } from "../data/demo";
 
 // Dictionary of case type descriptions
@@ -36,12 +36,18 @@ const InterviewPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Video configuration - easily adjustable
+  const VIDEO_ASPECT_RATIO = '16/9'; // Change this to adjust aspect ratio (e.g., '4/3', '16/9', '1/1')
+  const VIDEO_MIRRORED = true; // Set to false to disable mirroring
+
   const [interview, setInterview] = useState<Interview | null>(null);
   const [caseContent, setCaseContent] = useState<CaseContent | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [startError, setStartError] = useState<string | null>(null);
   const [isStarting, setIsStarting] = useState(false);
+  const [preCreatedSession, setPreCreatedSession] = useState<InterviewSession | null>(null);
+  const [sessionPreloadError, setSessionPreloadError] = useState<string | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const [mediaStatus, setMediaStatus] = useState<{
@@ -53,6 +59,29 @@ const InterviewPage: React.FC = () => {
     audio: false,
   });
   const localStreamRef = useRef<MediaStream | null>(null);
+  
+  // Device information state
+  const [deviceInfo, setDeviceInfo] = useState<{
+    audioOutput: string;
+    audioInput: string;
+    videoInput: string;
+  }>({
+    audioOutput: "Default",
+    audioInput: "Default", 
+    videoInput: "Default"
+  });
+
+  // Helper function to check if pre-created session is still valid
+  const isSessionValid = (session: InterviewSession): boolean => {
+    if (!session) return false;
+    
+    const sessionStartTime = new Date(session.started_at).getTime();
+    const currentTime = Date.now();
+    const elapsedSeconds = (currentTime - sessionStartTime) / 1000;
+    
+    // Session is valid if it hasn't exceeded its TTL
+    return elapsedSeconds < session.ttl_seconds;
+  };
 
   // Fetch interview data
   useEffect(() => {
@@ -98,6 +127,20 @@ const InterviewPage: React.FC = () => {
           };
 
           setCaseContent(generatedContent);
+
+          // Pre-create session for demo interviews only
+          console.log("🚀 Pre-creating session for demo interview:", demoInterview.id);
+          createInterviewSession(demoInterview.id, true)
+            .then(session => {
+              console.log("✅ Demo session pre-created successfully:", session.progress_id);
+              setPreCreatedSession(session);
+              setSessionPreloadError(null);
+            })
+            .catch(error => {
+              console.warn("⚠️ Demo session pre-creation failed (will fallback to normal flow):", error.message);
+              setSessionPreloadError(error.message);
+              setPreCreatedSession(null);
+            });
         } else {
           // Fetch from API for premium interviews
           const interviewData = await fetchInterview(id);
@@ -162,8 +205,8 @@ const InterviewPage: React.FC = () => {
       try {
         stream = await navigator.mediaDevices.getUserMedia({
           video: {
-            width: { ideal: 1280 },
-            height: { ideal: 720 },
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
             facingMode: "user",
           },
           audio: {
@@ -175,6 +218,24 @@ const InterviewPage: React.FC = () => {
         hasVideo = true;
         hasAudio = true;
         console.log("✅ Successfully got camera and microphone access");
+        console.log("🎥 Video stream details:", {
+          id: stream.id,
+          active: stream.active,
+          videoTracks: stream.getVideoTracks().length,
+          audioTracks: stream.getAudioTracks().length
+        });
+        
+        // Log video track details
+        stream.getVideoTracks().forEach((track, index) => {
+          console.log(`🎥 Video track ${index}:`, {
+            id: track.id,
+            kind: track.kind,
+            label: track.label,
+            enabled: track.enabled,
+            readyState: track.readyState,
+            settings: track.getSettings()
+          });
+        });
       } catch (videoError) {
         console.log("❌ Camera access failed, trying audio only:", videoError);
         
@@ -203,16 +264,8 @@ const InterviewPage: React.FC = () => {
       // Save the stream to the ref
       localStreamRef.current = stream;
 
-      // Connect the stream to the video element if it exists and we have video
-      if (videoRef.current && hasVideo) {
-        videoRef.current.srcObject = stream;
-        // Make sure video plays when ready
-        videoRef.current.onloadedmetadata = () => {
-          videoRef.current?.play().catch((e) => {
-            console.error("Error playing video:", e);
-          });
-        };
-      }
+      // We'll connect the stream to the video element in a separate useEffect
+      // after the component re-renders with the video element
 
       // Update status to indicate what we successfully got
       setMediaStatus({ video: hasVideo, audio: hasAudio });
@@ -242,6 +295,84 @@ const InterviewPage: React.FC = () => {
     }
   };
 
+  // Connect video stream to video element when both are available
+  useEffect(() => {
+    const connectVideoStream = () => {
+      if (videoRef.current && mediaStatus.video && localStreamRef.current) {
+        const stream = localStreamRef.current;
+        console.log("🎥 Connecting video stream to element after render");
+        console.log("🎥 Stream has video tracks:", stream.getVideoTracks().length);
+        console.log("🎥 Video tracks active:", stream.getVideoTracks().map(track => track.enabled && track.readyState === 'live'));
+        
+        videoRef.current.srcObject = stream;
+        
+        // Set video properties for better rendering
+        videoRef.current.onloadedmetadata = () => {
+          if (videoRef.current) {
+            console.log("🎥 Video metadata loaded, dimensions:", videoRef.current.videoWidth, "x", videoRef.current.videoHeight);
+            console.log("🎥 Video element ready state:", videoRef.current.readyState);
+            videoRef.current.play().then(() => {
+              console.log("🎥 Video started playing successfully");
+            }).catch((e) => {
+              console.error("❌ Error playing video:", e);
+            });
+          }
+        };
+        
+        // Add error event listener
+        videoRef.current.onerror = (e) => {
+          console.error("❌ Video element error:", e);
+        };
+        
+        // Add additional event listeners for debugging
+        videoRef.current.oncanplay = () => {
+          console.log("🎥 Video can start playing");
+        };
+        
+        videoRef.current.onplaying = () => {
+          console.log("🎥 Video is now playing");
+        };
+        
+        // Also try to play immediately if metadata is already loaded
+        if (videoRef.current.readyState >= 1) {
+          console.log("🎥 Metadata already loaded, playing immediately");
+          videoRef.current.play().then(() => {
+            console.log("🎥 Video started playing immediately");
+          }).catch((e) => {
+            console.error("❌ Error playing video immediately:", e);
+          });
+        }
+      } else {
+        console.log("🎥 Video connection not ready yet:", {
+          videoRef: !!videoRef.current,
+          mediaStatusVideo: mediaStatus.video,
+          localStream: !!localStreamRef.current
+        });
+      }
+    };
+
+    connectVideoStream();
+  }, [mediaStatus.video, localStreamRef.current]); // Run when video status changes or stream is set
+
+  // Get device information
+  const getDeviceInfo = async () => {
+    try {
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      
+      const audioOutput = devices.find(device => device.kind === 'audiooutput')?.label || "Default Speaker";
+      const audioInput = devices.find(device => device.kind === 'audioinput')?.label || "Default Microphone";
+      const videoInput = devices.find(device => device.kind === 'videoinput')?.label || "Default Camera";
+      
+      setDeviceInfo({
+        audioOutput: audioOutput.replace(/\s*\([^)]*\)$/, ''), // Remove device IDs in parentheses
+        audioInput: audioInput.replace(/\s*\([^)]*\)$/, ''),
+        videoInput: videoInput.replace(/\s*\([^)]*\)$/, '')
+      });
+    } catch (err) {
+      console.log("Could not enumerate devices:", err);
+    }
+  };
+
   // Check media permissions on component mount
   useEffect(() => {
     const checkMediaSupport = async () => {
@@ -266,6 +397,9 @@ const InterviewPage: React.FC = () => {
               // If we already have permissions, set up media automatically
               await setupMedia();
             }
+            
+            // Get device info regardless of permissions
+            await getDeviceInfo();
           } catch (permErr) {
             // Permissions API might not be fully supported, that's okay
             console.log("Permissions API query failed:", permErr);
@@ -274,6 +408,7 @@ const InterviewPage: React.FC = () => {
       } catch (err) {
         console.log("Permissions API not supported or failed:", err);
         // This is fine, we'll request permissions when user clicks
+        await getDeviceInfo(); // Still try to get device info
       }
     };
 
@@ -302,8 +437,22 @@ const InterviewPage: React.FC = () => {
         localStreamRef.current.getTracks().forEach((track) => track.stop());
       }
 
-      // Create interview session using new API
-      const session = await createInterviewSession(interview.id, interview.demo);
+      let session: InterviewSession;
+
+      // Check if we have a valid pre-created session for demo interviews
+      if (interview.demo && preCreatedSession && isSessionValid(preCreatedSession)) {
+        console.log("✅ Using pre-created demo session:", preCreatedSession.progress_id);
+        session = preCreatedSession;
+      } else {
+        // Create new session (fallback for demo or normal flow for premium)
+        if (interview.demo && preCreatedSession && !isSessionValid(preCreatedSession)) {
+          console.log("⚠️ Pre-created session expired, creating new session");
+        } else if (interview.demo) {
+          console.log("⚠️ No pre-created session available, creating new session");
+        }
+        
+        session = await createInterviewSession(interview.id, interview.demo);
+      }
       
       // Navigate to the interview session with Eleven Labs integration
       navigate(`/interview/session/${session.progress_id}`, {
@@ -501,6 +650,16 @@ const InterviewPage: React.FC = () => {
                     playsInline
                     muted
                     className={styles.videoFeed}
+                    style={{ 
+                      width: '100%', 
+                      height: '100%', 
+                      objectFit: 'cover',
+                      transform: VIDEO_MIRRORED ? 'scaleX(-1)' : 'none',
+                      aspectRatio: VIDEO_ASPECT_RATIO
+                    }}
+                    onLoadStart={() => console.log("🎥 Video load started")}
+                    onLoadedData={() => console.log("🎥 Video data loaded")}
+                    onCanPlayThrough={() => console.log("🎥 Video can play through")}
                   />
                 ) : (
                   <div className={styles.audioOnlyIndicator}>
@@ -526,9 +685,28 @@ const InterviewPage: React.FC = () => {
             )}
           </div>
 
-          <p className={styles.cameraInstructions}>
-            Please enable your microphone and camera.
-          </p>
+          <div className={styles.deviceInfo}>
+            <div className={styles.deviceItem}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="#666"/>
+              </svg>
+              <span>{deviceInfo.audioOutput}</span>
+            </div>
+            
+            <div className={styles.deviceItem}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2c1.1 0 2 .9 2 2v6c0 1.1-.9 2-2 2s-2-.9-2-2V4c0-1.1.9-2 2-2zm5.3 6c-.08 0-.16.02-.24.06-.15.08-.26.23-.26.44v1.5c0 2.76-2.24 5-5 5s-5-2.24-5-5V8.5c0-.28-.22-.5-.5-.5s-.5.22-.5.5V10c0 3.53 2.61 6.43 6 6.92V19h-2c-.28 0-.5.22-.5.5s.22.5.5.5h5c.28 0 .5-.22.5-.5s-.22-.5-.5-.5h-2v-2.08c3.39-.49 6-3.39 6-6.92V8.5c0-.28-.22-.5-.5-.5z" fill="#666"/>
+              </svg>
+              <span>{deviceInfo.audioInput}</span>
+            </div>
+            
+            <div className={styles.deviceItem}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z" fill="#666"/>
+              </svg>
+              <span>{deviceInfo.videoInput}</span>
+            </div>
+          </div>
         </div>
 
         <div className={styles.rightSidebar}>
