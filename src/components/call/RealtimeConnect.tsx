@@ -66,7 +66,7 @@ const RealtimeConnect: React.FC = () => {
   // Initialize ElevenLabs conversation
   const conversation = useConversation({
     onConnect: () => {
-      console.log('🔗 Connected to ElevenLabs');
+
       setIsSessionActive(true);
       
       // Set up session timer
@@ -75,12 +75,10 @@ const RealtimeConnect: React.FC = () => {
       startSessionTimer(ttl);
     },
     onDisconnect: () => {
-      console.log('📞 Disconnected from ElevenLabs');
       setIsSessionActive(false);
       handleSessionComplete();
     },
     onMessage: (message: any) => {
-      console.log('💬 Message received:', message);
       
       // Process message for transcription - only if it's actual content
       let messageText = '';
@@ -150,7 +148,6 @@ const RealtimeConnect: React.FC = () => {
             }
           });
         } catch (videoError) {
-          console.log('📹 Video not available, using audio only');
           // Fallback to audio only
           stream = await navigator.mediaDevices.getUserMedia({
             audio: {
@@ -258,11 +255,9 @@ const RealtimeConnect: React.FC = () => {
 
     const startConversation = async () => {
       try {
-        console.log('🚀 Starting conversation with signed URL');
         // Use signedUrl for pre-authenticated WebSocket connections
         const id = await conversation.startSession({ signedUrl: ws_url });
         setConversationId(id);
-        console.log('✅ Conversation started with ID:', id);
       } catch (error) {
         console.error('❌ Failed to start conversation:', error);
         setError('Failed to connect to interview. Please try again.');
@@ -329,11 +324,9 @@ const RealtimeConnect: React.FC = () => {
 
       if (interview?.id) {
         await completeInterviewSession(interview.id, completionData);
-        console.log('✅ Session completed and saved in background');
       }
     } catch (error) {
       console.error('❌ Failed to complete session in background:', error);
-      // Don't redirect on error since user is already on analytics page
     }
   };
 

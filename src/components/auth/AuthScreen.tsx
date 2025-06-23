@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import LoadingSpinner from "../common/LoadingSpinner";
 import styles from "./AuthScreen.module.css";
@@ -9,13 +10,14 @@ const API_BASE_URL = "https://caseprepcrud.onrender.com";
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 const AuthScreen: React.FC = () => {
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { fetchUserProfile } = useAuth();
+  const { fetchUserProfile, isAuthenticated } = useAuth();
 
   useEffect(() => {
     document.body.classList.add("auth-page");
@@ -23,6 +25,13 @@ const AuthScreen: React.FC = () => {
       document.body.classList.remove("auth-page");
     };
   }, []);
+
+  // Redirect to main app if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/interviews", { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -68,6 +77,9 @@ const AuthScreen: React.FC = () => {
 
       // Fetch user profile
       await fetchUserProfile();
+      
+      // Redirect to main app after successful authentication
+      navigate("/interviews", { replace: true });
     } catch (err) {
       console.error("Authentication error:", err);
       setError(err instanceof Error ? err.message : "Authentication failed");

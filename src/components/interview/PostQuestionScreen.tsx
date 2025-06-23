@@ -136,13 +136,7 @@ const PostQuestionScreen: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    console.log("PostQuestionScreen mounted with:", {
-      interviewId,
-      interview: interview?.title,
-      transcriptLength: transcripts?.length || transcript?.length || 0,
-    });
-
+  useEffect(() => {   
     const transcriptText = formatTranscriptText();
     
     if (!interviewId) {
@@ -169,17 +163,11 @@ const PostQuestionScreen: React.FC = () => {
     }
 
     try {
-      console.log("🚀 Generating analytics with simplified approach");
-      console.log("🔍 Interview ID:", interviewId);
-      console.log("📝 Transcript length:", transcriptText.length);
-
       // Use the new simplified analytics endpoint
       const result = await completeInterviewWithAnalytics(
         transcriptText,
         interviewId
       );
-
-      console.log("✅ Analytics response:", result);
 
       // Set analytics data directly from the simplified response
       setAnalyticsData({
@@ -187,10 +175,8 @@ const PostQuestionScreen: React.FC = () => {
         processing_metadata: result.processing_metadata
       });
       setIsProcessing(false);
-      console.log("✅ Analytics loaded successfully");
 
     } catch (error: any) {
-      console.error("❌ Failed to generate analytics:", error);
       
       // Handle specific error types with simplified approach
       if (error.message.includes('Transcript text is required') || 
