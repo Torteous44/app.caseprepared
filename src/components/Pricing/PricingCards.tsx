@@ -42,7 +42,7 @@ const PricingCards: React.FC<PricingCardsProps> = ({
     navigate("/profile");
   };
 
-  const handleStripeCheckout = async (priceId: string) => {
+  const handleStripeCheckout = async (plan: string) => {
     try {
       setLoading(true);
       setError(null);
@@ -52,12 +52,12 @@ const PricingCards: React.FC<PricingCardsProps> = ({
         throw new Error("Authentication required");
       }
 
-      // Call backend endpoint to create checkout session
+      // Call backend endpoint to create checkout session - Updated to match API docs
       const response = await axios.post(
-        `${API_BASE_URL}/api/v1/subscriptions/create-checkout-session`,
+        `${API_BASE_URL}/api/v1/billing/checkout`,
         {
-          price_id: priceId,
-          success_url: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+          plan: plan,
+          success_url: `${window.location.origin}/checkout/success`,
           cancel_url: `${window.location.origin}/checkout/cancel`,
         },
         {
@@ -90,7 +90,7 @@ const PricingCards: React.FC<PricingCardsProps> = ({
       navigate("/profile");
     } else {
       // If authenticated without subscription, open Stripe checkout directly
-      handleStripeCheckout("price_1RGov6IzbD323IQGMNJWMu93");
+      handleStripeCheckout("monthly");
     }
   };
 

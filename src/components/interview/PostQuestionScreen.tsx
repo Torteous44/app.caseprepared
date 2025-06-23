@@ -1,19 +1,21 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { completeInterviewWithAnalytics, InterviewCompleteResponse } from "../../utils/interviewService";
+import LoadingSpinner from "../common/LoadingSpinner";
+import Footer from "../common/Footer";
 import styles from "../../styles/PostQuestion.module.css";
-import Footer from "../../components/common/Footer";
-
-// API base URL
-const API_BASE_URL = "http://127.0.0.1:8000";
 
 interface LocationState {
-  title?: string;
-  questionNumber?: number;
-  nextQuestionNumber?: number;
-  totalQuestions?: number;
-  isAllCompleted?: boolean;
-  completedQuestions?: number[];
-  transcriptAnalysis?: TranscriptAnalysis | null;
+  interview?: any;
+  session?: any;
+  metrics?: any;
+  transcript?: any[];
+  transcripts?: Array<{
+    speaker: 'user' | 'ai' | 'system';
+    text: string;
+    timestamp: string;
+  }>;
+  conversationId?: string;
 }
 
 interface TranscriptAnalysis {
@@ -38,6 +40,22 @@ interface TranscriptAnalysis {
     description: string;
   };
   [key: string]: any;
+}
+
+interface ProcessingMetadata {
+  processed_at: string;
+  interview_id?: string;
+  gpt_model: string;
+  word_count: number;
+  char_count: number;
+  prompt_tokens?: number;
+  completion_tokens?: number;
+  total_tokens: number;
+}
+
+interface AnalyticsData {
+  analytics: TranscriptAnalysis;
+  processing_metadata: ProcessingMetadata;
 }
 
 // Icons for each competency
@@ -77,228 +95,130 @@ const PostQuestionScreen: React.FC = () => {
   const navigate = useNavigate();
   const locationState = (location.state || {}) as LocationState;
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [loadedAnalysis, setLoadedAnalysis] =
-    useState<TranscriptAnalysis | null>(null);
-  const [loadError, setLoadError] = useState<string | null>(null);
-  const [pollingAttempts, setPollingAttempts] = useState(0);
-  const [hasReceivedData, setHasReceivedData] = useState(false);
-  const pollingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Debug logging
-  useEffect(() => {
-    console.log("PostQuestionScreen mounted with:", {
-      interviewId,
-      locationState,
-      path: location.pathname,
-    });
-  }, [interviewId, location]);
+  const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
+  const [isProcessing, setIsProcessing] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Extract data from location state
   const {
-    title = "Case Interview",
-    questionNumber = 1,
-    nextQuestionNumber = questionNumber + 1,
-    totalQuestions = 4,
-    isAllCompleted = false,
-    completedQuestions = [],
-    transcriptAnalysis = null,
+    interview,
+    session,
+    metrics,
+    transcript,
+    transcripts,
+    conversationId
   } = locationState;
 
-  // If transcriptAnalysis is not provided in location state, fetch it
-  useEffect(() => {
-    // Generate unique keys to track state
-    const analysisStorageKey = `analysis_retrieved_${interviewId}_${questionNumber}`;
-    const alreadySentKey = `transcript_analysis_sent_${interviewId}_${questionNumber}`;
-
-    // For debugging - clear any previous localStorage state if needed
-    // This helps when we're having issues with stale localStorage data
-    // Uncomment the following line if you're having issues with analysis not showing
-    localStorage.removeItem(analysisStorageKey);
-
-    // Skip if we already have analysis data from navigation state
-    if (transcriptAnalysis || loadedAnalysis) {
-      console.log("Analysis already available from props, skipping fetch");
-      return;
-    }
-
-    // Check if analysis was sent previously
-    const analysisSent = localStorage.getItem(alreadySentKey) === "true";
-
-    // Max polling attempts and interval
-    const MAX_POLLING_ATTEMPTS = 10;
-    const POLLING_INTERVAL = 2000; // 2 seconds
-
-    // Always start loading regardless of whether analysis was sent
-    setIsLoading(true);
-    console.log(
-      analysisSent
-        ? "Analysis was previously sent, starting to poll for it"
-        : "Analysis may not have been sent yet, but will start polling anyway"
-    );
-
-    // For cleanup
-    let isMounted = true;
-    let currentAttempt = 0;
-    let pollingTimeout: NodeJS.Timeout | null = null;
-
-    // Add a small initial delay to ensure backend has time to process any recently sent analysis
-    setTimeout(() => {
-      const fetchAnalysisData = async () => {
-        // Don't try to fetch if unmounted or max attempts reached
-        if (!isMounted || currentAttempt >= MAX_POLLING_ATTEMPTS) {
-          if (isMounted && currentAttempt >= MAX_POLLING_ATTEMPTS) {
-            console.log("Max polling attempts reached, giving up");
-            setIsLoading(false);
+  // Function to convert transcript data to string format
+  const formatTranscriptText = (): string => {
+    if (transcripts && transcripts.length > 0) {
+      // Use the structured transcripts for better formatting
+      return transcripts
+        .map(item => {
+          const speaker = item.speaker === 'ai' ? 'Interviewer' : 'Candidate';
+          return `${speaker}: ${item.text}`;
+        })
+        .join('\n\n');
+    } else if (transcript && Array.isArray(transcript)) {
+      // Fallback to transcript array if available
+      return transcript
+        .map(item => {
+          if (typeof item === 'string') return item;
+          if (item.role && item.message) {
+            const speaker = item.role === 'assistant' ? 'Interviewer' : 'Candidate';
+            return `${speaker}: ${item.message}`;
           }
-          return;
-        }
-
-        try {
-          if (!interviewId || !questionNumber) {
-            console.warn(
-              "Missing interviewId or questionNumber, can't fetch analysis"
-            );
-            return;
-          }
-
-          // DON'T skip fetching based on localStorage - we want to always check the API
-          // This fixes issues where localStorage might be out of sync with the server state
-
-          // Get the auth token
-          const token = localStorage.getItem("access_token");
-          if (!token) {
-            setLoadError("Authentication required");
-            setIsLoading(false);
-            return;
-          }
-
-          console.log(
-            `Attempting to fetch analysis (attempt ${
-              currentAttempt + 1
-            }/${MAX_POLLING_ATTEMPTS})`
-          );
-
-          // Fetch the latest analysis from the API
-          const response = await fetch(
-            `${API_BASE_URL}/api/v1/transcript-analysis/`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-              body: JSON.stringify({
-                transcript: "",
-                interview_id: interviewId,
-                question_number: questionNumber,
-                retrieve_only: true,
-              }),
-            }
-          );
-
-          if (!response.ok) {
-            // If 404 (not found), we'll retry
-            if (response.status === 404) {
-              console.log(
-                `Analysis not found yet, will retry (attempt ${
-                  currentAttempt + 1
-                }/${MAX_POLLING_ATTEMPTS})`
-              );
-              currentAttempt++;
-
-              // Schedule next attempt if not at max
-              if (currentAttempt < MAX_POLLING_ATTEMPTS && isMounted) {
-                pollingTimeout = setTimeout(
-                  fetchAnalysisData,
-                  POLLING_INTERVAL
-                );
-              } else if (isMounted) {
-                setIsLoading(false);
-              }
-              return;
-            }
-
-            throw new Error(`Failed to fetch analysis: ${response.status}`);
-          }
-
-          const data = await response.json();
-          console.log("Successfully loaded transcript analysis", data);
-
-          if (data && Object.keys(data).length > 0 && isMounted) {
-            setLoadedAnalysis(data);
-            setIsLoading(false);
-
-            // Mark as retrieved in localStorage to prevent future fetches
-            localStorage.setItem(analysisStorageKey, "true");
-
-            // Also mark as sent since we now know it was successfully sent
-            localStorage.setItem(alreadySentKey, "true");
-
-            // No need to schedule more polling
-          } else if (isMounted) {
-            console.log("Received empty analysis data, will retry");
-            currentAttempt++;
-
-            // Schedule next attempt if not at max
-            if (currentAttempt < MAX_POLLING_ATTEMPTS) {
-              pollingTimeout = setTimeout(fetchAnalysisData, POLLING_INTERVAL);
-            } else {
-              setIsLoading(false);
-            }
-          }
-        } catch (error) {
-          if (isMounted) {
-            console.error("Error fetching transcript analysis:", error);
-            setLoadError(
-              `Failed to load analysis data: ${
-                error instanceof Error ? error.message : String(error)
-              }`
-            );
-            setIsLoading(false);
-          }
-        }
-      };
-
-      // Start first polling attempt
-      fetchAnalysisData();
-    }, 1000); // 1 second initial delay
-
-    // Cleanup on unmount
-    return () => {
-      isMounted = false;
-      if (pollingTimeout) {
-        clearTimeout(pollingTimeout);
-      }
-    };
-  }, [interviewId, questionNumber, transcriptAnalysis, loadedAnalysis]);
-
-  // Parse title to get the case name
-  const titleParts = title.split(" - ");
-  const caseName = titleParts.length > 1 ? titleParts[0] : title;
-  const caseType = titleParts.length > 1 ? titleParts[1] : "Case Interview";
-
-  // Calculate duration - 20m is a placeholder, would normally come from API
-  const duration = "20m";
-
-  // Handle continuing to next question or returning to interviews
-  const handleContinue = () => {
-    if (isAllCompleted || questionNumber >= totalQuestions) {
-      // Navigate to interviews page (final question)
-      navigate(`/interviews`);
+          return JSON.stringify(item);
+        })
+        .join('\n\n');
     } else {
-      // Navigate to next question
-      navigate(`/interview/authenticated-session/${interviewId}`, {
-        state: {
-          questionNumber: nextQuestionNumber,
-          title: title,
-        },
-      });
+      return '';
     }
   };
 
-  // Use loaded analysis if available, otherwise fall back to the one from location state
-  const analysisToDisplay = loadedAnalysis || transcriptAnalysis;
+  useEffect(() => {
+    console.log("PostQuestionScreen mounted with:", {
+      interviewId,
+      interview: interview?.title,
+      transcriptLength: transcripts?.length || transcript?.length || 0,
+    });
+
+    const transcriptText = formatTranscriptText();
+    
+    if (!interviewId) {
+      setError("Missing interview ID. Please try the interview again.");
+      setIsProcessing(false);
+      return;
+    }
+
+    if (!transcriptText.trim()) {
+      setError("No transcript data available for analysis. Please try the interview again.");
+      setIsProcessing(false);
+      return;
+    }
+
+    // Generate analytics with the simplified approach
+    generateAnalytics(transcriptText);
+  }, [interviewId, transcripts, transcript]);
+
+  const generateAnalytics = async (transcriptText: string) => {
+    if (!transcriptText.trim()) {
+      setError("No transcript data available for analysis");
+      setIsProcessing(false);
+      return;
+    }
+
+    try {
+      console.log("🚀 Generating analytics with simplified approach");
+      console.log("🔍 Interview ID:", interviewId);
+      console.log("📝 Transcript length:", transcriptText.length);
+
+      // Use the new simplified analytics endpoint
+      const result = await completeInterviewWithAnalytics(
+        transcriptText,
+        interviewId
+      );
+
+      console.log("✅ Analytics response:", result);
+
+      // Set analytics data directly from the simplified response
+      setAnalyticsData({
+        analytics: result.analytics,
+        processing_metadata: result.processing_metadata
+      });
+      setIsProcessing(false);
+      console.log("✅ Analytics loaded successfully");
+
+    } catch (error: any) {
+      console.error("❌ Failed to generate analytics:", error);
+      
+      // Handle specific error types with simplified approach
+      if (error.message.includes('Transcript text is required') || 
+          error.message.includes('transcript is available')) {
+        setError("Interview transcript is not available. Please ensure the interview completed properly.");
+      } else if (error.message.includes('subscription required')) {
+        setError("Active subscription required for analytics.");
+      } else if (error.message.includes('Analytics service is temporarily unavailable')) {
+        setError("Analytics service is temporarily unavailable. Please try again in a moment.");
+      } else {
+        setError(`Analytics generation failed: ${error.message.split(':').pop()?.trim() || 'Please try again later'}`);
+      }
+      setIsProcessing(false);
+    }
+  };
+
+
+
+  const handleRetryAnalytics = () => {
+    setError(null);
+    setIsProcessing(true);
+    const transcriptText = formatTranscriptText();
+    generateAnalytics(transcriptText);
+  };
+
+  const handleBackToInterviews = () => {
+    navigate("/interviews");
+  };
 
   // Format section title to be more readable
   const formatSectionTitle = (key: string): string => {
@@ -344,6 +264,17 @@ const PostQuestionScreen: React.FC = () => {
     }
   };
 
+  // Parse title to get the case name
+  const title = interview?.title || "Case Interview";
+  const titleParts = title.split(" - ");
+  const caseName = titleParts.length > 1 ? titleParts[0] : title;
+  const caseType = titleParts.length > 1 ? titleParts[1] : "Case Interview";
+
+  // Calculate duration - get from metrics or default
+  const duration = metrics?.duration 
+    ? `${Math.floor(metrics.duration / 60)}m ${metrics.duration % 60}s`
+    : interview?.demo ? "2m" : "20m";
+
   return (
     <div className={styles.container}>
       {/* Breadcrumb */}
@@ -361,37 +292,29 @@ const PostQuestionScreen: React.FC = () => {
         <div className={styles.metadata}>
           <div className={styles.durationPill}>{duration}</div>
           <div className={styles.caseType}>
-            Official Consulting Case Interview Practice
+            {interview?.demo ? "Demo Interview" : "Official Consulting Case Interview Practice"}
           </div>
         </div>
       </div>
 
       {/* Main content */}
       <div className={styles.content}>
-        {/* Left column - Reports */}
+        {/* Left column - Analytics Report */}
         <div className={styles.reportColumn}>
-          <h2 className={styles.reportHeading}>Your Report</h2>
+          <h2 className={styles.reportHeading}>Your Performance Report</h2>
 
-          {isLoading ? (
-            <div className={styles.loadingContainer}>
-              <div className={styles.spinner}></div>
-              <p>Analyzing your performance...</p>
+          {error ? (
+            <div className={styles.errorContainer}>
+              <h3>Unable to Load Analytics</h3>
+              <p>{error}</p>
+              <button onClick={handleRetryAnalytics} className={styles.retryButton}>
+                Try Again
+              </button>
             </div>
-          ) : loadError ? (
-            <div className={styles.noAnalysisContainer}>
-              <p>Error loading analysis: {loadError}</p>
-              <p>
-                Please try refreshing the page or contact support if the problem
-                persists.
-              </p>
-            </div>
-          ) : analysisToDisplay ? (
+          ) : analyticsData?.analytics ? (
             <div className={styles.competencies}>
-              {Object.entries(analysisToDisplay)
-                .filter(
-                  ([key]) =>
-                    key !== "id" && key !== "created_at" && key !== "updated_at"
-                )
+              {Object.entries(analyticsData.analytics)
+                .filter(([key]) => key !== "id" && key !== "created_at" && key !== "updated_at")
                 .map(([key, section]) => {
                   // Check if the section has the expected structure
                   const hasValidStructure =
@@ -406,11 +329,7 @@ const PostQuestionScreen: React.FC = () => {
 
                   return (
                     <div key={key} className={styles.competencyItem}>
-                      <div
-                        className={`${
-                          styles.competencyPill
-                        } ${getCompetencyClass(key)}`}
-                      >
+                      <div className={`${styles.competencyPill} ${getCompetencyClass(key)}`}>
                         <div className={styles.competencyIcon}>
                           {getCompetencyIcon(key)}
                         </div>
@@ -429,14 +348,35 @@ const PostQuestionScreen: React.FC = () => {
                     </div>
                   );
                 })}
+
+              {/* Processing metadata display */}
+
+              
+            </div>
+          ) : isProcessing ? (
+            <div className={styles.processingContainer}>
+              <h3>AI Analysis in Progress</h3>
+              <p>Your interview is being analyzed in the background...</p>
+              <div className={styles.processingPlaceholder}>
+                <div className={styles.placeholderItem}>
+                  <div className={styles.placeholderPill}></div>
+                  <div className={styles.placeholderText}></div>
+                </div>
+                <div className={styles.placeholderItem}>
+                  <div className={styles.placeholderPill}></div>
+                  <div className={styles.placeholderText}></div>
+                </div>
+                <div className={styles.placeholderItem}>
+                  <div className={styles.placeholderPill}></div>
+                  <div className={styles.placeholderText}></div>
+                </div>
+              </div>
             </div>
           ) : (
             <div className={styles.noAnalysisContainer}>
-              <p>No analysis available for this question.</p>
-              <p>
-                This may happen if the question was too short or there was an
-                error processing the transcript.
-              </p>
+              <h3>No Analytics Available</h3>
+              <p>We weren't able to generate analytics for this interview session.</p>
+              <p>This can happen if the interview was too short or there was insufficient conversation data.</p>
             </div>
           )}
         </div>
@@ -444,59 +384,41 @@ const PostQuestionScreen: React.FC = () => {
         {/* Right column - Action */}
         <div className={styles.actionColumn}>
           <div className={styles.actionCard}>
-            <p className={styles.congratulation}>
-              Hooray! You finished Question #{questionNumber}
-            </p>
-            <h3 className={styles.nextPrompt}>
-              {isAllCompleted || questionNumber >= totalQuestions
-                ? "All questions completed!"
-                : `Ready to start Question #${nextQuestionNumber}?`}
+            <h3 className={styles.congratulations}>
+              Interview Complete!
             </h3>
+            <p className={styles.completionMessage}>
+              {analyticsData 
+                ? "Review your detailed performance analysis on the left."
+                : error 
+                ? "Your interview was completed successfully."
+                : isProcessing
+                ? "Your AI analysis is being generated in the background..."
+                : "Interview completed successfully!"
+              }
+            </p>
+            
             <button
               className={styles.actionButton}
-              onClick={handleContinue}
-              disabled={isLoading} // Disable the button while loading
+              onClick={handleBackToInterviews}
             >
-              {isLoading
-                ? "Loading Analysis..."
-                : isAllCompleted || questionNumber >= totalQuestions
-                ? "Back to Interviews"
-                : "Start Interview"}
+              Back to Interviews
             </button>
-            <a
-              href={`/my-interview/${interviewId}`}
-              className={styles.backLink}
-            >
-              Back to interview page
-            </a>
+
+            {interview && (
+              <a
+                href={`/interview/${interview.id}`}
+                className={styles.backLink}
+              >
+                Try this interview again
+              </a>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Keep the progress container for accessibility, but hide it with CSS */}
-      <div className={styles.progressContainer}>
-        <div className={styles.progressBar}>
-          {Array.from({ length: totalQuestions }).map((_, index) => (
-            <div
-              key={index}
-              className={`${styles.progressStep} ${
-                completedQuestions.includes(index + 1) ? styles.completed : ""
-              } ${questionNumber === index + 1 ? styles.current : ""}`}
-            >
-              {index + 1}
-            </div>
-          ))}
-        </div>
-        <div className={styles.progressLabel}>
-          {isAllCompleted
-            ? "All questions completed!"
-            : `${completedQuestions.length} of ${totalQuestions} questions completed`}
-        </div>
-      </div>
-
-      {/* Add Footer */}
       <Footer
-        tagline="Get expert-level feedback on your case interviews"
+        tagline="Get expert-level AI feedback on your case interviews"
         showSections={true}
         showResources={true}
         showOther={true}

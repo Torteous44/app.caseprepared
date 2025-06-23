@@ -116,9 +116,12 @@ body {
   line-height: var(--line-height-normal);
   letter-spacing: var(--letter-spacing-normal);
   color: var(--text-color-primary);
-  margin: 40px;
   padding: 0;
   background-color: var(--background-primary);
+}
+
+body.auth-page {
+  margin: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {

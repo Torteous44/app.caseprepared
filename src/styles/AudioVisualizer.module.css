@@ -1,45 +1,224 @@
-.visualizer {
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  max-height: 300px;
-  display: block;
-}
+/* AudioVisualizer - Modern AI conversation interface */
 
-.loadingContainer {
-  width: 100%;
-  height: 100%;
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding: 40px;
 }
 
-.loadingSpinner {
-  width: 60px;
-  height: 60px;
-  border: 4px solid rgba(255, 255, 255, 0.1);
-  border-left-color: #2563eb;
+.visualizerWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 60px;
+}
+
+.outerCircle {
+  width: 240px;
+  height: 240px;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 16px;
+  border: 2px solid rgba(59, 130, 246, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 2;
+  background: radial-gradient(circle, rgba(59, 130, 246, 0.05), transparent);
 }
 
-.loadingText {
-  font-size: 16px;
-  color: #f0f0f0;
-  font-weight: 500;
+.outerCircle.speaking {
+  border-color: rgba(59, 130, 246, 0.8);
+  box-shadow: 
+    0 0 30px rgba(59, 130, 246, 0.4),
+    0 0 60px rgba(59, 130, 246, 0.2),
+    inset 0 0 20px rgba(59, 130, 246, 0.1);
+  transform: scale(1.05);
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+.innerCircle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 3;
+  box-shadow: 
+    0 8px 32px rgba(59, 130, 246, 0.3),
+    inset 0 2px 8px rgba(255, 255, 255, 0.2);
+}
+
+.aiIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* Enhanced ripple effects for speaking animation */
+.ripple {
+  position: absolute;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 50%;
+  animation: ripple 3s infinite ease-out;
+  z-index: 1;
+}
+
+.ripple1 {
+  width: 280px;
+  height: 280px;
+  animation-delay: 0s;
+}
+
+.ripple2 {
+  width: 320px;
+  height: 320px;
+  animation-delay: 0.8s;
+}
+
+.ripple3 {
+  width: 360px;
+  height: 360px;
+  animation-delay: 1.6s;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.8;
+    border-width: 2px;
+  }
+  30% {
+    opacity: 0.6;
+    border-width: 1px;
+  }
+  70% {
+    opacity: 0.3;
+    border-width: 0.5px;
+  }
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+    border-width: 0px;
   }
 }
 
+.statusContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 30px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #10b981;
+  animation: statusPulse 2s infinite ease-in-out;
+  box-shadow: 0 0 8px currentColor;
+}
+
+.statusText {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+@keyframes statusPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.2);
+  }
+}
+
+.brandingContainer {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.brandingText {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 12px;
+  font-weight: 400;
+  text-align: center;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Mobile responsiveness */
 @media (max-width: 768px) {
-  .visualizer {
-    height: 200px;
+  .container {
+    padding: 20px;
+  }
+
+  .visualizerWrapper {
+    margin-bottom: 40px;
+  }
+
+  .outerCircle {
+    width: 180px;
+    height: 180px;
+  }
+
+  .innerCircle {
+    width: 110px;
+    height: 110px;
+  }
+
+  .aiIcon svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .ripple1 {
+    width: 220px;
+    height: 220px;
+  }
+
+  .ripple2 {
+    width: 260px;
+    height: 260px;
+  }
+
+  .ripple3 {
+    width: 300px;
+    height: 300px;
+  }
+
+  .statusContainer {
+    padding: 6px 12px;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .statusText {
+    font-size: 12px;
+  }
+
+  .brandingText {
+    font-size: 10px;
   }
 } 

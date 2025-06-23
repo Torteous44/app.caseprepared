@@ -139,9 +139,9 @@
 }
 
 .formInput:focus {
-  border-color: #2563eb;
+  border-color: var(--blue-primary);
   outline: none;
-  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 0 0 2px rgba(23, 78, 166, 0.1);
 }
 
 .formInput.disabled {
@@ -157,7 +157,7 @@
 
 .saveButton {
   padding: 8px 16px;
-  background-color: #2563eb;
+  background-color: var(--blue-primary);
   color: white;
   border: none;
   border-radius: 6px;
@@ -168,7 +168,7 @@
 }
 
 .saveButton:hover {
-  background-color: #1d4ed8;
+  background-color: var(--blue-secondary);
 }
 
 .cancelButton {
@@ -321,6 +321,28 @@
   cursor: not-allowed;
 }
 
+.manageSubscriptionButton {
+  margin-top: 16px;
+  padding: 8px 16px;
+  background-color: var(--blue-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.manageSubscriptionButton:hover {
+  background-color: var(--blue-secondary);
+}
+
+.manageSubscriptionButton:disabled {
+  background-color: #93c5fd;
+  cursor: not-allowed;
+}
+
 /* No subscription */
 .noSubscription {
   text-align: center;
@@ -334,7 +356,7 @@
 
 .subscribeButton {
   padding: 10px 20px;
-  background-color: #2563eb;
+  background-color: var(--blue-primary);
   color: white;
   border: none;
   border-radius: 6px;
@@ -345,7 +367,7 @@
 }
 
 .subscribeButton:hover {
-  background-color: #1d4ed8;
+  background-color: var(--blue-secondary);
 }
 
 /* Security section */
@@ -425,9 +447,13 @@
 }
 
 .loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
   text-align: center;
-  padding: 24px;
   color: #6b7280;
+  font-size: 16px;
 }
 
 /* Responsive styles */

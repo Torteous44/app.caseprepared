@@ -4,6 +4,7 @@
   "private": true,
   "description": "Authenticated application for Case Prepared - AI-powered case interview practice",
   "dependencies": {
+    "@elevenlabs/react": "^0.1.7",
     "@heroicons/react": "^2.1.1",
     "@react-three/drei": "^10.2.0",
     "@react-three/fiber": "^9.0.0-alpha.8",
@@ -19,6 +20,7 @@
     "@types/react-dom": "^19.1.1",
     "@types/react-helmet": "^6.1.11",
     "@vercel/analytics": "^1.5.0",
+    "audiomotion-analyzer": "^4.5.1",
     "axios": "^1.8.4",
     "clsx": "^2.1.1",
     "lottie-react": "^2.4.1",

@@ -82,52 +82,32 @@ const CheckoutSuccess: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const verifySession = async () => {
+    const handleSuccess = async () => {
       try {
         const searchParams = new URLSearchParams(location.search);
         const sessionId = searchParams.get("session_id");
 
-        if (!sessionId) {
-          setError("No session ID found");
+        // If there's a session ID, just acknowledge success
+        // The webhook will handle the actual subscription activation
+        if (sessionId) {
+          // Simple delay to allow webhook processing
+          setTimeout(() => {
+            setLoading(false);
+          }, 2000);
+        } else {
+          // No session ID means we came here without a proper checkout
           setLoading(false);
-          return;
         }
-
-        const token = localStorage.getItem("access_token");
-        if (!token) {
-          setError("Authentication required");
-          setLoading(false);
-          return;
-        }
-
-        // Verify the session with your backend
-        const response = await fetch(
-          `${API_BASE_URL}/api/v1/subscriptions/verify-session?session_id=${sessionId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.detail || "Failed to verify session");
-        }
-
-        // Session verified successfully
-        setLoading(false);
       } catch (err) {
-        console.error("Session verification error:", err);
+        console.error("Checkout success error:", err);
         setError(
-          `${err instanceof Error ? err.message : "Unknown verification error"}`
+          `${err instanceof Error ? err.message : "Unknown error"}`
         );
         setLoading(false);
       }
     };
 
-    verifySession();
+    handleSuccess();
   }, [location.search]);
 
   if (loading) {

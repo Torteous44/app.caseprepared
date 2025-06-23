@@ -22,7 +22,7 @@ const ResourcesMeasurements: React.FC = () => {
 
         <div className="measurements-grid">
           {/* Structured Problem-Solving Column */}
-          <Link to="/interview/1" className="measurement-card-link">
+          <Link to="/interviews" className="measurement-card-link">
             <div className="measurement-card">
               <div className="title-container">
                 <div className="measurement-icon blue">
@@ -78,7 +78,7 @@ const ResourcesMeasurements: React.FC = () => {
           </Link>
 
           {/* Analytical & Quantitative Skills Column */}
-          <Link to="/interview/1" className="measurement-card-link">
+          <Link to="/interviews" className="measurement-card-link">
             <div className="measurement-card">
               <div className="title-container">
                 <div className="measurement-icon orange">
@@ -133,7 +133,7 @@ const ResourcesMeasurements: React.FC = () => {
           </Link>
 
           {/* Business Judgment & Insight Column */}
-          <Link to="/interview/1" className="measurement-card-link">
+          <Link to="/interviews" className="measurement-card-link">
             <div className="measurement-card">
               <div className="title-container">
                 <div className="measurement-icon red">

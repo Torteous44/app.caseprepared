@@ -21,8 +21,7 @@ const GoogleOAuthCallback = lazy(
 // Main application pages
 const Interviews = lazy(() => import("../pages/InterviewsPage"));
 const InterviewDetail = lazy(() => import("../pages/InterviewPage"));
-const Profile = lazy(() => import("../pages/ProfilePage"));
-const Subscription = lazy(() => import("../pages/SubscriptionPage"));
+const Profile = lazy(() => import("../pages/ProfilePage")); 
 const RealtimeSession = lazy(
   () => import("../components/call/RealtimeConnect")
 );
@@ -58,11 +57,10 @@ const AppRoutes = () => {
             element={<RealtimeSession />}
           />
           <Route
-            path="/interview/post-question/:interviewId"
+            path="/interview/analytics/:interviewId"
             element={<PostQuestion />}
           />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/subscription" element={<Subscription />} />
 
           {/* Checkout routes */}
           <Route path="/checkout" element={<CheckoutSuccess />} />

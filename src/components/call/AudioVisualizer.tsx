@@ -1,214 +1,107 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../../styles/AudioVisualizer.module.css";
 
 interface AudioVisualizerProps {
-  mediaStream: MediaStream;
-  isLoading: boolean;
+  isConnected: boolean;
+  isSpeaking: boolean;
+  volume?: number;
+  status?: string;
 }
 
 const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
-  mediaStream,
-  isLoading,
+  isConnected,
+  isSpeaking,
+  volume = 0,
+  status = "disconnected"
 }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const animationRef = useRef<number | null>(null);
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const analyserRef = useRef<AnalyserNode | null>(null);
-  const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
-  const isCleanedUpRef = useRef<boolean>(false);
+  const [pulseScale, setPulseScale] = useState(1);
 
-  // Effect for handling just the animation frame cleanup
+  // Animate the visualizer based on speaking state and volume
   useEffect(() => {
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = null;
-      }
-    };
-  }, []);
+    if (isSpeaking && isConnected) {
+      // Create pulsing animation when AI is speaking
+      const interval = setInterval(() => {
+        setPulseScale(prev => {
+          const variation = 0.1 + (volume * 0.3); // Scale based on volume
+          return prev === 1 ? 1 + variation : 1;
+        });
+      }, 200);
 
-  // Separate effect for audio context cleanup on unmount only
-  useEffect(() => {
-    return () => {
-      cleanupAudio();
-      isCleanedUpRef.current = true;
-    };
-  }, []);
-
-  // Cleanup audio resources safely
-  const cleanupAudio = () => {
-    if (isCleanedUpRef.current) return;
-
-    if (sourceRef.current) {
-      try {
-        sourceRef.current.disconnect();
-      } catch (err) {
-        console.log("Error disconnecting source:", err);
-      }
-      sourceRef.current = null;
+      return () => clearInterval(interval);
+    } else {
+      setPulseScale(1);
     }
+  }, [isSpeaking, isConnected, volume]);
 
-    if (audioContextRef.current) {
-      try {
-        if (audioContextRef.current.state !== "closed") {
-          audioContextRef.current.close();
-        }
-      } catch (err) {
-        console.log("Error closing audio context:", err);
-      }
-      audioContextRef.current = null;
-    }
+  const getStatusText = () => {
+    if (!isConnected) return "Connecting...";
+    if (isSpeaking) return "AI is speaking";
+    return "Listening...";
   };
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const setupVisualization = () => {
-      if (isLoading || !mediaStream) {
-        renderLoadingAnimation(ctx, canvas);
-        return;
-      }
-
-      try {
-        // Cleanup previous audio resources without using close()
-        if (sourceRef.current) {
-          try {
-            sourceRef.current.disconnect();
-          } catch (err) {
-            // Ignore disconnection errors
-          }
-          sourceRef.current = null;
-        }
-
-        // Only create a new AudioContext if we don't have one or it's closed
-        if (
-          !audioContextRef.current ||
-          audioContextRef.current.state === "closed"
-        ) {
-          const AudioContext =
-            window.AudioContext || (window as any).webkitAudioContext;
-          audioContextRef.current = new AudioContext();
-        }
-
-        const analyser = audioContextRef.current.createAnalyser();
-        analyser.fftSize = 256;
-        analyserRef.current = analyser;
-
-        const source =
-          audioContextRef.current.createMediaStreamSource(mediaStream);
-        source.connect(analyser);
-        sourceRef.current = source;
-
-        const bufferLength = analyser.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
-
-        const renderFrame = () => {
-          if (!canvas || !ctx || !analyser) return;
-
-          animationRef.current = requestAnimationFrame(renderFrame);
-
-          analyser.getByteFrequencyData(dataArray);
-
-          // Clear canvas
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-          // Background
-          ctx.fillStyle = "rgba(0, 0, 0, 0.1)";
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-          // Calculate bar width
-          const barCount = bufferLength / 2;
-          const barWidth = canvas.width / barCount;
-          let x = 0;
-
-          // Draw bars
-          for (let i = 0; i < barCount; i++) {
-            // Use frequencies for visualization
-            const barHeight = (dataArray[i] / 255) * canvas.height;
-
-            // Use a gentle gradient color for the bars
-            const hue = (i / barCount) * 120 + 200; // Blue to purple range
-            ctx.fillStyle = `hsla(${hue}, 70%, 60%, 0.8)`;
-
-            // Draw rounded bars
-            const barY = canvas.height - barHeight;
-            const barX = x + barWidth * 0.1; // Add some padding between bars
-            const barW = barWidth * 0.8; // Make bars slightly narrower than the space
-
-            // Draw rounded rectangle
-            ctx.beginPath();
-            ctx.moveTo(barX + barW / 2, barY);
-            ctx.lineTo(barX + barW / 2, barY + barHeight);
-            ctx.lineWidth = barW;
-            ctx.lineCap = "round";
-            ctx.stroke();
-
-            x += barWidth;
-          }
-        };
-
-        renderFrame();
-      } catch (err) {
-        console.error("Error setting up audio visualization:", err);
-      }
-    };
-
-    setupVisualization();
-
-    // Clean up when mediaStream changes - just cancel animation frame
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-        animationRef.current = null;
-      }
-    };
-  }, [mediaStream, isLoading]);
-
-  const renderLoadingAnimation = (
-    ctx: CanvasRenderingContext2D,
-    canvas: HTMLCanvasElement
-  ) => {
-    let angle = 0;
-    const centerX = canvas.width / 2;
-    const centerY = canvas.height / 2;
-    const radius = Math.min(centerX, centerY) * 0.7;
-
-    const animate = () => {
-      // Clear canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Draw loading indicator
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, 0, Math.PI * 2, false);
-      ctx.lineWidth = 4;
-      ctx.strokeStyle = "rgba(100, 100, 255, 0.2)";
-      ctx.stroke();
-
-      // Draw loading arc
-      ctx.beginPath();
-      ctx.arc(centerX, centerY, radius, angle, angle + Math.PI / 2, false);
-      ctx.lineWidth = 4;
-      ctx.strokeStyle = "rgba(100, 200, 255, 0.8)";
-      ctx.stroke();
-
-      angle += 0.05;
-      animationRef.current = requestAnimationFrame(animate);
-    };
-
-    animate();
+  const getStatusColor = () => {
+    if (!isConnected) return "#fbbf24"; // Yellow
+    if (isSpeaking) return "#3b82f6"; // Blue
+    return "#10b981"; // Green
   };
 
   return (
-    <canvas
-      ref={canvasRef}
-      className={styles.visualizer}
-      width={800}
-      height={300}
-    />
+    <div className={styles.container}>
+      <div className={styles.visualizerWrapper}>
+        <div 
+          className={`${styles.outerCircle} ${isSpeaking ? styles.speaking : ''}`}
+          style={{ 
+            transform: `scale(${pulseScale})`,
+            borderColor: getStatusColor()
+          }}
+        >
+          <div 
+            className={styles.innerCircle}
+            style={{ backgroundColor: getStatusColor() }}
+          >
+            <div className={styles.aiIcon}>
+              <svg 
+                width="48" 
+                height="48" 
+                viewBox="0 0 24 24" 
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                color="white"
+              >
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                <line x1="12" y1="19" x2="12" y2="23"/>
+                <line x1="8" y1="23" x2="16" y2="23"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        {/* Ripple effects for speaking animation */}
+        {isSpeaking && (
+          <>
+            <div className={`${styles.ripple} ${styles.ripple1}`} />
+            <div className={`${styles.ripple} ${styles.ripple2}`} />
+            <div className={`${styles.ripple} ${styles.ripple3}`} />
+          </>
+        )}
+      </div>
+
+      <div className={styles.statusContainer}>
+        <div 
+          className={styles.statusDot}
+          style={{ backgroundColor: getStatusColor() }}
+        />
+        <span className={styles.statusText}>{getStatusText()}</span>
+      </div>
+
+      <div className={styles.brandingContainer}>
+        <span className={styles.brandingText}>CasePrepared AI Interview</span>
+      </div>
+    </div>
   );
 };
 

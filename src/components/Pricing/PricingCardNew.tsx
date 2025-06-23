@@ -11,7 +11,7 @@ const API_BASE_URL = "http://127.0.0.1:8000";
 // Determine the app domain to redirect to
 const APP_DOMAIN =
   process.env.NODE_ENV === "development"
-    ? "http://localhost:3001"
+    ? "http://localhost:3000"
     : "https://app.caseprepared.com";
 
 interface PricingCardNewProps {
@@ -71,8 +71,7 @@ const PricingCardNew: React.FC<PricingCardNewProps> = ({
   }, []);
 
   const handleStripeCheckout = async (
-    priceId: string,
-    isOneTime: boolean = false
+    plan: string
   ) => {
     try {
       setLoading(true);
@@ -83,26 +82,16 @@ const PricingCardNew: React.FC<PricingCardNewProps> = ({
         throw new Error("Authentication required");
       }
 
-      // Different request body for one-time payments vs subscriptions
-      const requestBody = isOneTime
-        ? {
-            price_id: priceId,
-            mode: "payment", // For one-time payments
-            success_url: `${APP_DOMAIN}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${APP_DOMAIN}/checkout/cancel`,
-          }
-        : {
-            price_id: priceId,
-            success_url: `${APP_DOMAIN}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${APP_DOMAIN}/checkout/cancel`,
-          };
+      console.log("Checkout request:", { plan });
 
-      console.log("Checkout request:", { priceId, isOneTime, requestBody });
-
-      // Call backend endpoint to create checkout session
+      // Call backend endpoint to create checkout session - Updated to match API docs
       const response = await axios.post(
-        `${API_BASE_URL}/api/v1/subscriptions/create-checkout-session`,
-        requestBody,
+        `${API_BASE_URL}/api/v1/billing/checkout`,
+        {
+          plan: plan,
+          success_url: `${APP_DOMAIN}/checkout/success`,
+          cancel_url: `${APP_DOMAIN}/checkout/cancel`,
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -131,30 +120,25 @@ const PricingCardNew: React.FC<PricingCardNewProps> = ({
   };
 
   const handleSubscribe = () => {
-    // Map selected plan to price ID
-    let priceId = "";
-    let isOneTime = false;
+    // Map selected plan to the plan names expected by the API
+    let plan = "";
 
     switch (selectedPlan) {
       case "monthly":
-        priceId = "price_1RaFI8IzbD323IQGSk75ygX0"; // $29.99
-        isOneTime = false;
+        plan = "monthly";
         break;
       case "believer":
-        priceId = "price_1RaFJ9IzbD323IQGzslYNzzW"; // $200.00
-        isOneTime = true; // This is a one-time payment
+        plan = "believer";
         break;
       case "threemonth":
-        priceId = "price_1RaFISIzbD323IQGKD5lBMcG"; // $21.99
-        isOneTime = false;
+        plan = "threemonth";
         break;
       default:
-        priceId = "price_1RaFI8IzbD323IQGSk75ygX0"; // Default to monthly
-        isOneTime = false;
+        plan = "monthly"; // Default to monthly
     }
 
     // Open Stripe checkout directly
-    handleStripeCheckout(priceId, isOneTime);
+    handleStripeCheckout(plan);
   };
 
   // Don't render until initialized to prevent layout issues

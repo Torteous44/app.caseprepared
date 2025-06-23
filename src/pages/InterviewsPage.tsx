@@ -5,88 +5,42 @@ import { useAuth } from "../contexts/AuthContext";
 import { InterviewCard, LoadingSpinner, Footer } from "../components";
 import { StripeContext } from "../contexts/StripeContext";
 import {
-  fetchLessons,
-  convertLessonToCardFormat,
-  Lesson,
-} from "../utils/lessonService";
+  fetchPremiumInterviews,
+  convertInterviewToCardFormat,
+  createInterviewSession,
+} from "../utils/interviewService";
+import { DEMO_INTERVIEWS, convertDemoToCardFormat } from "../data/demo";
 
-// Define demo interview cards
-interface DemoInterview {
-  id: string;
-  company: string;
-  logo: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  thumbnail: string;
-  buttonText: string;
-  case_type: string;
-  difficulty: string;
-  duration: number;
-}
+// Helper function to get company logo based on company name
+const getCompanyLogo = (company: string): string => {
+  const normalizedCompany = company.toLowerCase();
 
-// Extended type for demo interviews when adding progress fields
-interface EnhancedDemoInterview extends DemoInterview {
-  progress_status: string | null;
-  progress_data: {
-    current_question: number;
-    questions_completed: number[];
-  } | null;
-  interview_id: string | null;
-  started_at: string | null;
-  completed_at: string | null;
-  questions_completed: number | null;
-  total_questions: number;
-  image_url?: string;
-  description_short?: string;
-  completionStatus?: string | null;
-}
+  const companyLogos: Record<string, string> = {
+    "mckinsey & company": "/assets/interviewCards/Logos/Mckinsey.svg",
+    "mckinsey": "/assets/interviewCards/Logos/Mckinsey.svg",
+    "bcg": "/assets/interviewCards/Logos/BCG.svg",
+    "boston consulting group": "/assets/interviewCards/Logos/BCG.svg",
+    "bain & company": "/assets/interviewCards/Logos/Bain.svg",
+    "bain": "/assets/interviewCards/Logos/Bain.svg",
+    "accenture": "/assets/interviewCards/Logos/Accenture.svg",
+    "deloitte": "/assets/interviewCards/Logos/Deloitte.svg",
+    "ey": "/assets/interviewCards/Logos/EY.svg",
+    "ernst & young": "/assets/interviewCards/Logos/EY.svg",
+    "kearney": "/assets/interviewCards/Logos/Kearney.svg",
+    "a.t. kearney": "/assets/interviewCards/Logos/Kearney.svg",
+    "pwc": "/assets/interviewCards/Logos/PWC.svg",
+    "pricewaterhousecoopers": "/assets/interviewCards/Logos/PWC.svg",
+    "oliver wyman": "/assets/interviewCards/Logos/Wyman.svg",
+    "wyman": "/assets/interviewCards/Logos/Wyman.svg",
+  };
 
-// Define demo interview templates
-const demoInterviews: DemoInterview[] = [
-  {
-    id: "market-entry",
-    company: "BCG",
-    logo: "/assets/interviewCards/Logos/BCG.svg",
-    title: "Betacer Market Entry - BCG Case",
-    subtitle: "Official Interview",
-    description:
-      "A major U.S. electronics manufacturer is considering entering the video-game market given low growth in various electronics segments. Evaluate whether this market entry strategy is wise.",
-    thumbnail: "/assets/interviewCards/image@2x-1.webp",
-    buttonText: "Mock Interview",
-    case_type: "Market Entry",
-    difficulty: "Medium",
-    duration: 30,
-  },
-  {
-    id: "profitability",
-    company: "McKinsey",
-    logo: "/assets/interviewCards/Logos/Mckinsey.svg",
-    title: "Premier Oil - McKinsey Case",
-    subtitle: "Official Interview",
-    description:
-      "The pandemic-induced collapse in oil prices has sharply reduced profitability of a major UK-based offshore oil producer. Design a profitability improvement plan focusing on cost reduction strategies.",
-    thumbnail: "/assets/interviewCards/image@2x.webp",
-    buttonText: "Mock Interview",
-    case_type: "Profitability",
-    difficulty: "Hard",
-    duration: 45,
-  },
-  {
-    id: "merger",
-    company: "Bain",
-    logo: "/assets/interviewCards/Logos/Bain.svg",
-    title: "Henderson Electric - Bain Case",
-    subtitle: "Official Interview",
-    description:
-      "An industrial air conditioning company has low sales of their IoT monitoring software despite strong overall revenue. Develop a growth strategy to boost software sales and overcome market adoption barriers.",
-    thumbnail: "/assets/interviewCards/image@2x-2.webp",
-    buttonText: "Mock Interview",
-    case_type: "Merger & Acquisition",
-    difficulty: "Easy",
-    duration: 35,
-  },
-];
+  return (
+    companyLogos[normalizedCompany] ||
+    "/assets/interviewCards/Logos/BCG.svg" // Default logo
+  );
+};
+
+
 
 const AuthenticatedInterviewsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -97,177 +51,128 @@ const AuthenticatedInterviewsPage: React.FC = () => {
     {}
   );
   const [error, setError] = useState<string | null>(null);
-  const [demoTemplates, setDemoTemplates] = useState<EnhancedDemoInterview[]>(
-    []
-  );
-  const [lessons, setLessons] = useState<any[]>([]);
-  const [lessonsLoading, setLessonsLoading] = useState<boolean>(false);
-  const [lessonsError, setLessonsError] = useState<string | null>(null);
+  const [premiumInterviews, setPremiumInterviews] = useState<any[]>([]);
+  const [interviewsLoading, setInterviewsLoading] = useState<boolean>(false);
+  const [interviewsError, setInterviewsError] = useState<string | null>(null);
+  const [demoInterviews, setDemoInterviews] = useState<any[]>([]);
 
   useEffect(() => {
-    // Check if user has subscription and load appropriate content
-    const loadContent = async () => {
+    const loadInterviews = async () => {
       setLoading(true);
+      setInterviewsError(null);
 
       try {
-        // Prepare demo templates with enhanced properties
-        const enhancedDemos = demoInterviews.map((demo) => ({
-          ...demo,
-          progress_status: null,
-          progress_data: null,
-          interview_id: null,
-          started_at: null,
-          completed_at: null,
-          questions_completed: null,
-          total_questions: 5,
-          completionStatus: null,
-          image_url: demo.thumbnail,
-          description_short: demo.description,
-        }));
+        // Always load demo interviews for users without subscription
+        if (!hasSubscription) {
+          const formattedDemos = DEMO_INTERVIEWS.map(demoInterview => 
+            convertDemoToCardFormat(demoInterview)
+          );
+          setDemoInterviews(formattedDemos);
+        }
 
-        setDemoTemplates(enhancedDemos);
-
+        // Load premium interviews if user has subscription
         if (hasSubscription) {
-          // User has subscription, fetch lessons
-          await loadLessons();
+          const premium = await fetchPremiumInterviews();
+          // Use premium interviews data directly since it already has the right format
+          const formattedPremium = premium.map(interview => ({
+            ...interview,
+            description: interview.short_description, // Map short_description to description for InterviewCard
+            logo: getCompanyLogo(interview.company || ''),
+            buttonText: "Start Interview",
+            isPremium: true
+          }));
+          setPremiumInterviews(formattedPremium);
         }
       } catch (err) {
-        console.error("Error loading content:", err);
-        setError(
-          err instanceof Error
-            ? err.message
-            : "Failed to load interview content"
+        console.error("Error loading interviews:", err);
+        setInterviewsError(
+          err instanceof Error ? err.message : "Failed to load interviews"
         );
       } finally {
         setLoading(false);
       }
     };
 
-    // Only proceed with API calls if we're authenticated
+    // Load interviews based on authentication and subscription status
     if (isAuthenticated) {
-      loadContent();
-    } else if (loading && !isAuthenticated) {
-      // If still loading auth state, don't do anything yet
-      console.log("Waiting for authentication to complete...");
-    } else {
-      // If auth is done loading and we're not authenticated, set up demo templates
-      console.log("User not authenticated, showing demo templates only");
-      const enhancedDemos = demoInterviews.map((demo) => ({
-        ...demo,
-        progress_status: null,
-        progress_data: null,
-        interview_id: null,
-        started_at: null,
-        completed_at: null,
-        questions_completed: null,
-        total_questions: 5,
-        completionStatus: null,
-        image_url: demo.thumbnail,
-        description_short: demo.description,
-      }));
-
-      setDemoTemplates(enhancedDemos);
+      loadInterviews();
+    } else if (isAuthenticated === false) {
+      // For non-authenticated users, still show demo interviews
+      const formattedDemos = DEMO_INTERVIEWS.map(demoInterview => 
+        convertDemoToCardFormat(demoInterview)
+      );
+      setDemoInterviews(formattedDemos);
       setLoading(false);
     }
-  }, [isAuthenticated, hasSubscription, navigate]);
-
-  // Function to load lessons from the API
-  const loadLessons = async () => {
-    setLessonsLoading(true);
-    setLessonsError(null);
-
-    try {
-      const lessonsData = await fetchLessons();
-
-      // Convert lessons to the format expected by InterviewCard
-      const formattedLessons = lessonsData.map(convertLessonToCardFormat);
-
-      setLessons(formattedLessons);
-    } catch (err) {
-      console.error("Error fetching lessons:", err);
-      setLessonsError(
-        err instanceof Error ? err.message : "Failed to load lessons"
-      );
-    } finally {
-      setLessonsLoading(false);
-    }
-  };
+  }, [isAuthenticated, hasSubscription]);
 
   const handleRetry = () => {
-    loadLessons();
-  };
-
-  const handleDemoInterviewClick = async (interview: DemoInterview) => {
-    setLoadingStates((prev) => ({ ...prev, [interview.id]: true }));
-    setError(null);
-
-    try {
-      // Map the demo interview ID to the corresponding hardcoded interview ID
-      // This maps to the IDs used in InterviewPage.tsx
-      const interviewIdMap: Record<string, string> = {
-        "market-entry": "2", // BCG - Climate Case
-        profitability: "1", // McKinsey - Beautify
-        merger: "3", // Bain - Coffee Shop
-      };
-
-      const interviewId = interviewIdMap[interview.id];
-
-      if (!interviewId) {
-        throw new Error("Invalid demo interview type");
+    // Retry loading interviews
+    const loadInterviews = async () => {
+      setInterviewsLoading(true);
+      try {
+        if (hasSubscription) {
+          const premium = await fetchPremiumInterviews();
+          const formattedPremium = premium.map(interview => ({
+            ...interview,
+            description: interview.short_description, // Map short_description to description for InterviewCard
+            logo: getCompanyLogo(interview.company || ''),
+            buttonText: "Start Interview",
+            isPremium: true
+          }));
+          setPremiumInterviews(formattedPremium);
+        }
+      } catch (err) {
+        setInterviewsError(err instanceof Error ? err.message : "Failed to load interviews");
+      } finally {
+        setInterviewsLoading(false);
       }
-
-      // Navigate to the interview page with the ID using the same flow as public page
-      navigate(`/interview/${interviewId}`, {
-        state: {
-          isDemo: true,
-          demoType: interview.id,
-          card: {
-            code: interview.id,
-          },
-        },
-      });
-    } catch (err) {
-      console.error("Error starting demo interview:", err);
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Failed to start demo interview. Please try again or contact support."
-      );
-    } finally {
-      setLoadingStates((prev) => ({ ...prev, [interview.id]: false }));
-    }
+    };
+    
+    loadInterviews();
   };
+
+
 
   const handleUpgradeClick = () => {
     navigate("/subscription");
   };
 
-  const handleInterviewAction = (interview: EnhancedDemoInterview) => {
-    // For demo interviews, we need to convert to the original format
-    const demoInterview = demoInterviews.find(
-      (demo) => demo.id === interview.id
-    );
-    if (demoInterview) {
-      handleDemoInterviewClick(demoInterview);
-    }
-  };
-
-  // Function to handle starting a lesson
-  const handleStartLesson = async (lessonId: string) => {
-    setLoadingStates((prev) => ({ ...prev, [lessonId]: true }));
+  const handleStartInterview = async (interview: any) => {
+    setLoadingStates((prev) => ({ ...prev, [interview.id]: true }));
 
     try {
-      // Navigate to the lesson page
-      navigate(`/interview/${lessonId}`);
-    } catch (err) {
-      console.error("Error starting lesson:", err);
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Failed to start lesson. Please try again."
-      );
+      // For demo interviews, navigate directly to interview page
+      if (interview.demo) {
+        navigate(`/interview/${interview.id}`);
+        return;
+      }
+
+      // Create interview session using the new API for premium interviews
+      const session = await createInterviewSession(interview.id, !interview.isPremium);
+      
+      // Navigate to the session with the Eleven Labs WebSocket URL
+      navigate("/interview/session/" + session.progress_id, {
+        state: {
+          interview: interview,
+          session: session,
+          ws_url: session.ws_url,
+          elevenlabs_agent_id: session.elevenlabs_agent_id,
+        },
+      });
+    } catch (error) {
+      console.error("Error starting interview session:", error);
+      if (error instanceof Error && error.message.includes('subscription')) {
+        navigate("/pricing");
+      } else {
+        alert("Failed to start interview. Please try again.");
+      }
     } finally {
-      setLoadingStates((prev) => ({ ...prev, [lessonId]: false }));
+      setLoadingStates((prev) => {
+        const newState = { ...prev };
+        delete newState[interview.id];
+        return newState;
+      });
     }
   };
 
@@ -284,7 +189,7 @@ const AuthenticatedInterviewsPage: React.FC = () => {
   }
 
   // Show error state if content couldn't be loaded
-  if (error && lessons.length === 0) {
+  if (interviewsError && premiumInterviews.length === 0) {
     return (
       <div className={styles.container}>
         <div className={styles.header}>
@@ -294,7 +199,7 @@ const AuthenticatedInterviewsPage: React.FC = () => {
 
         <div className={styles.errorState}>
           <h3>Unable to load interview content</h3>
-          <p>{error}</p>
+          <p>{interviewsError}</p>
           <button className={styles.retryButton} onClick={handleRetry}>
             Retry
           </button>
@@ -325,35 +230,33 @@ const AuthenticatedInterviewsPage: React.FC = () => {
         )}
       </div>
 
-      {error && <div className={styles.errorMessage}>{error}</div>}
+      {interviewsError && <div className={styles.errorMessage}>{interviewsError}</div>}
 
-      {/* Display demo interview templates for non-subscribers */}
-      {!hasSubscription && demoTemplates.length > 0 && (
+      {/* Display demo interviews for users without subscription */}
+      {!hasSubscription && demoInterviews.length > 0 && (
         <>
-          <h2 className={styles.sectionTitle}>Interview Templates</h2>
+          <h2 className={styles.sectionTitle}>Free Demo Interviews</h2>
+          <p className={styles.demoDescription}>
+            Try our AI-powered case interviews for free. Each demo is limited to 1m 30s.
+          </p>
           <div className={styles.interviewCards}>
-            {demoTemplates.map((interview) => (
+            {demoInterviews.map((interview: any) => (
               <InterviewCard
-                key={interview.id}
+                key={`demo-${interview.id}`}
                 id={interview.id}
                 company={interview.company}
-                logo={
-                  interview.logo || "/assets/interviewCards/Logos/default.svg"
-                }
+                logo={interview.logo}
                 title={interview.title}
-                description={
-                  interview.description || interview.description_short || ""
-                }
+                description={interview.description}
                 image_url={interview.image_url}
-                thumbnail={interview.thumbnail}
-                buttonText={interview.buttonText || "Mock Interview"}
+                buttonText={interview.buttonText}
                 isLoading={loadingStates[interview.id]}
-                progress_status={interview.progress_status}
-                completionStatus={null}
-                onClick={() => handleInterviewAction(interview)}
+                isPremium={false}
+                completionStatus="Demo"
+                onClick={() => handleStartInterview(interview)}
                 onButtonClick={(e) => {
                   e.stopPropagation();
-                  handleInterviewAction(interview);
+                  handleStartInterview(interview);
                 }}
               />
             ))}
@@ -361,51 +264,33 @@ const AuthenticatedInterviewsPage: React.FC = () => {
         </>
       )}
 
-      {/* Display lessons if user has subscription */}
-      {hasSubscription && (
+      {/* Display premium interviews */}
+      {hasSubscription && premiumInterviews.length > 0 && (
         <>
-          {lessonsLoading ? (
-            <div className={styles.loadingContainer}>
-              <LoadingSpinner />
-              <p>Loading lessons...</p>
-            </div>
-          ) : lessonsError ? (
-            <div className={styles.errorMessage}>
-              {lessonsError}
-              <button
-                className={styles.retryButton}
-                onClick={loadLessons}
-                style={{ marginLeft: "10px" }}
-              >
-                Retry
-              </button>
-            </div>
-          ) : lessons.length > 0 ? (
-            <div className={styles.interviewCards}>
-              {lessons.map((lesson) => (
-                <InterviewCard
-                  key={`lesson-${lesson.id}`}
-                  id={lesson.id}
-                  company={lesson.company}
-                  logo={lesson.logo}
-                  title={lesson.title}
-                  description={lesson.description}
-                  image_url={lesson.image_url}
-                  buttonText={lesson.buttonText}
-                  isLoading={loadingStates[lesson.id]}
-                  onClick={() => handleStartLesson(lesson.id)}
-                  onButtonClick={(e) => {
-                    e.stopPropagation();
-                    handleStartLesson(lesson.id);
-                  }}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className={styles.emptyState}>
-              <p>No lessons available at this time. Check back later!</p>
-            </div>
-          )}
+          <h2 className={styles.sectionTitle}>Premium Interviews</h2>
+          <div className={styles.interviewCards}>
+            {premiumInterviews.map((interview: any) => (
+              <InterviewCard
+                key={`premium-${interview.id}`}
+                id={interview.id}
+                company={interview.company}
+                logo={interview.logo}
+                title={interview.title}
+                description={interview.description}
+                image_url={interview.image_url}
+                buttonText={interview.buttonText}
+                isLoading={loadingStates[interview.id]}
+                isPremium={true}
+                completion_status={interview.completion_status}
+                completionStatus={interview.completionStatus}
+                onClick={() => navigate(`/interview/${interview.id}`)}
+                onButtonClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/interview/${interview.id}`);
+                }}
+              />
+            ))}
+          </div>
         </>
       )}
 
@@ -502,10 +387,10 @@ const AuthenticatedInterviewsPage: React.FC = () => {
                 buttonText={card.buttonText}
                 isPremium={true}
                 completionStatus={card.subtitle}
-                onClick={() => navigate("/subscription")}
+                onClick={() => navigate("/pricing")}
                 onButtonClick={(e) => {
                   e.stopPropagation();
-                  navigate("/subscription");
+                  navigate("/pricing");
                 }}
               />
             ))}

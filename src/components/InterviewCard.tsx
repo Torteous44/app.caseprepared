@@ -32,7 +32,7 @@ export interface InterviewCardProps {
   buttonText: string;
   isLoading?: boolean;
   isPremium?: boolean;
-  progress_status?: string | null;
+  completion_status?: string | null;
   completionStatus?: string | null;
   onClick: () => void;
   onButtonClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -49,7 +49,7 @@ const InterviewCard: React.FC<InterviewCardProps> = ({
   buttonText,
   isLoading = false,
   isPremium = false,
-  progress_status,
+  completion_status,
   completionStatus,
   onClick,
   onButtonClick,
@@ -71,15 +71,15 @@ const InterviewCard: React.FC<InterviewCardProps> = ({
 
       <div className={styles.cardImage}>
         <img src={imageSource} alt={title} />
-        {progress_status && (
+        {completion_status && (
           <span
             className={`${styles.statusPill} ${
-              progress_status === "completed"
+              completion_status === "completed"
                 ? styles.completed
                 : styles.incomplete
             }`}
           >
-            {progress_status === "completed" ? "Completed" : "In Progress"}
+            {completion_status === "completed" ? "Completed" : "In Progress"}
           </span>
         )}
       </div>
@@ -91,10 +91,8 @@ const InterviewCard: React.FC<InterviewCardProps> = ({
         <div className={styles.buttonWrapper}>
           <button
             onClick={onButtonClick}
-            disabled={isLoading || isPremium}
-            className={`${styles.mockButton} ${
-              isPremium ? styles.disabledButton : ""
-            }`}
+            disabled={isLoading}
+            className={styles.mockButton}
           >
             {isLoading ? "Loading..." : buttonText}
             <ArrowIcon />

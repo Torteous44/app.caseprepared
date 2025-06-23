@@ -185,6 +185,20 @@
   border-left: 4px solid var(--red-primary);
 }
 
+.sectionTitle {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  margin: var(--space-xl) 0 var(--space-sm) 0;
+  text-align: left;
+}
+
+.demoDescription {
+  font-size: var(--font-size-md);
+  color: var(--text-color-secondary);
+  margin-bottom: var(--space-lg);
+  text-align: left;
+}
+
 .emptyState {
   background-color: var(--background-secondary);
   border-radius: var(--border-radius-md);

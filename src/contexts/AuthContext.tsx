@@ -11,7 +11,7 @@ const API_BASE_URL = "http://127.0.0.1:8000";
 // Determine the app domain to redirect to
 const APP_DOMAIN =
   process.env.NODE_ENV === "development"
-    ? "http://localhost:3001"
+    ? "http://localhost:3000"
     : "https://app.caseprepared.com";
 
 // Determine the marketing site domain for redirects
@@ -234,9 +234,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           // Try to fetch current user profile
           await fetchUserProfile();
         } else {
-          console.log("No token found, redirecting to marketing site");
-          // Redirect to marketing site if no token is found
-          window.location.href = MARKETING_DOMAIN;
+          console.log("No token found, user needs to authenticate");
+          // Don't redirect - let the auth screen handle it
+          setLoading(false);
         }
       } catch (err) {
         console.error("Authentication check failed:", err);
@@ -253,11 +253,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               "Authentication failed after token refresh:",
               refreshErr
             );
-            redirectToLogin();
+            // Clear auth data but don't redirect
+            logout();
           }
         } else {
-          // Clear all auth data if refresh fails and redirect
-          redirectToLogin();
+          // Clear all auth data if refresh fails
+          logout();
         }
       } finally {
         setLoading(false);
@@ -267,19 +268,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     checkAuth();
   }, []);
 
-  // Redirect to login page on the marketing site
-  const redirectToLogin = () => {
-    logout();
-    window.location.href = `${MARKETING_DOMAIN}/login`;
-  };
-
-  // Logout function
+  // Logout function - updated to not redirect to marketing site
   const logout = () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("user");
     setUser(null);
-    window.location.href = MARKETING_DOMAIN;
+    setHasSubscription(false);
+    // Don't redirect - let the auth screen show
   };
 
   return (
