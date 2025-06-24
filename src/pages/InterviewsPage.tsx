@@ -40,11 +40,9 @@ const getCompanyLogo = (company: string): string => {
   );
 };
 
-
-
 const AuthenticatedInterviewsPage: React.FC = () => {
   const navigate = useNavigate();
-  const { user, isAuthenticated, hasSubscription } = useAuth();
+  const { user, isAuthenticated, hasSubscription, refreshSubscriptionStatus } = useAuth();
   const stripeContext = useContext(StripeContext);
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>(
@@ -85,6 +83,18 @@ const AuthenticatedInterviewsPage: React.FC = () => {
         }
       } catch (err) {
         console.error("Error loading interviews:", err);
+        
+        // If we get a 402 error, try refreshing subscription status
+        if (err instanceof Error && err.message.includes('subscription required')) {
+          console.log('Subscription error detected, refreshing status...');
+          try {
+            await refreshSubscriptionStatus();
+            // Don't retry automatically - let user refresh the page
+          } catch (refreshError) {
+            console.error('Failed to refresh subscription status:', refreshError);
+          }
+        }
+        
         setInterviewsError(
           err instanceof Error ? err.message : "Failed to load interviews"
         );
@@ -104,7 +114,7 @@ const AuthenticatedInterviewsPage: React.FC = () => {
       setDemoInterviews(formattedDemos);
       setLoading(false);
     }
-  }, [isAuthenticated, hasSubscription]);
+  }, [isAuthenticated, hasSubscription, refreshSubscriptionStatus]);
 
   const handleRetry = () => {
     // Retry loading interviews
@@ -131,8 +141,6 @@ const AuthenticatedInterviewsPage: React.FC = () => {
     
     loadInterviews();
   };
-
-
 
   const handleUpgradeClick = () => {
     navigate("/subscription");

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import styles from "../styles/CheckoutPage.module.css";
 import "../styles.css";
 
@@ -79,7 +80,10 @@ const SupportIcon = () => (
 const CheckoutSuccess: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshAttempts, setRefreshAttempts] = useState(0);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { refreshToken, fetchUserProfile } = useAuth();
 
   useEffect(() => {
     const handleSuccess = async () => {
@@ -87,15 +91,43 @@ const CheckoutSuccess: React.FC = () => {
         const searchParams = new URLSearchParams(location.search);
         const sessionId = searchParams.get("session_id");
 
-        // If there's a session ID, just acknowledge success
-        // The webhook will handle the actual subscription activation
+        // If there's a session ID, refresh token and user profile
         if (sessionId) {
-          // Simple delay to allow webhook processing
-          setTimeout(() => {
+          console.log("Payment successful, refreshing token and user profile...");
+          
+          // Wait a bit for webhook to process
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          
+          // Attempt to refresh token to get updated subscription status
+          const tokenRefreshed = await refreshToken();
+          
+          if (tokenRefreshed) {
+            console.log("Token refreshed successfully, fetching updated user profile...");
+            
+            // Fetch updated user profile with new token
+            await fetchUserProfile();
+            
+            console.log("User profile updated with new subscription status");
             setLoading(false);
-          }, 2000);
+          } else {
+            console.error("Failed to refresh token after payment");
+            
+            // Try alternative approach - fetch user profile directly
+            try {
+              await fetchUserProfile();
+              console.log("User profile fetched successfully without token refresh");
+              setLoading(false);
+            } catch (profileError) {
+              console.error("Failed to fetch user profile:", profileError);
+              
+              // If we still can't get the updated profile, show error with retry option
+              setError("Payment was successful, but we couldn't verify your subscription status. Please try refreshing the page or contact support.");
+              setLoading(false);
+            }
+          }
         } else {
           // No session ID means we came here without a proper checkout
+          console.warn("No session ID found in URL");
           setLoading(false);
         }
       } catch (err) {
@@ -108,14 +140,35 @@ const CheckoutSuccess: React.FC = () => {
     };
 
     handleSuccess();
-  }, [location.search]);
+  }, [location.search, refreshToken, fetchUserProfile]);
+
+  // Handle retry for token refresh
+  const handleRetry = async () => {
+    setError(null);
+    setLoading(true);
+    
+    try {
+      const tokenRefreshed = await refreshToken();
+      if (tokenRefreshed) {
+        await fetchUserProfile();
+        setLoading(false);
+      } else {
+        setError("Still unable to verify subscription. Please contact support.");
+        setLoading(false);
+      }
+    } catch (err) {
+      setError("Retry failed. Please contact support.");
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (
       <div className="container">
         <div className={styles.loadingContainer}>
           <div className={styles.spinner}></div>
-          <p>Verifying your subscription...</p>
+          <p>Payment successful! Setting up your premium access...</p>
+          <p className={styles.detailText}>Refreshing your account with updated subscription status</p>
         </div>
       </div>
     );
@@ -128,12 +181,20 @@ const CheckoutSuccess: React.FC = () => {
           <div className={styles.errorIcon}>!</div>
           <h1>Verification Error</h1>
           <p>{error}</p>
-          <Link
-            to="/profile"
-            className={`btn btn-primary ${styles.actionButton}`}
-          >
-            Return to Profile
-          </Link>
+          <div className={styles.actionButtonGroup}>
+            <button
+              onClick={handleRetry}
+              className={`btn btn-primary ${styles.actionButton}`}
+            >
+              Retry Verification
+            </button>
+            <Link
+              to="/profile"
+              className={`btn btn-outline ${styles.actionButton}`}
+            >
+              Go to Profile
+            </Link>
+          </div>
         </div>
       </div>
     );

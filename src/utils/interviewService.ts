@@ -1,3 +1,5 @@
+import { refreshTokenAndProfile } from './apiClient';
+
 // Define API base URL
 const API_BASE_URL = "https://caseprepcrud.onrender.com";
 
@@ -77,6 +79,27 @@ export const fetchPremiumInterviews = async (skip = 0, limit = 100): Promise<Int
 
     if (!response.ok) {
       if (response.status === 402) {
+        // Try to refresh token and retry once
+        console.log('Received 402 error, attempting token refresh...');
+        const refreshed = await refreshTokenAndProfile();
+        
+        if (refreshed) {
+          // Retry with new token
+          const newToken = localStorage.getItem('access_token');
+          const retryResponse = await fetch(`${API_BASE_URL}/api/v1/interviews/premium?skip=${skip}&limit=${limit}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${newToken}`,
+            },
+          });
+          
+          if (retryResponse.ok) {
+            console.log('Successfully fetched premium interviews after token refresh');
+            return await retryResponse.json();
+          }
+        }
+        
         throw new Error('Active subscription required for premium interviews');
       }
       throw new Error(`Failed to fetch premium interviews: ${response.status}`);
@@ -180,6 +203,28 @@ export const createInterviewSession = async (
 
     if (!response.ok) {
       if (response.status === 402) {
+        // Try to refresh token and retry once
+        console.log('Received 402 error, attempting token refresh...');
+        const refreshed = await refreshTokenAndProfile();
+        
+        if (refreshed) {
+          // Retry with new token
+          const newToken = localStorage.getItem('access_token');
+          const retryResponse = await fetch(`${API_BASE_URL}/api/v1/interviews/${interviewId}/session`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${newToken}`,
+            },
+            body: JSON.stringify({ demo_mode: demoMode.toString() }),
+          });
+          
+          if (retryResponse.ok) {
+            console.log('Successfully created interview session after token refresh');
+            return await retryResponse.json();
+          }
+        }
+        
         throw new Error('Active subscription required for premium interviews');
       }
       throw new Error(`Failed to create interview session: ${response.status}`);

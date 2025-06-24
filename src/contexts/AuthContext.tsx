@@ -40,6 +40,7 @@ interface AuthContextType {
   hasSubscription: boolean;
   logout: () => void;
   refreshToken: () => Promise<boolean>;
+  refreshSubscriptionStatus: () => Promise<void>;
   loading: boolean;
   error: string | null;
   fetchUserProfile: () => Promise<void>;
@@ -178,7 +179,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-
+  const refreshSubscriptionStatus = async (): Promise<void> => {
+    try {
+      // First try to refresh the token
+      const tokenRefreshed = await refreshToken();
+      
+      if (tokenRefreshed) {
+        // If token was refreshed, fetch updated user profile
+        await fetchUserProfile();
+      } else {
+        // If token refresh failed, try to fetch profile with current token
+        await fetchUserProfile();
+      }
+    } catch (error) {
+      console.error('Error refreshing subscription status:', error);
+      // Don't throw - let the calling component handle the error
+    }
+  };
 
   useEffect(() => {
     // Check for existing token on mount
@@ -276,6 +293,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         hasSubscription,
         logout,
         refreshToken,
+        refreshSubscriptionStatus,
         loading,
         error,
         fetchUserProfile,

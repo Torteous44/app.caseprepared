@@ -138,4 +138,76 @@ export const useApi = () => {
     request: apiRequest,
     refreshToken: auth.refreshToken,
   };
+};
+
+/**
+ * Utility function to refresh token and update user profile
+ * This ensures the user has the latest subscription status after payment
+ */
+export const refreshTokenAndProfile = async (): Promise<boolean> => {
+  try {
+    const refreshToken = localStorage.getItem('refresh_token');
+    
+    if (!refreshToken) {
+      console.error('No refresh token available');
+      return false;
+    }
+
+    // Refresh the access token
+    const response = await fetch(`${API_BASE_URL}/api/v1/auth/refresh`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ refresh_token: refreshToken }),
+    });
+
+    if (!response.ok) {
+      console.error('Failed to refresh token');
+      return false;
+    }
+
+    const data = await response.json();
+
+    // Store new tokens
+    localStorage.setItem('access_token', data.access_token);
+    localStorage.setItem('refresh_token', data.refresh_token || '');
+
+    // Fetch updated user profile with new token
+    const profileResponse = await fetch(`${API_BASE_URL}/api/v1/users/me`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${data.access_token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (profileResponse.ok) {
+      const userData = await profileResponse.json();
+      localStorage.setItem('user', JSON.stringify(userData));
+      console.log('Token and profile refreshed successfully');
+      return true;
+    } else {
+      console.error('Failed to fetch updated user profile');
+      return false;
+    }
+  } catch (error) {
+    console.error('Error refreshing token and profile:', error);
+    return false;
+  }
+};
+
+/**
+ * Utility function to check if user needs token refresh
+ * Returns true if the current token is likely stale (e.g., after payment)
+ */
+export const shouldRefreshToken = (): boolean => {
+  // Check if we're on a payment success page
+  const isOnPaymentSuccess = window.location.pathname.includes('/checkout/success');
+  
+  // Check if we have a session_id in URL (indicates recent payment)
+  const urlParams = new URLSearchParams(window.location.search);
+  const hasSessionId = urlParams.has('session_id');
+  
+  return isOnPaymentSuccess && hasSessionId;
 }; 
