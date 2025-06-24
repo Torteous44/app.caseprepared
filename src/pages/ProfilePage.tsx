@@ -3,10 +3,7 @@ import { useAuth } from "../contexts/AuthContext";
 import styles from "../styles/ProfilePage.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "../components/common/Footer";
-import axios from "axios";
-
-// API base URL
-const API_BASE_URL = "https://caseprepcrud.onrender.com";
+import SubscriptionService, { SubscriptionStatus } from "../utils/subscriptionService";
 
 // Lock Icon SVG as component
 const LockIcon = () => (
@@ -54,6 +51,7 @@ interface User {
   created_at: string;
   updated_at?: string;
   subscription_status?: string; // From token payload: "none" | "trialing" | "active" | "past_due" | "canceled"
+  subscription?: SubscriptionStatus;
 }
 
 // Checkout Button Component
@@ -73,29 +71,8 @@ const CheckoutButton = ({
       setLoading(true);
       setError(null);
 
-      const token = localStorage.getItem("access_token");
-      if (!token) {
-        throw new Error("Authentication required");
-      }
-
-      // Call backend endpoint to create checkout session - Updated to match API docs
-      const response = await axios.post(
-        `${API_BASE_URL}/api/v1/billing/checkout`,
-        {
-          plan: plan,
-          success_url: `${window.location.origin}/checkout/success`,
-          cancel_url: `${window.location.origin}/checkout/cancel`,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      // Redirect to Stripe Checkout
-      window.location.href = response.data.checkout_url;
+      const response = await SubscriptionService.createCheckoutSession(plan);
+      window.location.href = response.checkout_url;
     } catch (err) {
       console.error("Checkout error:", err);
       setError(
@@ -124,16 +101,17 @@ const CheckoutButton = ({
   );
 };
 
-
 const ProfilePage: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [profileData, setProfileData] = useState<User | null>(null);
   const [profileLoading, setProfileLoading] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
+  const [cancelLoading, setCancelLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [editMode, setEditMode] = useState(false);
+  const [showCancelConfirmation, setShowCancelConfirmation] = useState(false);
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",
@@ -152,7 +130,7 @@ const ProfilePage: React.FC = () => {
       if (!token) return;
 
       // Use the documented API endpoint for profile data
-      const response = await fetch(`${API_BASE_URL}/api/v1/users/me`, {
+      const response = await fetch("https://caseprepcrud.onrender.com/api/v1/users/me", {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -191,31 +169,9 @@ const ProfilePage: React.FC = () => {
     try {
       setPortalLoading(true);
       setError(null);
-      const token = localStorage.getItem("access_token");
-      if (!token) return;
 
-      // Use the documented billing portal endpoint
-      const response = await fetch(
-        `${API_BASE_URL}/api/v1/billing/portal?return_url=${encodeURIComponent(window.location.href)}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        // Redirect to Stripe billing portal
-        window.location.href = data.url;
-      } else {
-        const errorData = await response.json();
-        setError(
-          errorData.detail || "Failed to access billing portal. Please try again."
-        );
-      }
+      const response = await SubscriptionService.getCustomerPortalUrl(window.location.href);
+      window.location.href = response.portal_url;
     } catch (error) {
       console.error("Error accessing billing portal:", error);
       setError(
@@ -225,6 +181,29 @@ const ProfilePage: React.FC = () => {
       );
     } finally {
       setPortalLoading(false);
+    }
+  };
+
+  const handleCancelSubscription = async () => {
+    try {
+      setCancelLoading(true);
+      setError(null);
+
+      const result = await SubscriptionService.cancelSubscription();
+      setMessage(result.message || "Subscription canceled successfully");
+      setShowCancelConfirmation(false);
+      
+      // Refresh profile data to get updated subscription status
+      await fetchUserProfile();
+    } catch (err) {
+      console.error("Error canceling subscription:", err);
+      setError(
+        `Failed to cancel subscription: ${
+          err instanceof Error ? err.message : "Unknown error"
+        }`
+      );
+    } finally {
+      setCancelLoading(false);
     }
   };
 
@@ -253,7 +232,7 @@ const ProfilePage: React.FC = () => {
 
       // Only update if there are changes
       if (Object.keys(updateData).length > 0) {
-        const response = await fetch(`${API_BASE_URL}/api/v1/users/me`, {
+        const response = await fetch("https://caseprepcrud.onrender.com/api/v1/users/me", {
           method: "PATCH",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -291,7 +270,19 @@ const ProfilePage: React.FC = () => {
   };
 
   const isPremiumMember = () => {
-    return profileData?.subscription_status === "active" || profileData?.subscription_status === "trialing";
+    return SubscriptionService.isSubscriptionActive(profileData?.subscription_status || "");
+  };
+
+  const getSubscriptionStatusText = () => {
+    return SubscriptionService.getStatusDisplayText(profileData?.subscription_status || "");
+  };
+
+  const getSubscriptionStatusClass = () => {
+    return styles[SubscriptionService.getStatusClass(profileData?.subscription_status || "")];
+  };
+
+  const isTrialSubscription = () => {
+    return SubscriptionService.isTrialSubscription(profileData?.subscription_status || "");
   };
 
   // Show loading state while fetching profile data
@@ -403,23 +394,43 @@ const ProfilePage: React.FC = () => {
               <div className={styles.subscriptionDetails}>
                 <div className={styles.infoRow}>
                   <span className={styles.infoLabel}>Status:</span>
-                  <span className={`${styles.infoValue} ${styles.active}`}>
-                    {profileData.subscription_status === "trialing" ? "Trial" : "Active"}
+                  <span className={`${styles.infoValue} ${getSubscriptionStatusClass()}`}>
+                    {getSubscriptionStatusText()}
                   </span>
                 </div>
                 <div className={styles.infoRow}>
                   <span className={styles.infoLabel}>Plan:</span>
                   <span className={styles.infoValue}>Premium</span>
                 </div>
-                {profileData.subscription_status !== "trialing" && (
-                  <button
-                    className={styles.manageSubscriptionButton}
-                    onClick={handleManageSubscription}
-                    disabled={portalLoading}
-                  >
-                    {portalLoading ? "Loading..." : "Manage Subscription"}
-                  </button>
+                
+                {profileData.subscription?.current_period_end && (
+                  <div className={styles.infoRow}>
+                    <span className={styles.infoLabel}>Next Billing:</span>
+                    <span className={styles.infoValue}>
+                      {SubscriptionService.formatPeriodEnd(profileData.subscription.current_period_end)}
+                    </span>
+                  </div>
                 )}
+                
+                <div className={styles.subscriptionActions}>
+                  {!isTrialSubscription() && (
+                    <button
+                      className={styles.manageSubscriptionButton}
+                      onClick={handleManageSubscription}
+                      disabled={portalLoading}
+                    >
+                      {portalLoading ? "Loading..." : "Manage Subscription"}
+                    </button>
+                  )}
+                  
+                  <button
+                    className={styles.cancelSubscriptionButton}
+                    onClick={() => setShowCancelConfirmation(true)}
+                    disabled={cancelLoading}
+                  >
+                    {cancelLoading ? "Processing..." : "Cancel Subscription"}
+                  </button>
+                </div>
               </div>
             </div>
           ) : (
@@ -449,6 +460,32 @@ const ProfilePage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Cancel Confirmation Modal */}
+      {showCancelConfirmation && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <h3>Cancel Subscription</h3>
+            <p>Are you sure you want to cancel your subscription? You will lose access to premium features immediately.</p>
+            <div className={styles.modalActions}>
+              <button
+                className={styles.cancelButton}
+                onClick={() => setShowCancelConfirmation(false)}
+                disabled={cancelLoading}
+              >
+                Keep Subscription
+              </button>
+              <button
+                className={styles.cancelSubscriptionButton}
+                onClick={handleCancelSubscription}
+                disabled={cancelLoading}
+              >
+                {cancelLoading ? "Processing..." : "Yes, Cancel"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {message && <div className={styles.successMessage}>{message}</div>}
       {error && <div className={styles.errorMessage}>{error}</div>}

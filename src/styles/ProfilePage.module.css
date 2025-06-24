@@ -290,6 +290,23 @@
   font-weight: 500;
 }
 
+.warning {
+  color: #d97706;
+  font-weight: 500;
+}
+
+.canceled {
+  color: #dc2626;
+  font-weight: 500;
+}
+
+.subscriptionActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+
 .cancelNotice {
   margin-top: 16px;
   padding: 12px;
@@ -300,7 +317,6 @@
 }
 
 .cancelSubscriptionButton {
-  margin-top: 16px;
   padding: 8px 16px;
   background-color: #ef4444;
   color: white;
@@ -322,7 +338,6 @@
 }
 
 .manageSubscriptionButton {
-  margin-top: 16px;
   padding: 8px 16px;
   background-color: var(--blue-primary);
   color: white;
@@ -355,7 +370,7 @@
 }
 
 .subscribeButton {
-  padding: 10px 20px;
+  padding: 8px 16px;
   background-color: var(--blue-primary);
   color: white;
   border: none;
@@ -370,7 +385,88 @@
   background-color: var(--blue-secondary);
 }
 
-/* Security section */
+/* Modal styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modalContent {
+  background-color: white;
+  border-radius: 8px;
+  padding: 24px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.modalContent h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.modalContent p {
+  margin: 0 0 24px 0;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.modalActions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.modalActions .cancelButton {
+  padding: 8px 16px;
+  background-color: white;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modalActions .cancelButton:hover {
+  background-color: #f9fafb;
+  color: #111827;
+}
+
+.modalActions .cancelSubscriptionButton {
+  padding: 8px 16px;
+  background-color: #ef4444;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.modalActions .cancelSubscriptionButton:hover {
+  background-color: #dc2626;
+}
+
+.modalActions .cancelSubscriptionButton:disabled {
+  background-color: #fca5a5;
+  cursor: not-allowed;
+}
+
+/* Security options */
 .securityOptions {
   display: flex;
   flex-direction: column;
@@ -393,7 +489,7 @@
 
 .securityOptionHeader h3 {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   margin: 0;
   color: #111827;
 }
@@ -403,87 +499,101 @@
 }
 
 .securityOption p {
+  margin: 0 0 12px 0;
   font-size: 14px;
   color: #6b7280;
-  margin: 0 0 16px 0;
 }
 
 .signOutButton {
   padding: 8px 16px;
-  background-color: #f3f4f6;
-  color: #4b5563;
-  border: 1px solid #d1d5db;
+  background-color: #ef4444;
+  color: white;
+  border: none;
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
 .signOutButton:hover {
-  background-color: #e5e7eb;
-  color: #111827;
+  background-color: #dc2626;
 }
 
 /* Messages */
 .successMessage {
-  margin-top: 24px;
+  margin-top: 16px;
   padding: 12px 16px;
-  background-color: #ecfdf5;
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
   border-radius: 6px;
-  color: #065f46;
+  color: #166534;
   font-size: 14px;
-  border: 1px solid #a7f3d0;
 }
 
 .errorMessage {
-  margin-top: 24px;
+  margin-top: 16px;
   padding: 12px 16px;
   background-color: #fef2f2;
-  border-radius: 6px;
-  color: #b91c1c;
-  font-size: 14px;
   border: 1px solid #fecaca;
+  border-radius: 6px;
+  color: #dc2626;
+  font-size: 14px;
 }
 
 .loading {
   display: flex;
-  align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  text-align: center;
-  color: #6b7280;
+  align-items: center;
+  height: 200px;
   font-size: 16px;
+  color: #6b7280;
 }
 
 /* Responsive styles */
 @media (max-width: 640px) {
   .profileContainer {
-    padding-top: 60px;
+    padding: 60px 16px 40px;
   }
-  
+
   .profileSection {
-    padding: 16px;
+    padding: 20px;
   }
-  
+
   .infoLabel {
     width: 120px;
   }
-  
+
   .subscriptionCard {
     flex-direction: column;
   }
-  
+
   .decorativeImage {
     width: 100%;
-    height: 80px;
+    height: 120px;
   }
-  
+
   .formActions {
     flex-direction: column;
   }
-  
+
   .saveButton, .cancelButton {
+    width: 100%;
+  }
+
+  .subscriptionActions {
+    flex-direction: column;
+  }
+
+  .subscriptionActions button {
+    width: 100%;
+  }
+
+  .modalActions {
+    flex-direction: column;
+  }
+
+  .modalActions button {
     width: 100%;
   }
 } 
