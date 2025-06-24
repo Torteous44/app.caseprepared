@@ -187,6 +187,7 @@ const InterviewPage: React.FC = () => {
   // Media setup function - called when user clicks to enable media
   const setupMedia = async () => {
     try {
+      console.log('📹 InterviewPage: Starting media setup...');
       setMediaStatus({ video: false, audio: false }); // Reset status
       
       // Check if getUserMedia is supported
@@ -200,6 +201,7 @@ const InterviewPage: React.FC = () => {
 
       // First, try to get both video and audio
       try {
+        console.log('📹 Requesting video + audio permissions...');
         stream = await navigator.mediaDevices.getUserMedia({
           video: {
             width: { ideal: 1920 },
@@ -214,14 +216,25 @@ const InterviewPage: React.FC = () => {
         });
         hasVideo = true;
         hasAudio = true;
-        
+        console.log('📹 Got video + audio stream:', {
+          stream,
+          videoTracks: stream.getVideoTracks().length,
+          audioTracks: stream.getAudioTracks().length
+        });
         
         // Log video track details
         stream.getVideoTracks().forEach((track, index) => {
-          
+          console.log(`📹 Video track ${index}:`, {
+            id: track.id,
+            label: track.label,
+            readyState: track.readyState,
+            enabled: track.enabled,
+            muted: track.muted,
+            settings: track.getSettings()
+          });
         });
       } catch (videoError) {
-        
+        console.log('📹 Video + audio failed, trying audio only:', videoError);
         
         // If video fails, try audio only
         try {
@@ -234,9 +247,9 @@ const InterviewPage: React.FC = () => {
           });
           hasVideo = false;
           hasAudio = true;
-          
+          console.log('📹 Got audio-only stream:', stream);
         } catch (audioError) {
-          
+          console.error('📹 Audio-only also failed:', audioError);
           throw audioError; // Re-throw the audio error since that's the minimum requirement
         }
       }
@@ -247,14 +260,16 @@ const InterviewPage: React.FC = () => {
 
       // Save the stream to the ref
       localStreamRef.current = stream;
+      console.log('📹 Saved stream to localStreamRef');
 
       // We'll connect the stream to the video element in a separate useEffect
       // after the component re-renders with the video element
 
       // Update status to indicate what we successfully got
       setMediaStatus({ video: hasVideo, audio: hasAudio });
+      console.log('📹 Updated media status:', { video: hasVideo, audio: hasAudio });
     } catch (err) {
-      console.error("Error accessing media devices:", err);
+      console.error("📹 Error accessing media devices:", err);
       let errorMessage = "Could not access microphone.";
       
       if (err instanceof Error) {
@@ -282,48 +297,98 @@ const InterviewPage: React.FC = () => {
   // Connect video stream to video element when both are available
   useEffect(() => {
     const connectVideoStream = () => {
+      console.log('📹 InterviewPage: Attempting to connect video stream:', {
+        hasVideoRef: !!videoRef.current,
+        hasVideoStatus: mediaStatus.video,
+        hasLocalStream: !!localStreamRef.current,
+        videoTracks: localStreamRef.current?.getVideoTracks().length || 0,
+        videoTrackState: localStreamRef.current?.getVideoTracks()[0]?.readyState,
+        videoTrackEnabled: localStreamRef.current?.getVideoTracks()[0]?.enabled
+      });
+
       if (videoRef.current && mediaStatus.video && localStreamRef.current) {
         const stream = localStreamRef.current;
         
-        
+        console.log('📹 Connecting stream to video element:', stream);
         videoRef.current.srcObject = stream;
         
         // Set video properties for better rendering
         videoRef.current.onloadedmetadata = () => {
           if (videoRef.current) {
-            
+            console.log('📹 Video metadata loaded:', {
+              videoWidth: videoRef.current.videoWidth,
+              videoHeight: videoRef.current.videoHeight,
+              readyState: videoRef.current.readyState
+            });
           }
         };
         
         // Add error event listener
         videoRef.current.onerror = (e) => {
-          console.error("❌ Video element error:", e);
+          console.error("📹 Video element error:", e);
         };
         
         // Add additional event listeners for debugging
         videoRef.current.oncanplay = () => {
-          
+          console.log('📹 Video can play');
         };
         
         videoRef.current.onplaying = () => {
-          
+          console.log('📹 Video is playing');
+        };
+
+        videoRef.current.onloadstart = () => {
+          console.log('📹 Video load started');
+        };
+
+        videoRef.current.onloadeddata = () => {
+          console.log('📹 Video data loaded');
         };
         
         // Also try to play immediately if metadata is already loaded
         if (videoRef.current.readyState >= 1) {
-          
+          console.log('📹 Video metadata already loaded, attempting to play');
           videoRef.current.play().then(() => {
-            
+            console.log('📹 Video playing successfully');
           }).catch((e) => {
-            
+            console.error('📹 Video play failed:', e);
           });
         }
-      } else {
         
+        return true; // Successfully connected
+      } else {
+        console.log('📹 Cannot connect video stream - missing requirements:', {
+          hasVideoRef: !!videoRef.current,
+          hasVideoStatus: mediaStatus.video,
+          hasLocalStream: !!localStreamRef.current
+        });
+        
+        return false; // Failed to connect
       }
     };
 
-    connectVideoStream();
+    // Only try to connect if we have both media status and stream
+    if (mediaStatus.video && localStreamRef.current) {
+      // Use a retry mechanism to wait for the video element
+      let retryCount = 0;
+      const maxRetries = 10;
+      const retryInterval = 100;
+      
+      const tryConnect = () => {
+        const success = connectVideoStream();
+        
+        if (!success && retryCount < maxRetries) {
+          retryCount++;
+          console.log(`📹 Retry ${retryCount}/${maxRetries} in ${retryInterval}ms...`);
+          setTimeout(tryConnect, retryInterval);
+        } else if (!success) {
+          console.error('📹 Failed to connect video after all retries');
+        }
+      };
+      
+      // Start with a small delay to allow React to render the video element
+      setTimeout(tryConnect, 50);
+    }
   }, [mediaStatus.video, localStreamRef.current]); // Run when video status changes or stream is set
 
   // Get device information
@@ -349,8 +414,10 @@ const InterviewPage: React.FC = () => {
   useEffect(() => {
     const checkMediaSupport = async () => {
       try {
+        console.log('📹 InterviewPage: Checking media support on mount...');
         // Check if getUserMedia is supported
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          console.log('📹 getUserMedia not supported');
           setMediaStatus({
             video: false,
             audio: false,
@@ -362,11 +429,18 @@ const InterviewPage: React.FC = () => {
         // Check if we already have permissions and auto-setup if granted
         if (navigator.permissions) {
           try {
+            console.log('📹 Checking existing permissions...');
             const videoPermission = await navigator.permissions.query({ name: 'camera' as PermissionName });
             const audioPermission = await navigator.permissions.query({ name: 'microphone' as PermissionName });
             
+            console.log('📹 Permission states:', {
+              video: videoPermission.state,
+              audio: audioPermission.state
+            });
+            
             if (videoPermission.state === 'granted' && audioPermission.state === 'granted') {
               // If we already have permissions, set up media automatically
+              console.log('📹 Permissions already granted, setting up media automatically');
               await setupMedia();
             }
             
@@ -374,11 +448,11 @@ const InterviewPage: React.FC = () => {
             await getDeviceInfo();
           } catch (permErr) {
             // Permissions API might not be fully supported, that's okay
-            console.log("Permissions API query failed:", permErr);
+            console.log("📹 Permissions API query failed:", permErr);
           }
         }
       } catch (err) {
-        console.log("Permissions API not supported or failed:", err);
+        console.log("📹 Permissions API not supported or failed:", err);
         // This is fine, we'll request permissions when user clicks
         await getDeviceInfo(); // Still try to get device info
       }
@@ -404,9 +478,9 @@ const InterviewPage: React.FC = () => {
     setIsStarting(true);
 
     try {
-      // Stop the local stream to release camera/mic before navigation
+      // Stop only the audio tracks of the local stream to release the mic
       if (localStreamRef.current) {
-        localStreamRef.current.getTracks().forEach((track) => track.stop());
+        localStreamRef.current.getAudioTracks().forEach((track) => track.stop());
       }
 
       let session: InterviewSession;

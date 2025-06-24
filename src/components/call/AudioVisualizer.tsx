@@ -87,9 +87,6 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
     { clamp: true }
   );
 
-  // For debugging
-  const debugText = isUserSpeaking ? "User Speaking" : (isSpeaking ? "AI Speaking" : "Silent");
-
   return (
     <div className={styles.container}>
       <div className={styles.visualizerWrapper}>
@@ -111,17 +108,6 @@ const AudioVisualizer: React.FC<AudioVisualizerProps> = ({
           </>
         )}
       </div>
-
-
-      
-      {/* Debug info - only show in development */}
-      {process.env.NODE_ENV === 'development' && (
-        <div style={{ position: 'absolute', top: '10px', left: '10px', color: 'rgba(255,255,255,0.5)', fontSize: '12px' }}>
-          <div>Status: {status}</div>
-          <div>Volume: {volume.toFixed(2)}</div>
-          <div>Speaking: {debugText}</div>
-        </div>
-      )}
     </div>
   );
 };

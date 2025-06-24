@@ -28,6 +28,24 @@
   100% { opacity: 0; transform: translate(-50%, -10px); }
 }
 
+/* Add the branding pill styles */
+.brandingPill {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #174EA6;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 30;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(23, 78, 166, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
 /* RealtimeConnect - Clean minimal video call interface */
 
 /* Demo timer display */

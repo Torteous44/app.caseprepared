@@ -69,9 +69,6 @@ const RealtimeConnect: React.FC = () => {
     onConnect: async () => {
       setIsSessionActive(true);
       
-      // Request microphone access only when session starts
-      await setupUserMedia();
-      
       // Set up session timer
       const ttl = session.ttl_seconds || (interview.demo ? 90 : 3600);
       setTimeRemaining(ttl);
@@ -136,7 +133,8 @@ const RealtimeConnect: React.FC = () => {
       let stream: MediaStream | null = null;
       
       try {
-        // Try to get video + audio
+        // Try to get video + audio first
+        console.log('Requesting video + audio permissions...');
         stream = await navigator.mediaDevices.getUserMedia({
           video: {
             width: { ideal: 1280 },
@@ -149,27 +147,48 @@ const RealtimeConnect: React.FC = () => {
             autoGainControl: true,
           }
         });
+        console.log('Got video + audio stream:', stream);
       } catch (videoError) {
+        console.log('Video + audio failed, trying audio only:', videoError);
         // Fallback to audio only
-        stream = await navigator.mediaDevices.getUserMedia({
-          audio: {
-            echoCancellation: true,
-            noiseSuppression: true,
-            autoGainControl: true,
-          }
-        });
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({
+            audio: {
+              echoCancellation: true,
+              noiseSuppression: true,
+              autoGainControl: true,
+            }
+          });
+          console.log('Got audio-only stream:', stream);
+        } catch (audioError) {
+          console.error('Audio-only also failed:', audioError);
+          throw audioError;
+        }
       }
 
       if (stream) {
+        console.log('Setting user stream. Video tracks:', stream.getVideoTracks().length, 'Audio tracks:', stream.getAudioTracks().length);
         setUserStream(stream);
+        
+        // Connect video to video element if we have video tracks
         if (userVideoRef.current && stream.getVideoTracks().length > 0) {
+          console.log('Connecting stream to video element');
           userVideoRef.current.srcObject = stream;
+          
+          // Ensure video plays
+          userVideoRef.current.onloadedmetadata = () => {
+            console.log('Video metadata loaded');
+            if (userVideoRef.current) {
+              userVideoRef.current.play().catch(e => console.error('Video play failed:', e));
+            }
+          };
         }
         
         // Set up audio analyzer for volume detection
         setupAudioAnalyzer(stream);
       }
     } catch (error) {
+      console.error('setupUserMedia failed:', error);
       setIsMicrophoneActive(false);
       setError('Microphone access required. Please allow permissions and refresh.');
     }
@@ -221,6 +240,48 @@ const RealtimeConnect: React.FC = () => {
       cleanupUserMedia();
     };
   }, []);
+
+  // Set up user media immediately when component mounts
+  useEffect(() => {
+    console.log('🎥 RealtimeConnect mounted, setting up media...');
+    setupUserMedia();
+  }, []);
+
+  // Log userStream changes
+  useEffect(() => {
+    console.log('🎥 userStream changed:', {
+      hasStream: !!userStream,
+      videoTracks: userStream?.getVideoTracks().length || 0,
+      audioTracks: userStream?.getAudioTracks().length || 0,
+      videoTrackState: userStream?.getVideoTracks()[0]?.readyState,
+      videoTrackEnabled: userStream?.getVideoTracks()[0]?.enabled
+    });
+    
+    if (userStream && userVideoRef.current) {
+      console.log('🎥 Video ref exists, connecting stream...');
+      userVideoRef.current.srcObject = userStream;
+      
+      // Add comprehensive video element event listeners
+      const videoElement = userVideoRef.current;
+      
+      videoElement.onloadstart = () => console.log('🎥 Video loadstart event');
+      videoElement.onloadeddata = () => console.log('🎥 Video loadeddata event');
+      videoElement.onloadedmetadata = () => {
+        console.log('🎥 Video metadata loaded:', {
+          videoWidth: videoElement.videoWidth,
+          videoHeight: videoElement.videoHeight,
+          duration: videoElement.duration,
+          readyState: videoElement.readyState
+        });
+        videoElement.play().catch(e => console.error('🎥 Video play failed:', e));
+      };
+      videoElement.oncanplay = () => console.log('🎥 Video can play');
+      videoElement.onplaying = () => console.log('🎥 Video is playing');
+      videoElement.onerror = (e) => console.error('🎥 Video error:', e);
+      videoElement.onstalled = () => console.log('🎥 Video stalled');
+      videoElement.onwaiting = () => console.log('🎥 Video waiting');
+    }
+  }, [userStream]);
 
   // Additional cleanup on page visibility change or beforeunload
   useEffect(() => {
@@ -447,6 +508,11 @@ const RealtimeConnect: React.FC = () => {
   // Main interview interface
   return (
     <div className={styles.container}>
+      {/* Branding pill */}
+      <div className={styles.brandingPill}>
+        CasePrepared AI
+      </div>
+
       {/* Demo timer */}
       {interview?.demo && (
         <div className={styles.demoTimer}>
@@ -466,19 +532,38 @@ const RealtimeConnect: React.FC = () => {
 
       {/* User video in bottom right */}
       <div className={styles.userVideoContainer}>
-        {userStream && userStream.getVideoTracks().length > 0 ? (
-          <video
-            ref={userVideoRef}
-            autoPlay
-            playsInline
-            muted
-            className={styles.userVideo}
-          />
-        ) : (
-          <div className={styles.cameraDisabled}>
-            <p>Camera not available</p>
-          </div>
-        )}
+        {(() => {
+          console.log('🎥 Rendering video container. Current state:', {
+            hasUserStream: !!userStream,
+            videoTracksCount: userStream?.getVideoTracks().length || 0,
+            userVideoRefExists: !!userVideoRef.current,
+            videoTrackEnabled: userStream?.getVideoTracks()[0]?.enabled,
+            videoTrackReadyState: userStream?.getVideoTracks()[0]?.readyState
+          });
+          
+          if (userStream && userStream.getVideoTracks().length > 0) {
+            console.log('🎥 Rendering video element');
+            return (
+              <video
+                ref={userVideoRef}
+                autoPlay
+                playsInline
+                muted
+                className={styles.userVideo}
+                onLoadedMetadata={() => console.log('🎥 Video element metadata loaded')}
+                onPlay={() => console.log('🎥 Video element playing')}
+                onError={(e) => console.error('🎥 Video element error:', e)}
+              />
+            );
+          } else {
+            console.log('🎥 Rendering camera disabled placeholder');
+            return (
+              <div className={styles.cameraDisabled}>
+                <p>Camera not available</p>
+              </div>
+            );
+          }
+        })()}
       </div>
 
       {/* Bottom controls */}
@@ -532,20 +617,6 @@ const RealtimeConnect: React.FC = () => {
           )}
         </div>
       </div>
-
-      {/* Debug info for development */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className={styles.debugInfo}>
-          <p>Status: {conversation.status}</p>
-          <p>Speaking: {conversation.isSpeaking ? 'Yes' : 'No'}</p>
-          <p>User Volume: {userVolume.toFixed(2)}</p>
-          <p>User Speaking: {userVolume > 0.1 ? 'Yes' : 'No'}</p>
-          <p>Microphone: {isMicrophoneActive ? 'Active' : 'Inactive'}</p>
-          <p>Time: {formatTime(timeRemaining)}</p>
-          <p>Session ID: {conversationId}</p>
-          <p>Transcripts: {transcripts.length}</p>
-        </div>
-      )}
     </div>
   );
 };
