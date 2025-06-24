@@ -30,25 +30,68 @@
 
 /* RealtimeConnect - Clean minimal video call interface */
 
-/* Main container - full screen */
+/* Demo timer display */
+.demoTimer {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 255, 255, 0.9);
+  color: #174EA6;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 20;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(23, 78, 166, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Main container - full screen with frame */
 .container {
   display: flex;
   flex-direction: column;
   height: 100vh;
   width: 100vw;
-  background: linear-gradient(-45deg, #E3F2FD, #BBDEFB, #90CAF9, #64B5F6);
-  background-size: 400% 400%;
-  animation: gradientShift 150s ease infinite;
+  background: #484A4B;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   overflow: hidden;
-  padding: 0;
+  padding: 8px;
   margin: 0;
   box-sizing: border-box;
   z-index: 9999;
+}
+
+/* Inner container for the blue gradient */
+.container::before {
+  content: '';
+  position: absolute;
+  top: 48px;
+  left: 48px;
+  right: 48px;
+  bottom: 48px;
+  background: linear-gradient(-45deg, #E3F2FD, #BBDEFB, #90CAF9, #64B5F6);
+  background-size: 400% 400%;
+  animation: gradientShift 150s ease infinite;
+  border-radius: 12px;
+  z-index: -1;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 /* Main content area - for audio visualizer */
@@ -60,15 +103,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background: transparent;
 }
 
 /* User video in bottom right corner */
 .userVideoContainer {
   position: absolute;
-  bottom: 100px;
-  right: 20px;
+  bottom: 48px;
+  right: 36px;
   width: 200px;
-  height: 150px;
+  height: 144px;
   border-radius: 12px;
   overflow: hidden;
   border: 2px solid #333;
@@ -259,7 +303,7 @@
 }
 
 .message.ai .messageText {
-  background: #3b82f6;
+  background: #174ea6ae;
   border: none;
   color: white;
   border-radius: 18px 18px 18px 4px;
@@ -267,7 +311,7 @@
 }
 
 .message.user .messageText {
-  background: white;
+  background: rgba(255, 255, 255, 0.625);
   border: none;
   color: #1f2937;
   border-radius: 18px 18px 4px 18px;
@@ -303,7 +347,7 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
-/* Loading, Error, and Completion states */
+/* Loading, Error states */
 .loadingContainer,
 .errorContainer {
   display: flex;
@@ -344,18 +388,6 @@
 
 .returnButton:hover {
   background-color: #2563eb;
-}
-
-/* Development debug info */
-.debugInfo {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  color: white;
-  background-color: rgba(0, 0, 0, 0.7);
-  padding: 10px;
-  border-radius: 5px;
-  font-size: 12px;
 }
 
 /* Mobile responsiveness */
@@ -400,18 +432,5 @@
     padding: 0 15px;
     height: 50px;
     bottom: 15px;
-  }
-}
-
-/* Gradient animation keyframes */
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
   }
 } 

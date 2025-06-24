@@ -46,10 +46,13 @@
   width: 140px;
   height: 140px;
   border-radius: 50%;
-  background: radial-gradient(circle at center, #174EA6 40%, #0f89ed 90%, #42A5F5 100%);
+  background: radial-gradient(circle at 50% 40%, #59A7F6, #174EA6);
   position: relative;
   z-index: 3;
-  box-shadow: 0 4px 16px rgba(23, 78, 166, 0.25);
+  box-shadow: 
+    0 8px 24px rgba(23, 78, 166, 0.25),
+    inset 0 4px 8px rgba(255, 255, 255, 0.1),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.25);
 }
 
 .aiIcon {

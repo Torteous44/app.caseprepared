@@ -601,16 +601,15 @@ const InterviewPage: React.FC = () => {
                 >
                   <path
                     d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4zM14 13h-3v3H9v-3H6v-2h3V8h2v3h3v2z"
-                    fill="#999"
+                    fill="#888"
                   />
                 </svg>
-                <p>Microphone Required</p>
-                <p className={styles.mediaNote}>Camera optional but recommended</p>
+                <p>Enable Microphone and Camera</p>
                 <button
                   onClick={setupMedia}
                   className={styles.enableMediaButton}
                 >
-                  Enable Microphone
+                  Enable Microphone and Camera
                 </button>
               </div>
             ) : (
@@ -710,6 +709,10 @@ const InterviewPage: React.FC = () => {
             >
               {isStarting ? "Starting Interview..." : "Start Interview"}
             </button>
+
+            <p className={styles.joinNote}>
+              Begin the interview to get started.
+            </p>
 
             {interview.demo && (
               <p className={styles.demoNote}>

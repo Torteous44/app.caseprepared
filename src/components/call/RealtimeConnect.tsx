@@ -447,6 +447,13 @@ const RealtimeConnect: React.FC = () => {
   // Main interview interface
   return (
     <div className={styles.container}>
+      {/* Demo timer */}
+      {interview?.demo && (
+        <div className={styles.demoTimer}>
+          Demo Time: {formatTime(timeRemaining)}
+        </div>
+      )}
+
       {/* Main content - Audio Visualizer */}
       <div className={styles.mainContent}>
         <AudioVisualizer 
