@@ -26,13 +26,12 @@ const Profile = lazy(() => import("../pages/ProfilePage"));
 const RealtimeSession = lazy(
   () => import("../components/call/RealtimeConnect")
 );
+const RealtimeDemo = lazy(() => import("../pages/RealtimeConnectDemo"));
 const PostQuestion = lazy(
   () => import("../components/interview/PostQuestionScreen")
 );
-
-// Demo page (temporary)
-const AudioVisualizerDemo = lazy(() => import("../pages/AudioVisualizerDemo"));
-
+const ResourceLibraryPage = lazy(() => import("../pages/ResourceLibraryPage"));
+const CaseMathPage = lazy(() => import("../pages/CaseMathPage"));
 // Checkout pages
 const CheckoutSuccess = lazy(() => import("../pages/CheckoutSuccess"));
 const CheckoutCancel = lazy(() => import("../pages/CheckoutCancel"));
@@ -68,18 +67,20 @@ const AppRoutes = () => {
           />
           <Route path="/profile" element={<Profile />} />
 
+          {/* Demo route for styling work */}
+          <Route path="/demo/realtime" element={<RealtimeDemo />} />
+
           {/* Checkout routes */}
           <Route path="/checkout" element={<CheckoutSuccess />} />
           <Route path="/checkout/success" element={<CheckoutSuccess />} />
           <Route path="/checkout/cancel" element={<CheckoutCancel />} />
 
-          {/* Demo page (temporary) */}
-          <Route path="/demo/audiovisualizer" element={<AudioVisualizerDemo />} />
-
           {/* Information pages */}
           <Route path="/about" element={<About />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/resources" element={<Resources />} />
+          <Route path="/resources/library" element={<ResourceLibraryPage />} />
+          <Route path="/casemath-braingame" element={<CaseMathPage />} />
           <Route path="/blogs" element={<Blogs />} />
           <Route path="/blog/:id" element={<BlogPost />} />
           <Route path="/terms" element={<Terms />} />

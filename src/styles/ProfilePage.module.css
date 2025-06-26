@@ -11,7 +11,7 @@
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
-  padding: 80px 20px 60px;
+  padding: 120px 20px 80px;
   font-family: var(--font-primary);
 }
 
@@ -318,7 +318,7 @@
 
 .cancelSubscriptionButton {
   padding: 8px 16px;
-  background-color: #ef4444;
+  background-color: #dc3545;
   color: white;
   border: none;
   border-radius: 6px;
@@ -329,7 +329,7 @@
 }
 
 .cancelSubscriptionButton:hover {
-  background-color: #dc2626;
+  background-color: #c82333;
 }
 
 .cancelSubscriptionButton:disabled {
@@ -447,7 +447,7 @@
 
 .modalActions .cancelSubscriptionButton {
   padding: 8px 16px;
-  background-color: #ef4444;
+  background-color: #dc3545;
   color: white;
   border: none;
   border-radius: 6px;
@@ -458,7 +458,7 @@
 }
 
 .modalActions .cancelSubscriptionButton:hover {
-  background-color: #dc2626;
+  background-color: #c82333;
 }
 
 .modalActions .cancelSubscriptionButton:disabled {
@@ -506,7 +506,7 @@
 
 .signOutButton {
   padding: 8px 16px;
-  background-color: #ef4444;
+  background-color: #dc3545;
   color: white;
   border: none;
   border-radius: 6px;
@@ -517,7 +517,7 @@
 }
 
 .signOutButton:hover {
-  background-color: #dc2626;
+  background-color: #c82333;
 }
 
 /* Messages */

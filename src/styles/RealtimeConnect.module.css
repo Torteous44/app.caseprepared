@@ -124,25 +124,26 @@
   background: transparent;
 }
 
-/* User video in bottom right corner */
+/* User video hooked to bottom right of container border */
 .userVideoContainer {
-  position: absolute;
-  bottom: 48px;
-  right: 36px;
-  width: 200px;
-  height: 144px;
-  border-radius: 12px;
+  position: fixed;
+  bottom: 60px;
+  right: 60px;
+  width: 180px;
+  height: 135px;
+  border-radius: 8px;
   overflow: hidden;
-  border: 2px solid #333;
-  background-color: #1a1a1a;
-  z-index: 10;
+  border: 3px solid #484A4B;
+  background-color: #2a2a2a;
+  z-index: 20;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 .userVideo {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 .cameraDisabled {
@@ -151,10 +152,12 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  background-color: #1a1a1a;
-  color: #666;
-  font-size: 14px;
+  background-color: #2a2a2a;
+  color: #888;
+  font-size: 12px;
+  font-weight: 500;
   text-align: center;
+  letter-spacing: 0.02em;
 }
 
 /* Bottom controls */
@@ -164,8 +167,9 @@
   left: 50%;
   transform: translateX(-50%);
   height: 60px;
-  background-color: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(10px);
+  background: linear-gradient(145deg, rgba(20, 20, 20, 0.95), rgba(0, 0, 0, 0.9));
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -173,7 +177,9 @@
   z-index: 25;
   padding: 10px 20px;
   border-radius: 30px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   width: auto;
 }
 
@@ -181,19 +187,40 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
-  background-color: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
   color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.controlButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 50%;
+}
+
+.controlButton:hover::before {
+  opacity: 1;
 }
 
 .controlButton:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  transform: scale(1.05);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .controlButton:disabled {
@@ -202,19 +229,35 @@
 }
 
 .endCall {
-  background-color: #ef4444;
+  background: linear-gradient(145deg, #ef4444, #dc2626);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.endCall::before {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
 }
 
 .endCall:hover {
-  background-color: #dc2626;
+  border-color: rgba(239, 68, 68, 0.5);
+  box-shadow: 
+    0 4px 12px rgba(239, 68, 68, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .transcriptButton {
-  background-color: rgba(59, 130, 246, 0.8);
+  background: linear-gradient(145deg, rgba(59, 130, 246, 0.8), rgba(59, 130, 246, 0.6));
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.transcriptButton::before {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
 }
 
 .transcriptButton:hover {
-  background-color: rgba(59, 130, 246, 1);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 
+    0 4px 12px rgba(59, 130, 246, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 /* Transcription panel */
@@ -224,15 +267,17 @@
   top: 0;
   bottom: 0;
   width: 380px;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.95));
-  backdrop-filter: blur(20px);
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(145deg, rgba(15, 15, 15, 0.98), rgba(5, 5, 5, 0.96));
+  backdrop-filter: blur(24px);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
   transform: translateX(100%);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 15;
+  z-index: 30;
   display: flex;
   flex-direction: column;
-  box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
+  box-shadow: 
+    -8px 0 24px rgba(0, 0, 0, 0.4),
+    inset 1px 0 0 rgba(255, 255, 255, 0.03);
 }
 
 .transcriptionPanel.open {
@@ -243,31 +288,35 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
-  font-size: 16px;
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 15px;
   font-weight: 500;
-  background: rgba(255, 255, 255, 0.02);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+  letter-spacing: 0.01em;
 }
 
 .closeTranscript {
   background: none;
-  border: none;
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 18px;
   cursor: pointer;
   padding: 0;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .closeTranscript:hover {
-  color: white;
+  color: rgba(255, 255, 255, 0.95);
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .transcriptionContent {
@@ -292,10 +341,10 @@
 }
 
 .messagesContainer {
-  padding: 16px;
+  padding: 20px 24px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .message {
@@ -312,28 +361,33 @@
 }
 
 .messageText {
-  max-width: 80%;
-  padding: 12px 16px;
-  border-radius: 18px;
+  max-width: 82%;
+  padding: 14px 18px;
+  border-radius: 16px;
   font-size: 14px;
-  line-height: 1.4;
+  line-height: 1.45;
   word-wrap: break-word;
+  font-weight: 400;
 }
 
 .message.ai .messageText {
-  background: #174ea6ae;
-  border: none;
-  color: white;
-  border-radius: 18px 18px 18px 4px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(145deg, #174ea6, #1565c0);
+  border: 1px solid rgba(23, 78, 166, 0.3);
+  color: rgba(255, 255, 255, 0.95);
+  border-radius: 16px 16px 16px 4px;
+  box-shadow: 
+    0 2px 8px rgba(23, 78, 166, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .message.user .messageText {
-  background: rgba(255, 255, 255, 0.625);
-  border: none;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.85));
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: #1f2937;
-  border-radius: 18px 18px 4px 18px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 16px 16px 4px 16px;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
 @keyframes messageSlideIn {
@@ -410,18 +464,37 @@
 
 /* Mobile responsiveness */
 @media (max-width: 768px) {
+  /* Thinner container border on mobile */
+  .container {
+    padding: 4px;
+  }
+
+  .container::before {
+    top:18px;
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+  }
+
+  /* Camera positioning - top left on mobile */
   .userVideoContainer {
     width: 120px;
     height: 90px;
-    bottom: 100px;
-    right: 10px;
+    top: 22px;
+    left: 22px;
+    bottom: auto;
+    right: auto;
+    border-width: 2px;
   }
 
+  /* Full height transcript panel */
   .transcriptionPanel {
     width: 100%;
-    bottom: 80px;
+    top: 0;
+    bottom: 0;
+    height: 100vh;
     border-left: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: none;
   }
 
   .transcriptionHeader {
@@ -445,10 +518,11 @@
     height: 45px;
   }
 
+  /* More vertical padding for bottom controls */
   .bottomControls {
     gap: 15px;
-    padding: 0 15px;
-    height: 50px;
-    bottom: 15px;
+    padding: 12px 20px;
+    height: 60px;
+    bottom: 20px;
   }
 } 

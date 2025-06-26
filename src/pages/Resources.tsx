@@ -7,12 +7,13 @@ import ResourcesHero from "../components/resources page/ResourcesHero"; // Assum
 import ResourcesMeasurements from "../components/resources page/ResourcesMeasurements";
 import ResourcesBlog from "../components/resources page/ResourcesBlog";
 import Footer from "../components/common/Footer";
-// import Blog from '../components/Blog';
+import ResourcesLibrarySection from "../components/resources page/ResourcesLibrarySection";
 
 const Resources: React.FC = () => {
   return (
     <div className="resources-page">
       <ResourcesHero />
+      <ResourcesLibrarySection />
       <ResourcesMeasurements />
       <ResourcesBlog />
       <Footer />

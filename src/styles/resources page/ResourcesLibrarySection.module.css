@@ -1,0 +1,342 @@
+@import "../../styles.css";
+
+.librarySection {
+  background: var(--background-primary);
+  padding: var(--space-3xl) 0;
+}
+
+.container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+  padding-bottom: 20px;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3xl);
+}
+
+.textContent {
+  flex: 1;
+  max-width: 500px;
+  margin-left: 5%;
+}
+
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: var(--blue-bg);
+  color: var(--blue-primary);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 16px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--space-md);
+  border: 1px solid rgba(23, 74, 166, 0.1);
+}
+
+.badgeIcon {
+  color: var(--blue-primary);
+}
+
+.title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-color-primary);
+  margin-bottom: var(--space-md);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.highlight {
+  color: var(--blue-primary);
+}
+
+.description {
+  font-size: var(--font-size-base);
+  color: var(--text-color-secondary);
+  margin-bottom: var(--space-lg);
+  line-height: var(--line-height-normal);
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--font-size-sm);
+  color: var(--text-color-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.featureIcon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: var(--blue-bg);
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--blue-primary);
+  border: 1px solid rgba(23, 74, 166, 0.1);
+}
+
+.ctaContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  background: var(--blue-primary);
+  color: white;
+  text-decoration: none;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--border-radius);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  max-width: fit-content;
+  letter-spacing: var(--letter-spacing-normal);
+}
+.ctaButton:hover {
+  background: var(--blue-secondary);
+  color: white;
+}
+.ctaSubtext {
+  font-size: var(--font-size-sm);
+  color: var(--text-color-quaternary);
+  margin: 0;
+  font-weight: var(--font-weight-medium);
+}
+
+.visualContent {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.libraryCard {
+  background: var(--background-primary);
+  border-radius: var(--border-radius-md);
+  padding: var(--space-lg);
+  border: 1px solid var(--border-color);
+  max-width: 300px;
+  width: 100%;
+  margin-left: 10%;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.cardIcon {
+  width: 36px;
+  height: 36px;
+  background: var(--blue-bg);
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--blue-primary);
+  border: 1px solid rgba(23, 74, 166, 0.1);
+}
+
+.cardHeader h3 {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-color-primary);
+  margin: 0;
+}
+
+.resourcePreview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.previewItem {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-xs);
+  padding: var(--space-xs);
+  border-radius: var(--border-radius);
+}
+
+.previewIcon {
+  width: 24px;
+  height: 24px;
+  background: var(--blue-bg);
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--blue-primary);
+  flex-shrink: 0;
+  border: 1px solid rgba(23, 74, 166, 0.1);
+}
+
+.previewContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.previewTitle {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-color-primary);
+  line-height: var(--line-height-snug);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.previewInstitution {
+  font-size: var(--font-size-xs);
+  color: var(--text-color-tertiary);
+  font-weight: var(--font-weight-medium);
+}
+
+.previewFooter {
+  margin-top: var(--space-xs);
+  padding-top: var(--space-xs);
+  border-top: 1px solid var(--border-color);
+}
+
+.previewMore {
+  font-size: var(--font-size-xs);
+  color: var(--blue-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .content {
+    gap: var(--space-4xl);
+  }
+  
+  .textContent {
+    margin-left: 5%;
+  }
+  
+  .title {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .description {
+    font-size: var(--font-size-md);
+  }
+  
+  .libraryCard {
+    max-width: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+  .librarySection {
+    padding: var(--space-4xl) 0;
+  }
+  
+  .content {
+    flex-direction: column;
+    gap: var(--space-3xl);
+    text-align: center;
+  }
+  
+  .textContent {
+    max-width: 100%;
+    margin-left: 0;
+  }
+  
+  .title {
+    font-size: var(--font-size-3xl);
+  }
+  
+  .features {
+    align-items: center;
+  }
+  
+  .feature {
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .ctaContainer {
+    align-items: center;
+  }
+  
+  .ctaButton {
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+  }
+  
+  .libraryCard {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .librarySection {
+    padding: var(--space-3xl) 0;
+  }
+  
+  .textContent {
+    margin-left: 0;
+  }
+  
+  .title {
+    font-size: var(--font-size-2xl);
+  }
+  
+  .description {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--space-xl);
+  }
+  
+  .features {
+    gap: var(--space-sm);
+  }
+  
+  .feature {
+    font-size: var(--font-size-sm);
+  }
+  
+  .featureIcon {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .libraryCard {
+    padding: var(--space-lg);
+  }
+  
+  .badge {
+    font-size: var(--font-size-xs);
+    padding: 6px var(--space-sm);
+  }
+} 
