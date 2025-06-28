@@ -8,8 +8,9 @@
 .container {
   max-width: var(--container-max-width);
   margin: 0 auto;
-  padding: 0 var(--container-padding);
+
   padding-bottom: 20px;
+  padding-top: 120px;
 }
 
 .content {
@@ -22,7 +23,7 @@
 .textContent {
   flex: 1;
   max-width: 500px;
-  margin-left: 5%;
+  margin-left: 2.5%;
 }
 
 

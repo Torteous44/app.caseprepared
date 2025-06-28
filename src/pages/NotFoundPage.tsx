@@ -8,7 +8,6 @@ const criticalStyles = {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    padding: "2rem",
     textAlign: "center" as const,
     backgroundColor: "#fafafa",
   },
